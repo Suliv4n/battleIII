@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -13,6 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import donnees.Formatage;
 
 import personnage.Equipe;
+import personnage.Personnage;
 
 import sac.Categorie;
 import sac.IObjet;
@@ -74,14 +76,16 @@ public class InterfaceSac extends BasicGameState
 	private Equipe equipe;
 	
 	private boolean categorieValidee;
-	private boolean confirmation = false;
-
+	private boolean confirmation = false; 
+	private String message;
 
 	private IObjet objetSelectionne;
 	private ArrayList<Integer> listeActions;
 	private int actionSelectionnee = -1;
 	
-	private int curseurJoueur = 0;
+	private int curseurPersonnage = 0;
+	private Personnage personnageSelectionne; 
+	
 	private int curseurDeplacement = 0;
 	private int curseurConfirmation = 0;
 	private int boiteComptage = 1;
@@ -148,6 +152,9 @@ public class InterfaceSac extends BasicGameState
 								afficherConfirmation(g);
 							}
 							break;
+						case(UTILISER):
+							afficherEquipePourUtiliser(g);
+							break;
 						}
 					}
 				}
@@ -157,7 +164,12 @@ public class InterfaceSac extends BasicGameState
 				}
 			}
 		}
+		if(message != null && message != "")
+		{
+			afficherMessage(g);
+		}
 	}
+
 
 
 
@@ -165,41 +177,75 @@ public class InterfaceSac extends BasicGameState
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException 
 	{
-		if(!categorieValidee)
+		if(message == null || message == "")
 		{
-			gererChoixCategorie(container.getInput());
-			if(container.getInput().isKeyPressed(Input.KEY_ESCAPE))
+			if(!categorieValidee)
 			{
-				game.enterState(Config.MENU);
-			}
-			container.getInput().clearKeyPressedRecord();
-		}
-		else if(actionSelectionnee == -1)
-		{
-			if(objetSelectionne == null)
-			{
-				gererChoixObjet(container.getInput());
-			}
-			else
-			{
-				gererChoixAction(container.getInput());
-			}	
-		}
-		else
-		{
-			switch(actionSelectionnee)
-			{
-			case(JETER):
-				if(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)) > 1 && !confirmation)
+				gererChoixCategorie(container.getInput());
+				if(container.getInput().isKeyPressed(Input.KEY_ESCAPE))
 				{
-					gererQuantiteAJeter(container.getInput());
+					game.enterState(Config.MENU);
+				}
+				container.getInput().clearKeyPressedRecord();
+			}
+			else if(actionSelectionnee == -1)
+			{
+				if(objetSelectionne == null)
+				{
+					gererChoixObjet(container.getInput());
 				}
 				else
 				{
-					System.out.println(confirmation);
-					gererCurseurConfirmation(container.getInput());
+					gererChoixAction(container.getInput());
+				}	
+			}
+			else
+			{
+				switch(actionSelectionnee)
+				{
+				case(JETER):
+					if(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)) > 1 && !confirmation)
+					{
+						gererQuantiteAJeter(container.getInput());
+					}
+					else
+					{
+						System.out.println(confirmation);
+						gererCurseurConfirmation(container.getInput());
+					}
+					break;
+				case(UTILISER):
+
+					if(personnageSelectionne == null)
+					{
+						gererCurseurSelectionPersonnage(container.getInput());
+						container.getInput().clearKeyPressedRecord();
+					}
+					else
+					{
+						if(personnageSelectionne.utiliserObjet(objetSelectionne))
+						{
+							sac.supprimer(objetSelectionne, 1);
+							personnageSelectionne = null;
+							if(sac.getQuantite(objetSelectionne) == 0)
+							{
+								objetSelectionne = null;
+							}
+						}
+						else
+						{
+							message = "Ca n'aura aucun effet!";
+							personnageSelectionne = null;
+						}
+					}
 				}
-				break;
+			}
+		}
+		else
+		{
+			if(container.getInput().isKeyPressed(Input.KEY_RETURN) || container.getInput().isKeyPressed(Input.KEY_ESCAPE))
+			{
+				message = null;
 			}
 		}
 		
@@ -361,6 +407,36 @@ public class InterfaceSac extends BasicGameState
 				index++;
 			}
 	}
+	
+	/**
+	 * Affiche les membres de l'équipe pour pouvoir sélectionner une personnage
+	 * et a lui appliquer un objet.
+	 * @param g
+	 */
+	private void afficherEquipePourUtiliser(Graphics g)
+	{
+		int i = 0;
+		for(Personnage p : equipe)
+		{
+			p.afficherGestionPerso(g,128, i*160, false);
+			i++;
+		}
+		
+		Image fleche = Jeu.getFleche(0);
+		g.drawImage(fleche, 130, 80 + curseurPersonnage*160);
+		
+	}
+	
+	/**
+	 * Affiche le message.
+	 * @param g
+	 */
+	private void afficherMessage(Graphics g) 
+	{
+		g.setColor(Color.white);
+		g.drawString(Formatage.multiLignes(message, 70), 5, 395);
+	}
+	
 	
 	//#endregion
 
@@ -597,7 +673,29 @@ public class InterfaceSac extends BasicGameState
 		
 		in.clearKeyPressedRecord();
 	}
-
+	
+	/**
+	 * Permet de gérer le curseur de sélection d'un personnage.
+	 */
+	private void gererCurseurSelectionPersonnage(Input in)
+	{
+		if(in.isKeyPressed(Input.KEY_DOWN))
+		{
+			curseurPersonnage = (curseurPersonnage + 1) % equipe.nbPersonnages();
+		}
+		else if(in.isKeyPressed(Input.KEY_UP))
+		{
+			curseurPersonnage = (curseurPersonnage - 1) % equipe.nbPersonnages();
+		}
+		else if(in.isKeyPressed(Input.KEY_ESCAPE))
+		{
+			actionSelectionnee = -1;
+		}
+		else if(in.isKeyPressed(Input.KEY_RETURN))
+		{
+			personnageSelectionne = equipe.get(curseurPersonnage);
+		}
+	}
 	//#endregion
 
 	//#region ---------AUTRES METHODES---------------

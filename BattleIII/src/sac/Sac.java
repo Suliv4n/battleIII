@@ -69,4 +69,16 @@ public class Sac
 			return divers;
 		}
 	}
+	
+	/**
+	 * Retourne la quatité restante d'un objet.
+	 * 
+	 * @param objet
+	 * 		Objet dont la quantité restante est à retourner.
+	 * @return
+	 */
+	public int getQuantite(IObjet objet)
+	{
+		return getCategorieObjet(objet).getQuantite(objet);
+	}
 }

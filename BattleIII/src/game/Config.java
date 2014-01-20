@@ -57,7 +57,7 @@ public class Config
 	
 	//#region -----VOLUMES------------
 	//Volume du jeu
-	public static int musique = 50;
+	public static int musique = 0;
 	public static int son = 100;
 	//#endregion
 }

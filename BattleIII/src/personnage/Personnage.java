@@ -18,6 +18,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
 
+import sac.IObjet;
 import sac.objet.stuff.*;
 import skill.Skill;
 
@@ -404,11 +405,11 @@ public abstract class Personnage implements IBattle
 		perso.setLooping(true);
 		if(selectionne)
 		{
-			g.drawAnimation(perso, 15, y+80-perso.getHeight()/2);		
+			g.drawAnimation(perso, 15+x, y+80-perso.getHeight()/2);		
 		}
 		else
 		{
-			g.drawImage(perso.getImage(2), 15, y+80-perso.getHeight()/2);
+			g.drawImage(perso.getImage(2), 15+x, y+80-perso.getHeight()/2);
 		}
 		g.setColor(new Color(255,255,255));
 		g.drawString(nom, 25, y+10);
@@ -767,7 +768,12 @@ public abstract class Personnage implements IBattle
 	}
 
 
-
+	/**
+	 * Retourne la couleur de la barre d'énergie du personnage.
+	 * 
+	 * @return
+	 * 		La couleur de la barre d'énergie du personnage.
+	 */
 	abstract public Color couleurEnergie();
 
 
@@ -775,6 +781,30 @@ public abstract class Personnage implements IBattle
 	public int getXP() 
 	{
 		return experience;
+	}
+
+
+	/**
+	 * Utilise l'objet passé en paramètre sur le personnage pour lui appliquer ses effets.
+	 * Retourne vrai si l'objet à un effet sur le personnage, faux sinon.
+	 * @param objet
+	 * 		Objet à utliser.
+	 * @return
+	 * 		Vrai si l'objet à eu un effet. Faux sinon.
+	 */
+	public boolean utiliserObjet(IObjet objet) 
+	{
+		boolean aEffet = false;
+		for(String effet : objet.getEffets())
+		{
+			String[] paire = effet.split(":");
+			if(paire[0].equalsIgnoreCase("soin"))
+			{
+				aEffet |= pv != getPVMaximum();
+				updatePV(Integer.parseInt(paire[1]));
+			}
+		}
+		return aEffet;
 	}
 	
 }

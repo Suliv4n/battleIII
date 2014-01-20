@@ -71,10 +71,40 @@ public class Categorie
 	{
 		return objets.get(i);
 	}
-
+	
+	/**
+	 * Retourne la quantité restante de l'objet passé en paramètre.
+	 * @param objet
+	 * 		Objet dont la quantité restante est passée en paramètre.
+	 * @return
+	 * 		La quantité restante de l'objet passé en paramètre.
+	 */
+	public int getQuantite(IObjet objet) 
+	{
+		int i = 0;
+		for(IObjet o : objets)
+		{
+			if(o == objet)
+			{
+				return quantites.get(i);
+			}
+			i++;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Retourne la quantité restante de l'objet dont l'indexe est passé en paramètre.
+	 * @param i
+	 * 		Index de l'objet dont la quantité est à retourner.
+	 * @return
+	 * 		La quantité restante de l'objet à l'indexe i.
+	 */
 	public int getQuantite(int i) 
 	{
 		return quantites.get(i);
 	}
+
+
 
 }
