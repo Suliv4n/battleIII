@@ -30,7 +30,7 @@ map => path de la map tmx
 		</portails>
 		
 		<coffres>
-			<coffre x="2" y="1" contenu="objet:1" qte="1" />
+			<coffre x="2" y="1" contenu="objet:1" qte="3" />
 			<coffre x="3" y="1" po="200" />
 			<coffre x="5" y="1" contenu="objet:2" qte="5" />
 		</coffres>

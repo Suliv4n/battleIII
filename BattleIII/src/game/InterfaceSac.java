@@ -21,6 +21,7 @@ import sac.IObjet;
 import sac.Sac;
 import sac.objet.stuff.Arme;
 import sac.objet.stuff.Armure;
+import sac.objet.stuff.Equipable;
 
 /**
  * Game State permettant d'avoir un aperçu sur les objets du joueur 
@@ -153,6 +154,7 @@ public class InterfaceSac extends BasicGameState
 							}
 							break;
 						case(UTILISER):
+						case(EQUIPER):
 							afficherEquipePourUtiliser(g);
 							break;
 						}
@@ -210,34 +212,52 @@ public class InterfaceSac extends BasicGameState
 					}
 					else
 					{
-						System.out.println(confirmation);
 						gererCurseurConfirmation(container.getInput());
 					}
 					break;
-				case(UTILISER):
-
+				case(EQUIPER):
 					if(personnageSelectionne == null)
 					{
 						gererCurseurSelectionPersonnage(container.getInput());
-						container.getInput().clearKeyPressedRecord();
+					}
+					else
+					{
+						if(personnageSelectionne.equipeStuff((Equipable)objetSelectionne))
+						{
+							actionSelectionnee = -1;
+							objetSelectionne = null;
+						}
+						else
+						{
+							message = personnageSelectionne + " ne peut pas s'équiper de "+objetSelectionne+".";
+						}
+						personnageSelectionne = null;
+					}
+					break;
+				case(UTILISER):
+					if(personnageSelectionne == null)
+					{
+						gererCurseurSelectionPersonnage(container.getInput());
 					}
 					else
 					{
 						if(personnageSelectionne.utiliserObjet(objetSelectionne))
 						{
 							sac.supprimer(objetSelectionne, 1);
-							personnageSelectionne = null;
 							if(sac.getQuantite(objetSelectionne) == 0)
 							{
 								objetSelectionne = null;
 							}
+							actionSelectionnee = -1;
 						}
 						else
 						{
 							message = "Ca n'aura aucun effet!";
-							personnageSelectionne = null;
+
 						}
+						personnageSelectionne = null;
 					}
+					break;
 				}
 			}
 		}
@@ -685,7 +705,7 @@ public class InterfaceSac extends BasicGameState
 		}
 		else if(in.isKeyPressed(Input.KEY_UP))
 		{
-			curseurPersonnage = (curseurPersonnage - 1) % equipe.nbPersonnages();
+			curseurPersonnage = (curseurPersonnage + equipe.nbPersonnages() - 1) % equipe.nbPersonnages();
 		}
 		else if(in.isKeyPressed(Input.KEY_ESCAPE))
 		{

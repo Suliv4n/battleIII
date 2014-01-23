@@ -114,7 +114,16 @@ public class Jeu extends StateBasedGame
 
 		
 		//TEST
-		equipe.get(2).apprendreCompetence(GenerateurDonnees.genererSkill("debug"));		
+		equipe.get(2).apprendreCompetence(GenerateurDonnees.genererSkill("debug"));
+		
+		Arme test = GenerateurDonnees.genererArme("epee_test");
+		
+		equipe.ajouterObjet(test, 1);
+		equipe.ajouterObjet(GenerateurDonnees.genererArme("arc_test"), 1);
+		equipe.ajouterObjet(GenerateurDonnees.genererArme("bouc_test"), 1);
+		equipe.ajouterObjet(GenerateurDonnees.genererArme("baton_test"), 1);
+		
+		System.out.println(test);
 		
 		//F_TEST
 		

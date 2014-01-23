@@ -60,7 +60,6 @@ public abstract class Personnage implements IBattle
 	
 	//Action en cours => state combat
 	private Object action;
-	
 	private ArrayList<IBattle> cibles;
 	
 	/**
@@ -277,31 +276,31 @@ public abstract class Personnage implements IBattle
 	 * @param arme L'arme à équiper.
 	 * @return l'ancienne arme si le personnage peut s'équiper de l'arme, sinon null.
 	 */
-	public Arme equipeArme(int positionArme, Arme arme)
+	public boolean equipeArme(int positionArme, Arme arme)
 	{
-		Arme ancienneArme;
+
 		switch(positionArme)
 		{
 			case(ARME_PRINCIPALE):
-				ancienneArme=armePrincipale;
+
 				if(typesArmesPrincipales.contains(arme.getType()))
 				{
 					armePrincipale=arme;
-					return ancienneArme;
+					return true;
 				}
 			break;
 			
 			case(ARME_SECONDAIRE):
-				ancienneArme=armeSecondaire;
+
 				if(typesArmesSecondaires.contains(arme.getType()))
 				{
 					armeSecondaire=arme;
-					return ancienneArme;
+					return true;
 				}
 			break;
 		}
 		
-		return null;
+		return false;
 	}
 	
 	/**
@@ -311,16 +310,15 @@ public abstract class Personnage implements IBattle
 	 * @param positionArme : 
 	 * @return l'ancienne Armure si le personnage peut s'équiper de l'armure, sinon null.
 	 */
-	public Armure equipeArmure(Armure armure)
+	public boolean equipeArmure(Armure armure)
 	{
-		Armure ancienneArmure=equipement.get(armure.getEmplacement());
 		if(typesArmures.contains(armure.getType()))
 		{
 			equipement.put(armure.getEmplacement(),armure);
-			return ancienneArmure;
+			return true;
 		}
 		
-		return ancienneArmure;
+		return false;
 	}
 	
 	
@@ -428,7 +426,7 @@ public abstract class Personnage implements IBattle
 		
 		//Remplissage bar pv
 		g.setColor(new Color(0,100,0));
-		g.fillRect(x+96, y+51, (float) (getPV()/getPVMaximum())*149, 9);
+		g.fillRect(x+96, y+51, (float) (pv/((double)getPVMaximum()))*149, 9);
 		
 		g.setColor(new Color(255,255,255));
 		g.drawString(getEnergie()+"/"+getEnergieMax(),x+100,y+100);
@@ -805,6 +803,37 @@ public abstract class Personnage implements IBattle
 			}
 		}
 		return aEffet;
+	}
+
+
+	/**
+	 * Equipe le personnage del'objet passé en paramètre.
+	 * Renvoie false si il peut s'en équipe, faux sinon.
+	 * 
+	 * @param equipable
+	 * 		Objet equipable.
+	 * @return
+	 * 		Vrais si le personnage peut s'équiper, faux sinon.
+	 */
+	public boolean equipeStuff(Equipable equipable) 
+	{
+		if(equipable instanceof Armure)
+		{
+			return equipeArmure((Armure)equipable);
+		}
+		else if(equipable instanceof Arme)
+		{
+			Arme arme = (Arme)equipable;
+			if(arme.getType() == Arme.BOUCLIER || arme.getType() == Arme.ARC)
+			{
+				return equipeArme(ARME_SECONDAIRE,(Arme)equipable);
+			}
+			else
+			{
+				return equipeArme(ARME_PRINCIPALE,(Arme)equipable);
+			}
+		}
+		return false;
 	}
 	
 }

@@ -3,6 +3,9 @@ package sac.objet.stuff;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import sac.IObjet;
 
 
 
@@ -21,7 +24,7 @@ import org.newdawn.slick.Image;
  *
  * @see Arme#bonus 	
  */
-public class Arme implements Equipable
+public class Arme implements Equipable, IObjet
 {
 	public static final int EPEE=0;
 	public static final int MARTEAU=1;
@@ -180,6 +183,35 @@ public class Arme implements Equipable
 		}
 	}
 
+	public static int codeArme(String type)
+	{
+		if(type.equalsIgnoreCase("epee") || type.equalsIgnoreCase("épée"))
+		{
+			return EPEE;
+		}
+		else if(type.equalsIgnoreCase("arc"))
+		{
+			return ARC;
+		}
+		else if(type.equalsIgnoreCase("hache"))
+		{
+			return HACHE;
+		}
+		else if(type.equalsIgnoreCase("marteau"))
+		{
+			return MARTEAU;
+		}
+		else if(type.equalsIgnoreCase("baton"))
+		{
+			return BATON;
+		}
+		else if(type.equalsIgnoreCase("bouclier"))
+		{
+			return BOUCLIER;
+		}
+		
+		return 0;
+	}
 
 	@Override
 	public String toString()
@@ -213,6 +245,42 @@ public class Arme implements Equipable
 	public int getDegatMagique() 
 	{
 		return degatMagique;
+	}
+
+	@Override
+	public Image getIcone() throws SlickException
+	{
+		return image;
+	}
+
+	@Override
+	public String getNom() 
+	{
+		return nom;
+	}
+
+	@Override
+	public boolean utilisableCombat() 
+	{
+		return false;
+	}
+
+	@Override
+	public boolean estRare() 
+	{
+		return false;
+	}
+
+	@Override
+	public ArrayList<String> getEffets()
+	{
+		return new ArrayList<String>();
+	}
+
+	@Override
+	public String getDescription() 
+	{
+		return nom +"\n"+"Dégât physique : " + degatPhysique + "\nDégât magique : " + defMagique;
 	}
 
 }

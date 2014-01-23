@@ -27,6 +27,7 @@ import personnage.EquipeEnnemis;
 import personnage.PNJ;
 import sac.IObjet;
 import sac.objet.Objet;
+import sac.objet.stuff.Arme;
 import skill.Skill;
 
 
@@ -517,6 +518,49 @@ public class GenerateurDonnees
 				}
 			}
 			return new Dialogue(new ArrayList<Replique>());
+		}
+		catch (SlickException e)
+		{
+			System.out.println("Impossible de charger le fichier xml");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Arme genererArme(String id)
+	{
+		XMLParser analyseur = new XMLParser();
+		try 
+		{
+			XMLElement file = analyseur.parse("ressources/donnees/equipables.xml");
+			XMLElementList listeArmes = file.getChildrenByName("armes").get(0).getChildrenByName("arme");
+			ArrayList<XMLElement> collecArmes = new ArrayList<XMLElement>();
+			listeArmes.addAllTo(collecArmes);
+			
+			
+			for(XMLElement e : collecArmes)
+			{
+				System.out.println("Debug GA : "+ id + "-" + e.getAttribute("id"));
+				if(e.getAttribute("id").equals(id))
+				{	
+					String nom = e.getAttribute("nom", "no name");
+					int atqphy = e.getIntAttribute("atqphy",0);
+					int atqmag = e.getIntAttribute("atmag",0);
+					int defphy = e.getIntAttribute("defphy",0);
+					int defmag = e.getIntAttribute("defmag",0);
+					int type = Arme.codeArme(e.getAttribute("type","epee"));
+					
+					String pathImg = e.getAttribute("image", "ressources/images/equipables.png");
+					int idimg = e.getIntAttribute("idimg",0);
+				    
+					int x = idimg%15;
+				    int y = (int) (idimg/15);
+					
+					Image img = new Image(pathImg).getSubImage(x, y, 32, 32);
+					return new Arme(nom, type, atqphy, atqmag, defphy, defmag, img);
+				}
+			}
+			return null;
 		}
 		catch (SlickException e)
 		{

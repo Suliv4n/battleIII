@@ -30,7 +30,7 @@ public class Mage extends Personnage
 		statsUP.put("intelligence",5);
 		statsUP.put("sagesse",4);
 		
-		pv=stats.get("endurance")*5;
+		pv=stats.get("endurance")*5-10;
 		
 		typesArmesPrincipales.add(Arme.BATON);
 		
