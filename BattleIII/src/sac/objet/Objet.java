@@ -12,7 +12,7 @@ import sac.IObjet;
 public class Objet implements IObjet
 {
 	private String id;
-	private int icone;
+	private Image icone;
 	private String description;
 	private String nom;
 	private boolean combat;
@@ -21,7 +21,7 @@ public class Objet implements IObjet
 	
 	
 
-	public Objet(String id, int icone, String description, String nom, boolean combat,	boolean rare, ArrayList<String> effets) 
+	public Objet(String id, Image icone, String description, String nom, boolean combat,	boolean rare, ArrayList<String> effets) 
 	{
 		this.id = id;
 		this.icone = icone;
@@ -34,7 +34,7 @@ public class Objet implements IObjet
 
 	public Image getIcone() throws SlickException
 	{
-		return IconesObjets.getIconeObjet(icone);
+		return icone;
 	}
 	
 	public String getDescription()

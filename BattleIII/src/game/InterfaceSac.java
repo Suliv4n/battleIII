@@ -30,7 +30,7 @@ import sac.objet.stuff.Equipable;
  * @author Darklev
  *
  */
-public class InterfaceSac extends BasicGameState
+public class InterfaceSac extends Top
 {
 
 
@@ -58,6 +58,8 @@ public class InterfaceSac extends BasicGameState
 	public static final int EQUIPER = 1;
 	public static final int JETER = 2;
 	public static final int DEPLACER = 3;
+	public static final int DESEQUIPER = 4;
+	
 	//#endregion
 
 	//#region -----CODES CONFIRMATION----------------
@@ -170,13 +172,16 @@ public class InterfaceSac extends BasicGameState
 		{
 			afficherMessage(g);
 		}
+		
+		super.render(container, game, g);
+		
 	}
 
 
 
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int arg2)
+	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException 
 	{
 		if(message == null || message == "")
@@ -224,6 +229,7 @@ public class InterfaceSac extends BasicGameState
 					{
 						if(personnageSelectionne.equipeStuff((Equipable)objetSelectionne))
 						{
+							message = personnageSelectionne + " est équipé de  "+objetSelectionne+".";
 							actionSelectionnee = -1;
 							objetSelectionne = null;
 						}
@@ -232,6 +238,16 @@ public class InterfaceSac extends BasicGameState
 							message = personnageSelectionne + " ne peut pas s'équiper de "+objetSelectionne+".";
 						}
 						personnageSelectionne = null;
+					}
+					break;
+				case(DESEQUIPER):
+					if(personnageSelectionne == null)
+					{
+						message="Déséquiper";
+						actionSelectionnee = -1;
+						Personnage perso = ((Equipable)objetSelectionne).quiEstEquipe(equipe);
+						perso.desequipe((Equipable)objetSelectionne);
+						objetSelectionne = null;
 					}
 					break;
 				case(UTILISER):
@@ -268,6 +284,8 @@ public class InterfaceSac extends BasicGameState
 				message = null;
 			}
 		}
+		
+		super.update(container, game, delta);
 		
 		container.getInput().clearKeyPressedRecord();
 	}
@@ -618,7 +636,15 @@ public class InterfaceSac extends BasicGameState
 		listeActions.add(UTILISER);		
 		if(objetSelectionne instanceof Arme || objetSelectionne instanceof Armure)
 		{
-			listeActions.set(0, EQUIPER);
+			Equipable equipable = (Equipable) objetSelectionne;
+			if(equipe.estEquipeDe(equipable))
+			{
+				listeActions.set(0, DESEQUIPER);
+			}
+			else
+			{
+				listeActions.set(0, EQUIPER);
+			}
 		}
 		listeActions.add(DEPLACER);
 		if(!objetSelectionne.estRare())
@@ -767,6 +793,8 @@ public class InterfaceSac extends BasicGameState
 			return "Déplacer";
 		case(JETER):
 			return "Jeter";
+		case(DESEQUIPER):
+			return "Déséquiper";			
 		default:
 			return "";
 		}

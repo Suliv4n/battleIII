@@ -10,6 +10,7 @@ import game.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -187,6 +188,16 @@ public abstract class Personnage implements IBattle
 	public int getPV() 
 	{
 		return pv;
+	}
+	
+	/**
+	 * Retourne l'équipement du personnage (armures).
+	 * @return
+	 * 	Pièces de l'armure du personnage.
+	 */
+	public HashMap<Integer, Armure> getEquipement()
+	{
+		return equipement;
 	}
 
 	/**
@@ -629,7 +640,17 @@ public abstract class Personnage implements IBattle
 		return armePrincipale;
 	}
 
-
+	/**
+	 * Retourne l'arme secondaire du personnage.
+	 *
+	 * @return
+	 * 		L'arme secondaire du personnage.
+	 */
+	public Arme getArmeSecondaire()
+	{
+		return armeSecondaire;
+	}
+	
 	/**
 	 * Retourne l'attaque physique maximal du Personnage
 	 * @return
@@ -834,6 +855,43 @@ public abstract class Personnage implements IBattle
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return nom;
+	}
+
+
+	/**
+	 * Déséquipe le personnage de l'équipable passé en paramètre.
+	 * 
+	 * @param objetSelectionne
+	 * 		L'équipable à déséquiper.
+	 */
+	public void desequipe(Equipable equipable) 
+	{
+		if(armePrincipale.equals(equipable))
+		{
+			armePrincipale = null;
+		}
+		else if(armeSecondaire.equals(equipable))
+		{
+			armeSecondaire = null;
+		}
+		else
+		{
+			for(Integer a : equipement.keySet())
+			{
+				if(equipement.get(a).equals(equipable))
+				{
+					equipement.put(a, null);
+					break;
+				}
+			}
+		}
+		
 	}
 	
 }

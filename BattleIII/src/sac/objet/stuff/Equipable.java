@@ -1,2 +1,12 @@
 package sac.objet.stuff;
-public interface Equipable{}
+
+import personnage.*;
+
+public interface Equipable{
+	/**
+	 * 
+	 * @return le personnage qui est équipé de l'équipable.
+	 */
+	public Personnage quiEstEquipe(Equipe equipe);
+	 
+}

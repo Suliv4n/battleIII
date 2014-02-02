@@ -22,8 +22,7 @@ import audio.GestionnaireMusique;
 
 
 
-// TODO 
-// Temps : pluie neige OU filtres / particles
+// TODO Particules : pluie neige OU filtres / particles
 
 /**
  * Une Map possède les caratéristiques :

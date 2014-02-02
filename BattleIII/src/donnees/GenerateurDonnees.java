@@ -366,7 +366,7 @@ public class GenerateurDonnees
 				{
 					String nom = element.getAttribute("nom","noname");
 					String description = element.getAttribute("description","[no description]");
-					int icone = element.getIntAttribute("icone",0);
+					int idimg = element.getIntAttribute("icone",0);
 					boolean rare = element.getBooleanAttribute("rare", false);
 					boolean combat = element.getBooleanAttribute("combat", false);
 					
@@ -384,6 +384,8 @@ public class GenerateurDonnees
 						}
 					}
 					
+					
+					Image icone = getIcone( idimg, "ressources/images/objets.png");
 					objet = new Objet(id, icone, description, nom, combat, rare, effets);
 				}
 			}
@@ -540,12 +542,11 @@ public class GenerateurDonnees
 			
 			for(XMLElement e : collecArmes)
 			{
-				System.out.println("Debug GA : "+ id + "-" + e.getAttribute("id"));
 				if(e.getAttribute("id").equals(id))
 				{	
 					String nom = e.getAttribute("nom", "no name");
 					int atqphy = e.getIntAttribute("atqphy",0);
-					int atqmag = e.getIntAttribute("atmag",0);
+					int atqmag = e.getIntAttribute("atqmag",0);
 					int defphy = e.getIntAttribute("defphy",0);
 					int defmag = e.getIntAttribute("defmag",0);
 					int type = Arme.codeArme(e.getAttribute("type","epee"));
@@ -555,9 +556,10 @@ public class GenerateurDonnees
 				    
 					int x = idimg%15;
 				    int y = (int) (idimg/15);
+				    
 					
-					Image img = new Image(pathImg).getSubImage(x, y, 32, 32);
-					return new Arme(nom, type, atqphy, atqmag, defphy, defmag, img);
+					Image img = getIcone(idimg, pathImg);
+					return new Arme(id, nom, type, atqphy, atqmag, defphy, defmag, img);
 				}
 			}
 			return null;
@@ -568,5 +570,16 @@ public class GenerateurDonnees
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	
+	/**
+	 * Retourne une subimage servant d'icône pour les IObjets.
+	 * 
+	 */
+	private static Image getIcone(int id, String src) throws SlickException
+	{
+		Image icones = new Image(src, new Color(255,0,255));
+		return icones.getSubImage(1+(id%15)*21, 1 + ((int) id/15), 20, 20);
 	}
 }

@@ -153,6 +153,8 @@ public class Jeu extends StateBasedGame
 		addState(gameOver);
 		addState(combatResult);
 		
+		interfaceSac.ajouterMeta("equipable", test);
+		
 
 	}
 	

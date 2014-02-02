@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import personnage.Equipe;
+import personnage.Personnage;
+
 import sac.IObjet;
 
 
@@ -39,6 +42,7 @@ public class Arme implements Equipable, IObjet
 	protected int defPhysique;
 	protected int defMagique;
 
+	private String id;
 	protected String nom;
 	protected int typeArme;
 
@@ -76,14 +80,15 @@ public class Arme implements Equipable, IObjet
 	 * @param defMag
 	 * 		Defense Magique de l'arme.
 	 */
-	public Arme(String nom,int typeArme,int degP, int degMag, int defPhy, int defMag, Image image)
+	public Arme(String id, String nom,int typeArme,int degP, int degMag, int defPhy, int defMag, Image image)
 	{
+		this.id = id;
 		this.nom=nom;
 		this.typeArme=typeArme;
 		degatPhysique=degP;
 		degatMagique=degMag;
-		degatPhysique=defPhy;
-		degatMagique=defMag;
+		defPhysique=defPhy;
+		defMagique=defMag;
 		this.image = image;
 		
 		bonus = new ArrayList<String>();
@@ -246,6 +251,11 @@ public class Arme implements Equipable, IObjet
 	{
 		return degatMagique;
 	}
+	
+	public String getId()
+	{
+		return id;
+	}
 
 	@Override
 	public Image getIcone() throws SlickException
@@ -280,7 +290,43 @@ public class Arme implements Equipable, IObjet
 	@Override
 	public String getDescription() 
 	{
-		return nom +"\n"+"Dégât physique : " + degatPhysique + "\nDégât magique : " + defMagique;
+		return nom +"\n"+"Dégât physique : " + degatPhysique + "\nDégât magique : " + degatMagique;
+	}
+	
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Arme))
+		{
+			return false;
+		}
+		return ((Arme)o).id.equals(this.id);
+	}
+
+	@Override
+	public Personnage quiEstEquipe(Equipe equipe) 
+	{
+		
+		for(Personnage p : equipe)
+		{
+			if(p.getArmePrincipale() != null)
+			{
+				if(p.getArmePrincipale().equals(this))
+				{
+					return p;
+				}
+			}
+			if(p.getArmeSecondaire() != null)
+			{
+				if(p.getArmeSecondaire().equals(this))
+				{
+					return p;
+				}
+			}
+		}
+		
+		return null;
 	}
 
 }

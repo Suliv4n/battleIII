@@ -12,6 +12,7 @@ import org.newdawn.slick.Graphics;
 
 import sac.IObjet;
 import sac.Sac;
+import sac.objet.stuff.Equipable;
 
 
 import donnees.GenerateurDonnees;
@@ -494,6 +495,51 @@ public class Equipe implements Iterable<Personnage>
 			}
 		}
 		return null;
+	}
+	
+	
+	/**
+	 * Retourne vrai si l'equipable passé en paramètre est équipé
+	 * par l'un des personnage de l'équipe, sinon faux.
+	 * 
+	 * @param equipable
+	 * 		Equipable à tester
+	 * 
+	 * @return vrai si l'equipable passé en paramètre est équipé
+	 * par l'un des personnage de l'équipe, sinon faux.
+	 */
+	public boolean estEquipeDe(Equipable equipable)
+	{
+		for(Personnage p : this)
+		{
+			for(Equipable e : p.equipement.values())
+			{
+				if(e != null)
+				{
+					if(e.equals(equipable))
+					{
+						return true;
+					}
+				}
+			}
+			
+			if(p.armePrincipale != null)
+			{
+				if(p.armePrincipale.equals(equipable))
+				{
+					return true;
+				}
+			}
+			
+			if(p.armeSecondaire != null)
+			{
+				if(p.armeSecondaire.equals(equipable))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public void ajouterObjet(IObjet objet,int qte)

@@ -14,7 +14,7 @@ public class Guerrier extends Personnage
 
 	private int furie = 100;
 	
-	public Guerrier(String nom) 
+	public Guerrier(String nom) throws SlickException 
 	{
 		super(nom);		
 		stats.put("endurance",20);
@@ -40,18 +40,13 @@ public class Guerrier extends Personnage
 		typesArmures.add(Armure.MAILLE);
 		typesArmures.add(Armure.CUIR);
 		
-		try 
+
+		sprites = new SpriteSheet("ressources/spritesheet/guerrier.png", 32,32,new Color(255,0,255));
+		for(int i = 0; i<5; i++)
 		{
-			sprites = new SpriteSheet("ressources/spritesheet/guerrier.png", 32,32,new Color(255,0,255));
-			for(int i = 0; i<5; i++)
-			{
-				animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
-			}
-		} catch (SlickException e) 
-		{
-			//TODO
-			e.printStackTrace();
+			animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
 		}
+
 	}	
 	
 	

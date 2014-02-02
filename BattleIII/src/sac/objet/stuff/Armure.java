@@ -2,6 +2,9 @@ package sac.objet.stuff;
 
 import java.util.ArrayList;
 
+import personnage.Equipe;
+import personnage.Personnage;
+
 public class Armure implements Equipable 
 {
 	public static final int TETE=0;
@@ -18,6 +21,8 @@ public class Armure implements Equipable
 	
 	protected ArrayList<String> bonus;
 	private String nom;
+	
+	private String id;
 	
 	private int emplacement;
 	private int typeArmure;
@@ -36,8 +41,9 @@ public class Armure implements Equipable
 	 * @param defMag
 	 * 		Défense magique conférée par l'armure.
 	 */
-	public Armure(String nom,int emplacement,int typeArmure,int defPhy, int defMag)
+	public Armure(String id, String nom,int emplacement,int typeArmure,int defPhy, int defMag)
 	{
+		this.id = id;
 		this.nom=nom;
 		this.emplacement=emplacement;
 		this.typeArmure=typeArmure;
@@ -181,7 +187,38 @@ public class Armure implements Equipable
 	{
 		return defMagique;
 	}
+	
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Armure))
+		{
+			return false;
+		}
+		return ((Armure)o).id.equals(this.id);
+	}
 
+
+
+	@Override
+	public Personnage quiEstEquipe(Equipe equipe)
+	{
+		for(Personnage p : equipe)
+		{
+			for(Armure a : p.getEquipement().values())
+			{
+				if(a != null)
+				{
+					if(a.equals(this))
+					{
+						return p;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 
 
