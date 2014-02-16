@@ -32,7 +32,7 @@ import personnage.Equipe;
 import personnage.EquipeEnnemis;
 import personnage.PNJ;
 
-
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * 
@@ -153,6 +153,10 @@ public class Exploration extends BasicGameState
 			afficherDialogue(g);
 		}
 		//AFFICHAGE DU DIALOGUE
+		
+		//TEST LIGHT
+
+        //FTEST
 		
 	}
 
@@ -409,6 +413,7 @@ public class Exploration extends BasicGameState
 			}
 		}
 		
+		equipe.getMap().updateAnimatedTile();
 		
 		in.clearKeyPressedRecord();
 	}

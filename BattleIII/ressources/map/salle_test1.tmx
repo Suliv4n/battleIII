@@ -64,7 +64,18 @@
   </tile>
   <tile id="15">
    <properties>
+    <property name="animation" value="30"/>
     <property name="collision" value="true"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="animation" value="60"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="animation" value="90"/>
    </properties>
   </tile>
   <tile id="19">
@@ -78,27 +89,27 @@
    </properties>
   </tile>
  </tileset>
- <layer name="background1" width="16" height="16">
+ <layer name="background1" width="16" height="16" visible="0">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC2NhYGBgJBOzATELELOTiWH6ecnEo/pH9Y90/VxAzE0m5gFiAFGz3BsABAAA
   </data>
  </layer>
  <layer name="background2" width="16" height="16">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoB3gIFKdABDzATE/HjXo8gLkOopOgBOKyQVMQMyMhT0UAaG4pTUY6PATAWJRPPLkpGVqpX8ASMcZFQAEAAA=
+   H4sIAAAAAAAAC2NgoB3gIFKdIBDzATE/HjXo8gLkOopOgBOKyQVMQMyMhT0UAaG4pTUY6PATAWJRPPLkpGUhMt2CDgDhgZH2AAQAAA==
   </data>
  </layer>
- <layer name="objet" width="16" height="16">
+ <layer name="objet" width="16" height="16" visible="0">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC2NgGAWjYBSMVAAALq+17wAEAAA=
   </data>
  </layer>
- <layer name="foreground1" width="16" height="16">
+ <layer name="foreground1" width="16" height="16" visible="0">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC2NgGAWjYBSMVAAALq+17wAEAAA=
   </data>
  </layer>
- <layer name="foreground2" width="16" height="16">
+ <layer name="foreground2" width="16" height="16" visible="0">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC2NgGAWjYBSMVAAALq+17wAEAAA=
   </data>

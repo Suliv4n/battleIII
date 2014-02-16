@@ -4,6 +4,7 @@ package map;
 import game.Jeu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.newdawn.slick.Image;
@@ -52,6 +53,7 @@ public class Map
 	private TiledMap map;
 	private Image terrain;
 	private ArrayList<Portail> portails;
+	private HashMap<Integer, AnimatedTileManager> tilesAnimes;
 	
 	private ArrayList<Coffre> coffres;
 	
@@ -106,6 +108,8 @@ public class Map
 		
 		this.pnj = pnj;
 		
+		tilesAnimes = new HashMap<Integer, AnimatedTileManager>();
+		
 		/*
 		if(musique == null)
 		{
@@ -144,7 +148,7 @@ public class Map
 		//Fin correction coordonées initiales
 		
 		
-		//Hydratation matrice de collisions
+		//Propriétés des tiles:
 		collisions = new boolean[map.getWidth()][map.getHeight()];
 		for(int axeX=0; axeX<map.getWidth();axeX++)
 		{
@@ -153,7 +157,10 @@ public class Map
 				collisions[axeX][axeY]=false;
 				for(int i=0;i<map.getLayerCount();i++)
 				{
+					//current tile
 					int tileID=map.getTileId((int) axeX,(int) axeY, i);
+					
+					/* Test collision */
 					boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
 					boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
 					if(portail)
@@ -165,10 +172,20 @@ public class Map
 					{
 						collisions[axeX][axeY] = true;
 					}
+					
+					/* Test animation de tiles */
+					if(!tilesAnimes.containsKey(tileID))
+					{
+						AnimatedTileManager atm = FactoryAnimatedTileManager.make(map, tileID);
+						if(atm != null)
+						{
+							tilesAnimes.put(tileID, atm);
+						}
+					}
 				}
 			}
 		}
-		//Fin Hydratation de collisions
+		//Fin proprietes tiles
 		
 
 		for(int axeX=0; axeX<map.getWidth();axeX++)
@@ -405,12 +422,33 @@ public class Map
 		map.render((int) x, (int) y, layer);
 	}
 	
+	/**
+	 * Met à jour les tiles animés.
+	 */
+	public void updateAnimatedTile()
+	{
+		for(int x=0;x<map.getWidth();x++)
+		{
+			for(int y=0;y<map.getWidth();y++)
+			{
+				for(int z=0;z<map.getLayerCount();z++)
+				{
+					for(Integer atm : tilesAnimes.keySet())
+					{
+						if(tilesAnimes.get(atm).containsTile(map.getTileId(x, y, z)))
+						{
+							map.setTileId(x, y, z, tilesAnimes.get(atm).next());
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public void afficherPNJ()
 	{
-		System.out.println(pnj.size());
 		for(PNJ pnj : this.pnj)
 		{
-			System.out.println(pnj);
 			if(pnj.enMouvement())
 			{
 				pnj.getAnimation().draw((float) x + pnj.getX()*32, (float) y + pnj.getY()*32);
