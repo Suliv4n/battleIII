@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<equipe>
+  <position x="143" y="113" map="test1" direction="3" />
+  <personnages>
+    <mage nom="Magelev" xp="200" />
+    <guerrier nom="Berzeklev" xp="150" />
+    <rodeur nom="Ninjalev" xp="100" />
+  </personnages>
+</equipe>

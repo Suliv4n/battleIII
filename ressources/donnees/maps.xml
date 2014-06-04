@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+id => id le carte.
+terrain => path de l'image de terrain pour les combats
+map => path de la map tmx
+-->
+<!--
+		+++++++
+		+PLACE+
+	 	+++++++
+		+++   +++
+		+0+   +1+
+		+++   +++
+
+		+++   +++
+		+2+   +3+
+		+++   +++
+	
+		+++   +++
+		+4+   +5+
+		+++   +++
+-->
+
+
+<maps>
+	<map id="foret1" terrain="ressources/spritesheet/guerrier.png" musique="test2" map="ressources/map/foret1.tmx">	
+		<portails>
+			<portail x="15" y="16" target="test1" xt="7" yt="2"/>
+			<portail x="14" y="16" target="test1" xt="7" yt="2"/>
+		</portails>
+		
+		<coffres>
+			<coffre x="2" y="1" contenu="objet:1" qte="3" />
+			<coffre x="3" y="1" po="200" />
+			<coffre x="5" y="1" contenu="objet:2" qte="5" />
+		</coffres>
+		
+
+	</map>
+	
+	<map id="test1" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/salle_test1.tmx" exterieur="false" image="">
+
+		<ennemis>
+			<groupe id="1"/>		
+		</ennemis>
+
+		
+		<pnjs>
+			<pnj id="1"  x="3" y="5" position="0" dialogue="test"/>
+		</pnjs>
+		
+		<portails>
+			<portail x="7" y="1" target="foret1" xt="14" yt="15"/>
+		</portails>		
+	</map>
+</maps>

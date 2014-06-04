@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<equipables>
+	<armes>
+		<arme id="epee_test" nom="Epée test" atqphy="20" atqmag="10" defphy="0" defmag="0" idimg="1" />
+		<arme id="arc_test" nom="Arc test" atqphy="20" atqmag="0" defphy="0" defmag="0" idimg="0" />
+		<arme id="bouc_test" nom="Bouclier test" atqphy="0" atqmag="0" defphy="20" defmag="2" idimg="2" />
+		<arme id="baton_test" nom="Baton test" atqphy="10" atqmag="20" defphy="0" defmag="0" idimg="5" />
+	</armes>
+
+</equipables>

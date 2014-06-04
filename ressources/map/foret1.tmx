@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="16" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_foret" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileset/tileset_foret.png" trans="ff00ff" width="306" height="214"/>
+  <tile id="19">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="55" name="systeme" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileset/systeme.png" trans="ff00ff" width="306" height="214"/>
+  <tile id="0">
+   <properties>
+    <property name="coffre" value="true"/>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Background1" width="32" height="16">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC61UQQ7DMAhLlvN2XHvb9v9PLpUaCVk2gbQHHxqgtoGkllIeBPWEij07XiKexYyrku/B79VmNbRAfHCt+I9oZTn2DP3f0X+loRaupzn8qBPrscc23si56lfGv+dF9Xg2swy/8nVgX8S7Y7tQP/BbxKfje6F+QM2F7byNzfof3SVvN7y66PuD//DymWalA/2znJW7FfXj3f/ZXcO3IjJzzGP9V73Ozigzf5vXHB7UEvHpzcT6j3KxnD9LvgIQAAgAAA==
+  </data>
+ </layer>
+ <layer name="Backgroung2" width="32" height="16">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACxNhYGAQIQPDADl6sZllDsUMSDStAbpfaG0XpfZT26347BdBo2kBqBX+6GYQayY94x+X/SMdDHT448qX1LSDVPvpBYi1n1pqyLWfVmCw2D+Q9S8A5NIodwAIAAA=
+  </data>
+ </layer>
+ <layer name="Objet" width="32" height="16">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkbBSAMAnrro8QAIAAA=
+  </data>
+ </layer>
+ <layer name="Foreground1" width="32" height="16">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+NmYGDgYRg4wE0H+7mw2AMTI9Z+bGZQw03YzKS2XaTaT445PDj4tLafXACzf6SDgQ5/XPmSGm7CZ9ZgSX+E7CcmPMgJs6Hif3rYTw6GAUrMGAzlDwCY5O/yAAgAAA==
+  </data>
+ </layer>
+ <layer name="Foreground2" width="32" height="16">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkYm4CETc0ExJWYMNAAAjh6ieAAIAAA=
+  </data>
+ </layer>
+</map>
