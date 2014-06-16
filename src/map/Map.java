@@ -13,12 +13,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 import donnees.GenerateurDonnees;
-
 import personnage.Ennemi;
 import personnage.Equipe;
 import personnage.EquipeEnnemis;
 import personnage.PNJ;
-
 import audio.GestionnaireMusique;
 
 
@@ -686,5 +684,9 @@ public class Map
 			}
 		}
 		return null;
+	}
+
+	public String getId() {	
+		return id;
 	}
 }

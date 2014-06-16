@@ -1,5 +1,11 @@
-ressources/musiques/*
-.classpath
-.project
-.metadata
-.medatata/*
+/animation
+/audio
+/donnees
+/game
+/lib
+/map
+/personnage
+/sac
+/skill
+/ui
+/util

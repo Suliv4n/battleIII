@@ -31,10 +31,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import animation.RessourceAnimationLoader;
 import audio.GestionnaireMusique;
-
 import personnage.*;
 import sac.objet.stuff.Arme;
-
 import donnees.GenerateurDonnees;
 
 
@@ -79,6 +77,11 @@ public class Jeu extends StateBasedGame
 	public static Equipe getEquipe()
 	{
 		return equipe;
+	}
+	
+	public static void setEquipe(Equipe equipe) {
+		Jeu.equipe = equipe;
+		
 	}
 	
 	/**
@@ -275,6 +278,8 @@ public class Jeu extends StateBasedGame
 		
 	}
 	//#endregion
+
+
 
 
 }

@@ -3,6 +3,7 @@ package game.dialogue;
 import game.Jeu;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Dialogue implements Cloneable
 {
@@ -20,7 +21,6 @@ public class Dialogue implements Cloneable
 	{
 		index++;
 		if(index >= dialogue.size())
-			
 		{
 			return false;
 		}
