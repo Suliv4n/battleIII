@@ -30,8 +30,6 @@ public class Regex {
 			}
 		}
 		
-		System.out.println(res);
-		
 		return res.toArray(new String[res.size()]);
 	}
 }

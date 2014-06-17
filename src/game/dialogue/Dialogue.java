@@ -5,11 +5,15 @@ import game.Jeu;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import personnage.Personnage;
+import util.Regex;
+
 public class Dialogue implements Cloneable
 {
 	private ArrayList<Replique> dialogue;
 	private int index;
 	private Selectionneur selectionneur;
+	private boolean notifEnd = false; //vaut true si $end est rencontré dans la réplique en cours.
 	
 	public Dialogue(ArrayList<Replique> dialogue)
 	{
@@ -27,7 +31,8 @@ public class Dialogue implements Cloneable
 		while(dialogue.get(index).getReplique().matches(".*\\$if\\[.*\\].*"))
 		{
 			String rep = dialogue.get(index).getReplique();
-			if(!condition(rep.substring(rep.indexOf("[",rep.indexOf("$if"))+1, rep.indexOf("]", rep.indexOf("$select")))))
+			String condition = Regex.eval(rep, ".*\\$if\\[(.*)\\].*")[1];
+			if(!condition(condition))
 			{
 				index++;
 			}
@@ -37,18 +42,71 @@ public class Dialogue implements Cloneable
 			}
 		}
 
+		//Si notifEnd vaut true alors mettre fin au dialogue
+		if(notifEnd == true){
+			notifEnd = false;
+			return false;
+		}
 		
 		if(dialogue.get(index).getReplique().contains("$end"))
 		{
-			return false;
+			notifEnd = true;
+		}
+		else{
+			notifEnd = false;
 		}
 		return index < dialogue.size();
 	}
 	
+	/**
+	 * Analyse une condition posée dans une réplique et retourne vraie
+	 * si la condition est vraie, faux sinon.
+	 * @param condition
+	 * @return
+	 */
 	private boolean condition(String condition)
 	{
-		System.out.println("-----------------------------------------------------------------------------------------");
-		return false;
+		boolean res = false;
+		String[] eval = Regex.eval(condition,"([^>|<]*)(=|>=?|<=?)(.*)|(.*)"); 
+		String[] membres = new String[2];
+		String operateur = null;
+		if(eval.length > 1)
+		{
+			membres[0] = eval[1];
+			
+			if(condition.matches("([^>|<]*)(=|>=?|<=?)(.*)|(.*)"))
+			{
+				operateur = eval[2];
+				membres[1] = eval[3];
+			}
+		}
+		
+		
+		Personnage perso0 = null;
+		Personnage perso1 = null;
+		for(String m : membres){
+			if(m.matches("^equipe(\\d+)$")){
+				perso0 = Jeu.getEquipe().get(Integer.parseInt(Regex.eval(m, "^equipe(\\d+)$")[1]));
+			}
+			else if(m.equalsIgnoreCase("mage")){
+				perso1 = Jeu.getEquipe().getMage();
+			}
+			else if(m.equalsIgnoreCase("rodeur")){
+				perso1 = Jeu.getEquipe().getRodeur();
+			}
+			else if(m.equals("guerrier")){
+				perso1 = Jeu.getEquipe().getGuerrier();
+			}
+		}
+		
+		if(perso0 != null && perso1 != null)
+		{
+			if(operateur.equals("=")){
+				res = perso0 == perso1;
+			}
+		}
+		
+		return res;
 	}
 	
 	

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialogues>
 	<dialogue id="test">
-		<replique enonciateur="$pnj[1]" replique="$if[equipe[0]=mage] Bonjour $mage! $end"/>
+		<replique enonciateur="$pnj[1]" replique="$if[equipe0=mage] Bonjour $mage! $end"/>
 		<replique enonciateur="$pnj[1]" replique="Êtes-vous un ami de $mage?"/>
 	</dialogue>
 </dialogues>

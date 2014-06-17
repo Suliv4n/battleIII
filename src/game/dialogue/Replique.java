@@ -50,6 +50,7 @@ public class Replique
 													.replaceAll("\\$select\\[.*\\]", "")
 													.replaceAll("\\$end", "")
 													.replaceAll("\\$goto[0-9]+", "")
+													.replaceAll("\\$if\\[.*\\]", "")
 													.trim();
 						
 		}
@@ -62,6 +63,7 @@ public class Replique
 								.replaceAll("\\$select\\[.*\\]", "")
 								.replaceAll("\\$end", "")
 								.replaceAll("\\$goto[0-9]+", "")
+								.replaceAll("\\$if\\[.*\\]", "")
 								.trim();
 		}
 	}
