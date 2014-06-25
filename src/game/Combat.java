@@ -359,7 +359,7 @@ public class Combat extends BasicGameState
 			}
 			else if(action instanceof Skill)
 			{
-				message = lanceur.getNom() + " utilise " + ((Skill)action).getNom() + " niv. " + ((Skill)action).getNiveau();
+				message = lanceur.getNom() + " utilise " + ((Skill)action).getNom() + " niv. " + ((Skill)action).getLevel();
 				animEnCours = AnimationFactory.creerAnimation(((Skill)action).getId());
 			}
 		}
@@ -770,7 +770,7 @@ public class Combat extends BasicGameState
 			}
 			
 			g.drawString(s.getNom(), 45, 112 + 20*i);
-			g.drawString(" Niv." + s.getNiveau() + "/" + s.getNiveauMax() , 220, 112 + 20*i);
+			g.drawString(" Niv." + s.getLevel() + "/" + s.getNiveauMax() , 220, 112 + 20*i);
 			g.drawString(String.valueOf(s.getConsommation()) , 300, 112 + 20*i);
 		}
 		

@@ -11,6 +11,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import donnees.Sauvegarde;
+
 /**
  * 
  * _-_-_-_-[State Menu]-_-_-_-_-_
@@ -90,6 +92,9 @@ public class Menu extends BasicGameState
 				container.getInput().clearKeyPressedRecord();
 				game.enterState(Config.SAC);
 				
+				break;
+			case(4):
+				Sauvegarde.sauvegarder("save1");
 				break;
 			case(5):
 				//TODO confirmation

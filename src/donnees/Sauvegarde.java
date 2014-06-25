@@ -3,22 +3,23 @@ package donnees;
 import game.Config;
 import game.Jeu;
 
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLElementList;
 import org.newdawn.slick.util.xml.XMLParser;
 
 import map.Map;
-
 import personnage.Equipe;
 import personnage.Guerrier;
 import personnage.Mage;
 import personnage.Personnage;
 import personnage.Rodeur;
+import skill.Skill;
 
+import java.awt.List;
 import java.io.*;
 
+import org.jdom2.Element;
 import org.jdom2.output.*;
 
 
@@ -33,9 +34,9 @@ public class Sauvegarde
 	{	
 		Equipe equipe = Jeu.getEquipe();
 		
-		org.jdom2.Element root = new org.jdom2.Element("equipe");
+		Element root = new Element("equipe");
 		org.jdom2.Document document = new org.jdom2.Document(root); 
-		org.jdom2.Element position = new org.jdom2.Element("position");
+		Element position = new Element("position");
 		
 		//position
 		position.setAttribute("x", String.valueOf((int) equipe.getAbsolueX()));
@@ -45,21 +46,28 @@ public class Sauvegarde
 		root.addContent(position);
 		
 		//equipes
-		org.jdom2.Element personnages = new org.jdom2.Element("personnages");
+		Element personnages = new Element("personnages");
 		for(Personnage p : equipe)
 		{
-			org.jdom2.Element personnage = null;
+			Element personnage = null;
 			if(p instanceof Mage)
 			{
-				personnage = new org.jdom2.Element("mage");
+				personnage = new Element("mage");
 			}
 			else if(p instanceof Guerrier)
 			{
-				personnage = new org.jdom2.Element("guerrier");
+				personnage = new Element("guerrier");
 			}
 			else if(p instanceof Rodeur)
 			{
-				personnage = new org.jdom2.Element("rodeur");
+				personnage = new Element("rodeur");
+			}
+			
+			for(Skill s : p.getSkills()){
+				Element skill = new Element("skill");
+				skill.setAttribute("id", s.getId());
+				skill.setAttribute("level", String.valueOf(s.getLevel()));
+				personnage.addContent(skill);
 			}
 			
 			personnage.setAttribute("nom", p.getNom());
@@ -90,11 +98,10 @@ public class Sauvegarde
 	 * 	Nom de la sauvegarde
 	 * @throws SlickException
 	 */
-	public static void getSauvegarde(String sauvegarde) throws SlickException
+	public static void charger(String sauvegarde) throws SlickException
 	{
 		XMLParser parser = new XMLParser();
 		XMLElement root = parser.parse("ressources/donnees/saves/"+sauvegarde+".xml");
-		//XMLElement root = file.getChildrenByName("equipe").get(0);
 		
 		//récupération de l'équipe de personnages
 		Equipe equipe = new Equipe(3);
@@ -118,6 +125,19 @@ public class Sauvegarde
 				String nom = e.getAttribute("nom");
 				p = new Guerrier(nom);
 			}
+			
+			XMLElementList skills= e.getChildrenByName("skill");
+			
+			//skills du personnage
+			for(int j=0; j<skills.size();j++){
+				String idSkill = skills.get(j).getAttribute("id","");
+				if(!idSkill.equals("")){
+					Skill skill = GenerateurDonnees.genererSkill(idSkill);
+					p.apprendreCompetence(skill);
+					skill.setLevel(skills.get(j).getIntAttribute("level",1));
+				}
+			}
+			
 			int xp = e.getIntAttribute("xp",0);
 			p.gagnerXP(xp);
 			equipe.ajouter(p);

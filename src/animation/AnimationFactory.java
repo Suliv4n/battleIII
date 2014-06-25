@@ -89,12 +89,12 @@ public class AnimationFactory
 
 			};
 		}
-		//----------------------------------------$id:m1--------------------------------------------------------------------------------------------------
+		//----------------------------------------$id:bouleDeFeu--------------------------------------------------------------------------------------------------
 		/*
 		 * Affiche une boule de feu s'orientant et avançant vers la cible.
 		 * (Compétence : Boule de feu)
 		 */
-		else if(id.equals("m1") || id.equals("debug"))
+		else if(id.equals("bouleDeFeu") || id.equals("debug"))
 		{
 			renderer = new IAnimation() {
 				
@@ -140,12 +140,12 @@ public class AnimationFactory
 				}
 			};
 		}
-		//----------------------------------------$id:m2--------------------------------------------------------------------------------------------------
+		//----------------------------------------$id:recherche--------------------------------------------------------------------------------------------------
 		/*
 		 * Affiche un livre dont les pages se tournent sur le lanceur.
 		 * (Compétence : Recherche)
 		 */
-		else if(id.equals("m2"))
+		else if(id.equals("recherche"))
 		{
 			renderer = new IAnimation() {
 				
@@ -179,8 +179,8 @@ public class AnimationFactory
 				}
 			};
 		}
-		//---------------------------------------$id:m4-----------------------------------------------------------------------------------------------------
-		else if(id.equals("m4"))
+		//---------------------------------------$id:soin-----------------------------------------------------------------------------------------------------
+		else if(id.equals("soin"))
 		{
 			renderer = new IAnimation() {
 

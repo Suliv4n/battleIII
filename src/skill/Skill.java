@@ -36,8 +36,8 @@ public class Skill
 	 */
 	private ArrayList<String> effets;
 	
-	private int lvl = 1;
-	private int lvlMax = 10;
+	private int level = 1;
+	private int levelMax = 10;
 	
 	private int xp = 0;
 	
@@ -82,7 +82,7 @@ public class Skill
 		
 		UPpuissance = UP;
 		
-		this.lvlMax = lvlMax;
+		this.levelMax = lvlMax;
 		
 		this.effets = new ArrayList<String>();
 		String[] lesEffets = effets.split(";");
@@ -102,8 +102,22 @@ public class Skill
 	
 	private void levelUp()
 	{
-		lvl++;
+		level++;
 		puissance+=UPpuissance;
+	}
+	
+	
+	/**
+	 * Retourne le niveau du skill.
+	 * 
+	 * @return le niveau du skill.
+	 */
+	public int getLevel() {
+		return level;
+	}
+	
+	public int getLevelMax(){
+		return levelMax;
 	}
 	
 	/**
@@ -210,16 +224,8 @@ public class Skill
 		return consommation;
 	}
 	
-	/**
-	 * Retourne le niveau du skill.
-	 * 
-	 * @return le niveau du skill.
-	 */
-	public int getNiveau() 
-	{
-		return lvl;
-	}
-	
+
+
 	/**
 	 * Retourne le niveau max du skill.
 	 * 
@@ -227,7 +233,7 @@ public class Skill
 	 */
 	public int getNiveauMax() 
 	{
-		return lvlMax;
+		return levelMax;
 	}
 	
 	/**
@@ -268,7 +274,7 @@ public class Skill
 	@Override
 	public String toString()
 	{
-		String res = nom+" : "+description+"\nPuissance : "+puissance+"\nPrecision : "+precision+"\nConsommation : "+consommation +"\nNiveau : "+lvl+"/"+lvlMax;
+		String res = nom+" : "+description+"\nPuissance : "+puissance+"\nPrecision : "+precision+"\nConsommation : "+consommation +"\nNiveau : "+level+"/"+levelMax;
 		return res;
 	}
 
@@ -314,4 +320,24 @@ public class Skill
 		}
 		return null;
 	}
+
+	public void setLevel(int level) {
+		
+		//retour à la puissance de base :
+		puissance = puissance - (this.level - 1)* UPpuissance;
+		
+		
+		if(level < 1){
+			level = 1;
+		}
+		else if(level > levelMax){
+			level = levelMax;
+		}
+		
+		this.level = level;
+		//nouvelle puissance
+		puissance = puissance + UPpuissance * (level-1);
+	}
+
+
 }

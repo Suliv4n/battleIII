@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <equipe>
-  <position x="143" y="113" map="test1" direction="3" />
+  <position x="248" y="113" map="test1" direction="2" />
   <personnages>
-    <mage nom="Magelev" xp="200" />
+    <mage nom="Magelev" xp="200">
+      <skill id="bouleDeFeu" level="2" />
+      <skill id="recherche" level="1" />
+      <skill id="soin" level="1" />
+    </mage>
     <guerrier nom="Berzeklev" xp="150" />
     <rodeur nom="Ninjalev" xp="100" />
   </personnages>

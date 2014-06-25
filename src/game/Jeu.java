@@ -34,6 +34,7 @@ import audio.GestionnaireMusique;
 import personnage.*;
 import sac.objet.stuff.Arme;
 import donnees.GenerateurDonnees;
+import donnees.Sauvegarde;
 
 
 
@@ -107,26 +108,13 @@ public class Jeu extends StateBasedGame
 	{
 		fleches = new Image("ressources/images/fleches.png",new Color(255,0,255));
 		
-		equipe = new Equipe(3);
-		equipe.ajouter(new Rodeur("Tell"));
-		equipe.ajouter(new Guerrier("Chrysaor"));
-		equipe.ajouter(new Mage("Yensid"));	
 		
 		GestionnaireMusique.chargerMusique("victory");		
 		GestionnaireMusique.chargerMusique("battle");
 
 		
 		//TEST
-		equipe.get(2).apprendreCompetence(GenerateurDonnees.genererSkill("debug"));
-		
-		Arme test = GenerateurDonnees.genererArme("epee_test");
-		
-		equipe.ajouterObjet(test, 1);
-		equipe.ajouterObjet(GenerateurDonnees.genererArme("arc_test"), 1);
-		equipe.ajouterObjet(GenerateurDonnees.genererArme("bouc_test"), 1);
-		equipe.ajouterObjet(GenerateurDonnees.genererArme("baton_test"), 1);
-		
-		System.out.println(test);
+		Sauvegarde.charger("save1");
 		
 		//F_TEST
 		
@@ -155,8 +143,6 @@ public class Jeu extends StateBasedGame
 		addState(combat);
 		addState(gameOver);
 		addState(combatResult);
-		
-		interfaceSac.ajouterMeta("equipable", test);
 		
 
 	}

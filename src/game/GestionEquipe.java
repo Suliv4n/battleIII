@@ -335,7 +335,7 @@ public class GestionEquipe extends BasicGameState
 			g.drawString("Puissance : "+lesSkills.get(curseur_competences).getPuissance(), 205, 200);
 			g.drawString("Coût : "+lesSkills.get(curseur_competences).getConsommation(), 205, 220);
 			
-			g.drawString("Niveau : "+lesSkills.get(curseur_competences).getNiveau()+"/"+lesSkills.get(curseur_competences).getNiveauMax(), 205, 240);
+			g.drawString("Niveau : "+lesSkills.get(curseur_competences).getLevel()+"/"+lesSkills.get(curseur_competences).getNiveauMax(), 205, 240);
 		}
 	}
 	//#endregion
