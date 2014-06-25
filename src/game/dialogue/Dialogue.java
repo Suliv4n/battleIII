@@ -48,7 +48,7 @@ public class Dialogue implements Cloneable
 			return false;
 		}
 		
-		if(dialogue.get(index).getReplique().contains("$end"))
+		if(dialogue.get(index).getReplique().contains("\\$end"))
 		{
 			notifEnd = true;
 		}

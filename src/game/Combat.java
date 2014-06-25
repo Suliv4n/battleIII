@@ -822,8 +822,7 @@ public class Combat extends BasicGameState
 			}
 			else
 			{
-				curseur = (curseur + 2)%6;
-						
+				curseur = (curseur + 2)%6;	
 			}
 		}
 		else if(input.isKeyPressed(Input.KEY_UP))
@@ -923,7 +922,8 @@ public class Combat extends BasicGameState
 		{
 			if(curseurAction.get(selectionPersonnage) == 0)
 			{
-				selectionPersonnage.setAction("Attaquer");	
+				selectionPersonnage.setAction("Attaquer");
+				initCurseurCible();
 			}
 			else if(curseurAction.get(selectionPersonnage) == 1)
 			{
@@ -932,11 +932,8 @@ public class Combat extends BasicGameState
 					curseursAbsolusSkills.put(selectionPersonnage, 0);
 					curseursRelatifsSkills.put(selectionPersonnage, 0);
 				}
-				
 				showSkill = true;
 			}
-			
-
 		}
 		input.clearKeyPressedRecord();
 	}
@@ -974,7 +971,7 @@ public class Combat extends BasicGameState
 		}
 		else if(in.isKeyPressed(Input.KEY_ESCAPE))
 		{
-			return Input.KEY_RETURN;
+			return Input.KEY_ESCAPE;
 		}
 		
 		
@@ -991,9 +988,7 @@ public class Combat extends BasicGameState
 	{
 		Object action = selectionPersonnage.getAction();
 		int typeCible = getCibleAction(action);
-		
 
-		
 		if(input == Input.KEY_ESCAPE)
 		{
 			selectionPersonnage.annulerAction();
@@ -1056,16 +1051,15 @@ public class Combat extends BasicGameState
 				personnagesPrets.add(selectionPersonnage);
 				selectionPersonnage = null;
 				curseur = (curseur + 1)%3+6;
+
 			}
 			
-			/*
-			 * Si la cible n'est pas valable (inexistante ou non vivante) : recommencer.
-			 */
-			if(!ennemis.estCibleValable(curseurCible))
+
+			if(selectionPersonnage != null && getCibleAction(selectionPersonnage.getAction()) == Skill.ENNEMI && input != -1 && !ennemis.estCibleValable(curseurCible))
 			{
 				gererCurseurCible(input);
 			}
-			
+
 		}
 		
 		else if(typeCible == Skill.ALLIE)
@@ -1180,23 +1174,7 @@ public class Combat extends BasicGameState
 				{
 					showSkill = false;
 					selectionPersonnage.setAction(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)));
-					//si cible = allie, alors ajustement de curseurCible
-					if(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).getCible() == Skill.ALLIE)
-					{
-						curseurCible = curseur;
-					}
-					//sinon si ennemi => curseurCible = premier ennemi vivant.
-					else if(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).getCible() == Skill.ENNEMI)
-					{
-						for(int i : ennemis.getEnnemis().keySet())
-						{
-							if(ennemis.getEnnemis().get(i).estVivant())
-							{
-								curseurCible = i;
-								break;
-							}
-						}
-					}
+					initCurseurCible();
 				}
 				else
 				{
@@ -1207,6 +1185,8 @@ public class Combat extends BasicGameState
 
 	}
 	
+
+
 	private void gererInputMessage(Input in)
 	{
 		if(in.isKeyPressed(Input.KEY_RETURN))
@@ -1498,6 +1478,32 @@ public class Combat extends BasicGameState
 		}
 		
 		return Skill.ENNEMI;
+	}
+	
+	
+	/**
+	 * Initialise le curseur de cible d'une action.
+	 * Si la cible doit être un ennemie le curseur pointera alors vers le premier ennemi vivant.
+	 * Si c'est un allié qui doit être ciblé alors le premier allié vivant est ponté par le curseur.
+	 */
+	private void initCurseurCible() {
+		//si cible = allie, alors ajustement de curseurCible
+		if(getCibleAction(selectionPersonnage.getAction()) == Skill.ALLIE)
+		{
+			curseurCible = curseur;
+		}
+		//sinon si ennemi => curseurCible = premier ennemi vivant.
+		else if(getCibleAction(selectionPersonnage.getAction()) == Skill.ENNEMI)
+		{
+			for(int i : ennemis.getEnnemis().keySet())
+			{
+				if(ennemis.getEnnemis().get(i).estVivant())
+				{
+					curseurCible = i;
+					break;
+				}
+			}
+		}
 	}
 	
 	//#endregion

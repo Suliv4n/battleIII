@@ -10,7 +10,7 @@ import game.Config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
+
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -22,6 +22,8 @@ import org.newdawn.slick.SpriteSheet;
 import sac.IObjet;
 import sac.objet.stuff.*;
 import skill.Skill;
+import ui.Barre;
+import ui.TypeBarre;
 
 
 
@@ -227,17 +229,20 @@ public abstract class Personnage implements IBattle
 	
 	/**
 	 * Retourne l'expérience nécessaire pour atteindre le prochain niveau.
-	 * TODO à modifier description
 	 * @return l'expérience nécessaire pour atteindre le prochain niveau.
 	 */
 	public int prochainNiveau() 
 	{
-		return (int) (experience + Math.round(level*1.5));
+		int res = 10;
+		for(int i = 1; i<level ; i++){
+			res += (int) (10 + i*i*0.5);
+		}
+		return res;
 	}
 	
 	
 	/**
-	 * Incrémete le level du Personnage et améliorer ses stats en conséquence.
+	 * Incrémente le level du Personnage et améliore ses stats en conséquence.
 	 */
 	private void levelUP() 
 	{
@@ -245,6 +250,7 @@ public abstract class Personnage implements IBattle
 		for(String k : stats.keySet())
 		{
 			stats.put(k,statsUP.get(k)+stats.get(k));
+			pv = getPVMaximum();
 		}
 	}
 
@@ -445,16 +451,8 @@ public abstract class Personnage implements IBattle
 		//XP
 		g.drawString("EXP", x+5, y+120);
 		g.drawString("EXP : "+experience+"/"+prochainNiveau(), x+5, y+140);
+		new Barre(Config.couleurXP, Color.black, 210, 4, experience, prochainNiveau(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2).afficher(g, x+35, y+127);
 
-		
-		g.setColor(Config.couleur2);
-		g.drawRect(x+35, y+127, 210, 4);
-		
-		g.setColor(new Color(0,0,0));
-		g.fillRect(x+36, y+128, 209, 3);
-		
-		g.setColor(Config.couleurXP);
-		g.fillRect(x+36, y+128, (int) (experience/prochainNiveau()*209) , 3);
 		
 
 	}
