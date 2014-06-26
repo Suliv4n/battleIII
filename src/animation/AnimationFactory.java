@@ -11,6 +11,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Triangulator;
 
+import donnees.GenerateurDonnees;
+
 import personnage.IBattle;
 import personnage.Personnage;
 
@@ -111,13 +113,13 @@ public class AnimationFactory
 					double angle = Math.toDegrees(Math.atan(dy/dx));
 					if(frame == 0)
 					{
-						RessourceAnimationLoader.ajouterImage("bouleFeu1", new Image("ressources/images/skill/skill1.png", new Color(255,0,255)).getSubImage(0, 55, 22, 17));
+						RessourceAnimationLoader.ajouterImage("bouleFeu1", GenerateurDonnees.genererImage("bouleDeFeu1"));
 						RessourceAnimationLoader.getImage("bouleFeu1").rotate((float)angle);
-						RessourceAnimationLoader.ajouterImage("bouleFeu2", new Image("ressources/images/skill/skill1.png", new Color(255,0,255)).getSubImage(23, 55, 22, 17));
+						RessourceAnimationLoader.ajouterImage("bouleFeu2", GenerateurDonnees.genererImage("bouleDeFeu2"));
 						RessourceAnimationLoader.getImage("bouleFeu2").rotate((float)angle);
-						RessourceAnimationLoader.ajouterImage("bouleFeu3", new Image("ressources/images/skill/skill1.png", new Color(255,0,255)).getSubImage(46, 55, 22, 17));
+						RessourceAnimationLoader.ajouterImage("bouleFeu3", GenerateurDonnees.genererImage("bouleDeFeu3"));
 						RessourceAnimationLoader.getImage("bouleFeu3").rotate((float)angle);
-						RessourceAnimationLoader.ajouterImage("explosion", new Image("ressources/images/skill/skill1.png", new Color(255,0,255)).getSubImage(74, 54, 23, 22));
+						RessourceAnimationLoader.ajouterImage("explosion", GenerateurDonnees.genererImage("explosion"));
 					}
 					if(frame < 10)
 					{

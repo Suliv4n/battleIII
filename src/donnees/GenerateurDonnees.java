@@ -572,6 +572,45 @@ public class GenerateurDonnees
 		}
 	}
 	
+	public static Image genererImage(String id)
+	{
+		XMLParser analyseur = new XMLParser();
+		try 
+		{
+			XMLElement file = analyseur.parse("ressources/donnees/images.xml");
+			XMLElementList listeImages = file.getChildrenByName("image").get(0).getChildrenByName("arme");
+			ArrayList<XMLElement> collecImages = new ArrayList<XMLElement>();
+			listeImages.addAllTo(collecImages);
+			
+			
+			for(XMLElement e : collecImages)
+			{
+				if(e.getAttribute("id").equals(id))
+				{	
+					int x = e.getIntAttribute("x",0);
+					int y = e.getIntAttribute("y",0);
+					String path = e.getAttribute("file", null);
+					if(path == null){
+						return null;
+					}
+					Image img = new Image(path, new Color(255,0,255));
+					int width = e.getIntAttribute("width", img.getWidth());
+					int height = e.getIntAttribute("height", img.getHeight());
+					
+					return img.getSubImage(x, y, width, height);
+					
+				}
+			}
+			return null;
+		}
+		catch (SlickException e)
+		{
+			System.out.println("Impossible de charger le fichier xml");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 	/**
 	 * Retourne une subimage servant d'icône pour les IObjets.
@@ -582,4 +621,6 @@ public class GenerateurDonnees
 		Image icones = new Image(src, new Color(255,0,255));
 		return icones.getSubImage(1+(id%15)*21, 1 + ((int) id/15), 20, 20);
 	}
+	
+
 }
