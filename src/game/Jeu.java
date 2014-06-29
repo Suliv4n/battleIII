@@ -240,7 +240,8 @@ public class Jeu extends StateBasedGame
 			
 			RessourceAnimationLoader.init();
 			
-			//lib.LibUtil.addToJavaLibraryPath("../lib");
+			//Ajout des librairies
+			lib.LibUtil.addToJavaLibraryPath("lib");
 			
 			Map.init(Config.LONGUEUR, Config.LARGEUR);
 			

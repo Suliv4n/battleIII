@@ -578,7 +578,7 @@ public class GenerateurDonnees
 		try 
 		{
 			XMLElement file = analyseur.parse("ressources/donnees/images.xml");
-			XMLElementList listeImages = file.getChildrenByName("image").get(0).getChildrenByName("arme");
+			XMLElementList listeImages = file.getChildrenByName("image");
 			ArrayList<XMLElement> collecImages = new ArrayList<XMLElement>();
 			listeImages.addAllTo(collecImages);
 			

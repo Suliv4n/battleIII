@@ -107,31 +107,31 @@ public class AnimationFactory
 						throws SlickException 
 						
 				{
-					//déplacements totaux.
+					// déplacements totaux.
 					double dx = coordonneesCibles.get(0).x - coordonneesLanceur.x;
 					double dy = coordonneesCibles.get(0).y - coordonneesLanceur.y;
 					double angle = Math.toDegrees(Math.atan(dy/dx));
 					if(frame == 0)
 					{
-						RessourceAnimationLoader.ajouterImage("bouleFeu1", GenerateurDonnees.genererImage("bouleDeFeu1"));
-						RessourceAnimationLoader.getImage("bouleFeu1").rotate((float)angle);
-						RessourceAnimationLoader.ajouterImage("bouleFeu2", GenerateurDonnees.genererImage("bouleDeFeu2"));
-						RessourceAnimationLoader.getImage("bouleFeu2").rotate((float)angle);
-						RessourceAnimationLoader.ajouterImage("bouleFeu3", GenerateurDonnees.genererImage("bouleDeFeu3"));
-						RessourceAnimationLoader.getImage("bouleFeu3").rotate((float)angle);
+						RessourceAnimationLoader.ajouterImage("bouleDeFeu1", GenerateurDonnees.genererImage("bouleDeFeu1"));
+						RessourceAnimationLoader.getImage("bouleDeFeu1").rotate((float)angle);
+						RessourceAnimationLoader.ajouterImage("bouleDeFeu2", GenerateurDonnees.genererImage("bouleDeFeu2"));
+						RessourceAnimationLoader.getImage("bouleDeFeu2").rotate((float)angle);
+						RessourceAnimationLoader.ajouterImage("bouleDeFeu3", GenerateurDonnees.genererImage("bouleDeFeu3"));
+						RessourceAnimationLoader.getImage("bouleDeFeu3").rotate((float)angle);
 						RessourceAnimationLoader.ajouterImage("explosion", GenerateurDonnees.genererImage("explosion"));
 					}
 					if(frame < 10)
 					{
-						RessourceAnimationLoader.getImage("bouleFeu1").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y , 2f);
+						RessourceAnimationLoader.getImage("bouleDeFeu1").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y , 2f);
 					}
 					else if (frame < 20)
 					{
-						RessourceAnimationLoader.getImage("bouleFeu1").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y, 2f);
+						RessourceAnimationLoader.getImage("bouleDeFeu2").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y, 2f);
 					}
 					else if(frame < 30)
 					{
-						RessourceAnimationLoader.getImage("bouleFeu1").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y, 2f);
+						RessourceAnimationLoader.getImage("bouleDeFeu3").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y, 2f);
 					}
 					else
 					{

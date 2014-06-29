@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<image file="ressources/images/skill/skill1.png" id="bouleDeFeu1" x="0" y="55" width="22" height="17" />
+	<image file="ressources/images/skill/skill1.png" id="bouleDeFeu2" x="23" y="55" width="22" height="17" /> 
+	<image file="ressources/images/skill/skill1.png" id="bouleDeFeu3" x="46" y="55" width="22" height="17" />
+	<image file="ressources/images/skill/skill1.png" id="explosion" x="74" y="54" width="23" height="22" />
+</map>
