@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emitter imageName="" name="rain">
+	<spawnInterval enabled="true" min="80" max="100" />
+	<spawnCount enabled="true" min="50" max ="50" />
+	<initialLife enabled="true" min="2000" max="2000" />
+	<itinitialSize enabled="false" min="1" max="1" />
+	<xOffset enabled="true" min="-640" max="640.0" />
+	<yOffset enabled="true" min="-10" max="0" />
+	<initialDistance enabled="true" min="0" max="0" />
+	<speed enabled="true" min="400" max="400" />
+	<length enabled="false" min="0" max="0" />
+	<spread value="0" />
+	<angularOffset value="135" />
+	<growthFactor value="0" />
+	<gravityFactor value="0" />
+	<startAlpha value="100" />
+	<endAlpha value="100" />
+	<color>
+		<step r="0" b="0.7" g="0.1" offset="0" />
+	</color>
+</emitter>

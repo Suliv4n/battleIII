@@ -4,6 +4,8 @@ import game.dialogue.Dialogue;
 import game.dialogue.Replique;
 import game.dialogue.Selectionneur;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,8 +20,15 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.Particle;
+import org.newdawn.slick.particles.ParticleEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
+import org.newdawn.slick.particles.effects.FireEmitter;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -28,6 +37,7 @@ import audio.GestionnaireMusique;
 import donnees.Formatage;
 import donnees.GenerateurDonnees;
 
+import particles.RainEmitter;
 import personnage.Equipe;
 import personnage.EquipeEnnemis;
 import personnage.PNJ;
@@ -60,6 +70,8 @@ public class Exploration extends BasicGameState
 	private Selectionneur selectionneur;
 	private int curseurSelect = 0;
 	
+	private ParticleSystem particles;
+	
 	//#endregion
 
 	//#region ------OVERRIDE BASICGAMESTATE--------
@@ -67,22 +79,20 @@ public class Exploration extends BasicGameState
 	public void init(GameContainer arg0, StateBasedGame sbg)
 			throws SlickException 
 	{
+		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
+		
+		File xmlFile = new File("ressources/particles/rain.xml");
+		ConfigurableEmitter ce;
+		try {
+			ce = ParticleIO.loadEmitter(xmlFile);
+			particles.addEmitter(ce);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		equipe = Jeu.getEquipe();
 		animation = equipe.getAnimation();
-		/*
-		 * TEST
-		 */
-		ArrayList<Replique> dial = new ArrayList<Replique>();
-		dial.add(new Replique("Bienvenue à Atrina! Je vais vous conter l'histoire de ce monde. L'histoire de trois champions. $end", "Narrateur"));
-		dial.add(new Replique("Voulez vous que je vous la raconte? $select[Oui;Non{end};Test retour{0}]", "Narrateur"));
-		dial.add(new Replique("Le premier est $mage, un mage dont la sagesse est grande... pas autant que sa curiosité.", "Narrateur"));
-		dial.add(new Replique("Ensuite, $guerrier le vaillant guerrier toujours prêt à se sacrifier pour ses amis.", "Narrateur"));
-		dial.add(new Replique("Enfin, $rodeur le rôdeur mystérieux. On ne sait pas grand chose sur lui ne serait ce qu'il sait très bien manier l'arc.", "Narrateur"));
-		dialogue = new Dialogue(dial);
-		dialogue.suivant();
-		/*
-		 * FIN TEST
-		 */
 		
 		//Jeu.saisir(null, "Nom du rôdeur :", "Tell", this.getID(), sbg);
 	}
@@ -92,9 +102,9 @@ public class Exploration extends BasicGameState
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
 			throws SlickException 
 	{
-		Map map = equipe.getMap();
 		
-
+		
+		Map map = equipe.getMap();
 		
 		map.afficherLayer(0);
 		map.afficherLayer(1);
@@ -154,10 +164,7 @@ public class Exploration extends BasicGameState
 		}
 		//AFFICHAGE DU DIALOGUE
 		
-		//TEST LIGHT
-
-        //FTEST
-		
+		particles.render();
 	}
 
 	
@@ -167,6 +174,8 @@ public class Exploration extends BasicGameState
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException 
 	{	
+		particles.update(delta);
+		
 		Input in = container.getInput();
 		in.disableKeyRepeat();
 		
@@ -470,8 +479,9 @@ public class Exploration extends BasicGameState
 		g.setColor(Config.couleur1);
 		g.fillRect(1, 401, 639, 79);
 		g.setColor(Color.white);
+		g.setFont(Jeu.getFont());
+		//Jeu.getFont().drawString(10,405, Formatage.multiLignes(dialogue.get().getFormatStandard(),70));
 		g.drawString(Formatage.multiLignes(dialogue.get().getFormatStandard(),70),10,405);
-		
 		if(selectionneur != null)
 		{
 			int l = selectionneur.getDimensionBoite().width;

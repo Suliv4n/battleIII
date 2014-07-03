@@ -14,6 +14,8 @@
 
 package game;
 
+import java.awt.Font;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +29,11 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 import animation.RessourceAnimationLoader;
 import audio.GestionnaireMusique;
@@ -65,6 +71,8 @@ public class Jeu extends StateBasedGame
 	private static Equipe equipe;
 	private static ArrayList<Coffre> coffresOuverts;
 	
+	private static UnicodeFont font;
+	
 	//#endregion
 	
 	//#region --------CONSTRUCTEUR-----------
@@ -95,9 +103,8 @@ public class Jeu extends StateBasedGame
 		return fleches.getSubImage(id*11, 0, 11, 9);
 	}
 	
-	public Jeu getJeu()
-	{
-		return this;
+	public static UnicodeFont getFont(){
+		return font;
 	}
 	
 	//#endregion
@@ -108,6 +115,22 @@ public class Jeu extends StateBasedGame
 	{
 		fleches = new Image("ressources/images/fleches.png",new Color(255,0,255));
 		
+		//FONT
+	    try {
+	        InputStream inputStream = ResourceLoader.getResourceAsStream("ressources/fonts/8bitoperator.ttf");
+
+	        Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+	        awtFont.deriveFont(24);
+	        font = new UnicodeFont(awtFont, 15, false, false);
+	        font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+	        font.addAsciiGlyphs();
+	        font.loadGlyphs();
+
+	    } catch (Exception e) {
+	    	System.out.println("FONT---------ERROR");
+	        e.printStackTrace();
+	    }
+	    //!FONT
 		
 		GestionnaireMusique.chargerMusique("victory");		
 		GestionnaireMusique.chargerMusique("battle");
@@ -246,8 +269,8 @@ public class Jeu extends StateBasedGame
 			Map.init(Config.LONGUEUR, Config.LARGEUR);
 			
 			coffresOuverts = new ArrayList<Coffre>();
-
 			app = new AppGameContainer(new Jeu("Battle III : The fantasy land of the Concepteur"));
+			
 			
 			app.setDisplayMode(Config.LONGUEUR, Config.LARGEUR, false);
 			app.setTargetFrameRate(Config.FPS);
@@ -265,8 +288,4 @@ public class Jeu extends StateBasedGame
 		
 	}
 	//#endregion
-
-
-
-
 }
