@@ -264,6 +264,15 @@ public abstract class Personnage implements IBattle
 	{
 		return nom;
 	}
+	
+	/**
+	 * Retourne le level du personnage.
+	 * @return
+	 * 		le level du personnage.
+	 */
+	public int getLevel() {
+		return level;
+	}
 
 	/**
 	 * Met à jour le nombre de pv restant du personnage en ajoutant 

@@ -62,6 +62,7 @@ public class Jeu extends StateBasedGame
 	private InterfaceSac interfaceSac;
 	private static Combat combat;
 	private CombatResult combatResult;
+	private TitleScreen titleScreen;
 	
 	private static Image fleches;
 
@@ -156,7 +157,10 @@ public class Jeu extends StateBasedGame
 		gameOver = new GameOver();
 		interfaceSac = new InterfaceSac();
 		combatResult = new CombatResult();
+		titleScreen = new TitleScreen();
 		
+		
+		addState(titleScreen);
 		addState(exploration);
 		addState(saisie);
 		addState(menu);
@@ -166,6 +170,7 @@ public class Jeu extends StateBasedGame
 		addState(combat);
 		addState(gameOver);
 		addState(combatResult);
+		
 		
 
 	}

@@ -78,7 +78,7 @@ public class Equipe implements Iterable<Personnage>
 				
 		recherches = new ArrayList<String>();
 		
-		map = GenerateurDonnees.genererMap("test1", - absolueX + relativeX, - absolueY + relativeY);
+		map = GenerateurDonnees.genererMap("test1", - absolueX + relativeX, - absolueY + relativeY, true);
 		argent = 10;
 		
 		sac = new Sac();

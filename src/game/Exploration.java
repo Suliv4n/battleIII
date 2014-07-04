@@ -4,13 +4,11 @@ import game.dialogue.Dialogue;
 import game.dialogue.Replique;
 import game.dialogue.Selectionneur;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.naming.directory.DirContext;
 
 import map.Coffre;
 import map.Map;
@@ -20,15 +18,9 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.particles.ConfigurableEmitter;
-import org.newdawn.slick.particles.Particle;
-import org.newdawn.slick.particles.ParticleEmitter;
-import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
-import org.newdawn.slick.particles.effects.FireEmitter;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -37,7 +29,6 @@ import audio.GestionnaireMusique;
 import donnees.Formatage;
 import donnees.GenerateurDonnees;
 
-import particles.RainEmitter;
 import personnage.Equipe;
 import personnage.EquipeEnnemis;
 import personnage.PNJ;
@@ -79,6 +70,7 @@ public class Exploration extends BasicGameState
 	public void init(GameContainer arg0, StateBasedGame sbg)
 			throws SlickException 
 	{
+		/*
 		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
 		
 		File xmlFile = new File("ressources/particles/rain.xml");
@@ -87,9 +79,9 @@ public class Exploration extends BasicGameState
 			ce = ParticleIO.loadEmitter(xmlFile);
 			particles.addEmitter(ce);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
 		equipe = Jeu.getEquipe();
 		animation = equipe.getAnimation();
@@ -164,17 +156,14 @@ public class Exploration extends BasicGameState
 		}
 		//AFFICHAGE DU DIALOGUE
 		
-		particles.render();
+		//particles.render();
 	}
 
-	
-	
-	
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException 
 	{	
-		particles.update(delta);
+		//particles.update(delta);
 		
 		Input in = container.getInput();
 		in.disableKeyRepeat();
@@ -354,7 +343,7 @@ public class Exploration extends BasicGameState
 				Portail portail = equipe.getMap().getPortail((int) ((equipe.getAbsolueX())/32), (int) ((equipe.getAbsolueY()+16)/32));
 				if(portail != null)
 				{
-					equipe.setMap(GenerateurDonnees.genererMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2)));
+					equipe.setMap(GenerateurDonnees.genererMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
 					System.out.println("new coords : " + (int) (portail.getXT()*32 - Config.LONGUEUR/2)+ "  -  " + ((int) portail.getYT()*32 - Config.LARGEUR/2));
 					equipe.setValAbsolueX(portail.getXT() * 32 +16);
 					equipe.setValAbsolueY(portail.getYT() * 32 +16);

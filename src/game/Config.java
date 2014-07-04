@@ -39,7 +39,9 @@ public class Config
 	public static final int GAME_OVER = 7;
 	public static final int SAC = 8;
 	public static final int COMBATRESULT = 9;
+	public static final int TITLE_SCREEN = 0;
 	//#endregion
+	
 	
 	//#region -------COULEURS CADRE----
 	//Couleur des menus

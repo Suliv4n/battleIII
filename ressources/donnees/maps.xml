@@ -23,7 +23,7 @@ map => path de la map tmx
 
 
 <maps>
-	<map id="foret1" terrain="ressources/spritesheet/guerrier.png" musique="test2" map="ressources/map/foret1.tmx">	
+	<map id="foret1" nom="La forêt" terrain="ressources/spritesheet/guerrier.png" musique="test2" map="ressources/map/foret1.tmx">	
 		<portails>
 			<portail x="15" y="16" target="test1" xt="7" yt="2"/>
 			<portail x="14" y="16" target="test1" xt="7" yt="2"/>
@@ -38,7 +38,7 @@ map => path de la map tmx
 
 	</map>
 	
-	<map id="test1" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/salle_test1.tmx" exterieur="false" image="">
+	<map id="test1" nom="Salle de test" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/salle_test1.tmx" exterieur="false" image="">
 
 		<ennemis>
 			<groupe id="1"/>		

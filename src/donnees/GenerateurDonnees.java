@@ -106,10 +106,12 @@ public class GenerateurDonnees
 	 * 		Abscisse d'affichage de la map.		
 	 * @param y
 	 * 		Ordonnée d'affichage de la map.
+	 * @param load
+	 * 		Vrai si la tiledMap doit être chargé, faux sinon.
 	 * @return
 	 * 		La map dont l'id est passé en paramètre.
 	 */
-	public static Map genererMap(String idMap, double x, double y)
+	public static Map genererMap(String idMap, double x, double y, boolean load)
 	{
 		XMLParser analyseur = new XMLParser();
 		try 
@@ -127,6 +129,7 @@ public class GenerateurDonnees
 					String terrain = e.getAttribute("terrain","default");
 					String musique = e.getAttribute("musique",null);
 					String map = e.getAttribute("map");
+					String nom = e.getAttribute("nom", "Inconnu");
 					boolean exterieur = e.getBooleanAttribute("exterieur", true);
 					ArrayList<String> ennemis = GenererEquipesEnnemisId(e.getChildrenByName("ennemis"));
 					ArrayList<Portail> portails = GenererPortailsMap(e.getChildrenByName("portails"));
@@ -154,7 +157,7 @@ public class GenerateurDonnees
 						}
 					}
 					
-					return new Map(idMap, map, terrain, x, y, musique, exterieur, ennemis, portails, coffres, pnjListe); 
+					return new Map(idMap, nom, map, terrain, x, y, musique, exterieur, ennemis, portails, coffres, pnjListe, load); 
 				}
 
 				

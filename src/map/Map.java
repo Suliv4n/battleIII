@@ -48,6 +48,7 @@ public class Map
 	private double yTheorique;
 	
 	private String id;
+	private String nom;
 	private TiledMap map;
 	private Image terrain;
 	private ArrayList<Portail> portails;
@@ -82,10 +83,11 @@ public class Map
 	 * @throws SlickException
 	 * @see SlickException
 	 */
-	public Map(String id, String pathMap, String pathTerrain, double x, double y, 
-			String musique, boolean exterieur, ArrayList<String> ennemis, ArrayList<Portail> portails, ArrayList<Coffre> coffres, ArrayList<PNJ> pnj) throws SlickException
+	public Map(String id, String nom, String pathMap, String pathTerrain, double x, double y, 
+			String musique, boolean exterieur, ArrayList<String> ennemis, ArrayList<Portail> portails, ArrayList<Coffre> coffres, ArrayList<PNJ> pnj, boolean load) throws SlickException
 	{
 		this.id = id;
+		this.nom = nom;
 		this.exterieur = exterieur;
 		this.x=x;
 		this.y=y;
@@ -96,7 +98,70 @@ public class Map
 
 		
 		terrain = new Image(pathTerrain);
-		map = new TiledMap(pathMap);
+		if(load)
+		{
+			map = new TiledMap(pathMap);
+			tilesAnimes = new HashMap<Integer, AnimatedTileManager>();
+			
+			//Propriétés des tiles:
+			collisions = new boolean[map.getWidth()][map.getHeight()];
+			for(int axeX=0; axeX<map.getWidth();axeX++)
+			{
+				for(int axeY=0; axeY<map.getHeight();axeY++)
+				{
+					collisions[axeX][axeY]=false;
+					for(int i=0;i<map.getLayerCount();i++)
+					{
+						//current tile
+						int tileID=map.getTileId((int) axeX,(int) axeY, i);
+						
+						/* Test collision */
+						boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
+						boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
+						if(portail)
+						{
+							collisions[axeX][axeY] = false;
+							break;
+						}
+						else if(collision)
+						{
+							collisions[axeX][axeY] = true;
+						}
+						
+						/* Test animation de tiles */
+						if(!tilesAnimes.containsKey(tileID))
+						{
+							AnimatedTileManager atm = FactoryAnimatedTileManager.make(map, tileID);
+							if(atm != null)
+							{
+								tilesAnimes.put(tileID, atm);
+							}
+						}
+					}
+				}
+			}
+			//Fin proprietes tiles
+			
+
+			for(int axeX=0; axeX<map.getWidth();axeX++)
+			{
+				for(int axeY=0; axeY<map.getHeight();axeY++)
+				{
+					for(int i=0;i<map.getLayerCount();i++)
+					{
+						int tileID=map.getTileId((int) axeX,(int) axeY, i);
+						if("true".equals(map.getTileProperty(tileID, "coffre", "false")))
+						{
+							if(Jeu.estCoffreOuvert(new Coffre(id, axeX, axeY)))
+							{
+								map.setTileId((int) axeX,(int) axeY, i, tileID+1);  //coffre ouvert
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		this.portails = portails;
 		
 		this.coffres = coffres;
@@ -106,7 +171,6 @@ public class Map
 		
 		this.pnj = pnj;
 		
-		tilesAnimes = new HashMap<Integer, AnimatedTileManager>();
 		
 		/*
 		if(musique == null)
@@ -144,66 +208,6 @@ public class Map
 		}
 		*/
 		//Fin correction coordonées initiales
-		
-		
-		//Propriétés des tiles:
-		collisions = new boolean[map.getWidth()][map.getHeight()];
-		for(int axeX=0; axeX<map.getWidth();axeX++)
-		{
-			for(int axeY=0; axeY<map.getHeight();axeY++)
-			{
-				collisions[axeX][axeY]=false;
-				for(int i=0;i<map.getLayerCount();i++)
-				{
-					//current tile
-					int tileID=map.getTileId((int) axeX,(int) axeY, i);
-					
-					/* Test collision */
-					boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
-					boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
-					if(portail)
-					{
-						collisions[axeX][axeY] = false;
-						break;
-					}
-					else if(collision)
-					{
-						collisions[axeX][axeY] = true;
-					}
-					
-					/* Test animation de tiles */
-					if(!tilesAnimes.containsKey(tileID))
-					{
-						AnimatedTileManager atm = FactoryAnimatedTileManager.make(map, tileID);
-						if(atm != null)
-						{
-							tilesAnimes.put(tileID, atm);
-						}
-					}
-				}
-			}
-		}
-		//Fin proprietes tiles
-		
-
-		for(int axeX=0; axeX<map.getWidth();axeX++)
-		{
-			for(int axeY=0; axeY<map.getHeight();axeY++)
-			{
-				for(int i=0;i<map.getLayerCount();i++)
-				{
-					int tileID=map.getTileId((int) axeX,(int) axeY, i);
-					if("true".equals(map.getTileProperty(tileID, "coffre", "false")))
-					{
-						if(Jeu.estCoffreOuvert(new Coffre(id, axeX, axeY)))
-						{
-							map.setTileId((int) axeX,(int) axeY, i, tileID+1);  //coffre ouvert
-						}
-					}
-				}
-			}
-		}
-		
 
 	}
 	
@@ -688,5 +692,9 @@ public class Map
 
 	public String getId() {	
 		return id;
+	}
+
+	public String getNom() {
+		return nom;
 	}
 }
