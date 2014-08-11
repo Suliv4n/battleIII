@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="32" height="16" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="tileset_foret" tilewidth="32" tileheight="32" spacing="1" margin="1">
-  <image source="tileset/tileset_foret.png" trans="ff00ff" width="306" height="214"/>
+  <image source="tileset/tileset_foret.png" trans="ff00ff" width="306" height="273"/>
   <tile id="19">
    <properties>
     <property name="collision" value="true"/>
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="55" name="systeme" tilewidth="32" tileheight="32" spacing="1" margin="1">
+ <tileset firstgid="73" name="systeme" tilewidth="32" tileheight="32" spacing="1" margin="1">
   <image source="tileset/systeme.png" trans="ff00ff" width="306" height="214"/>
   <tile id="0">
    <properties>
@@ -29,7 +29,7 @@
  </layer>
  <layer name="Backgroung2" width="32" height="16">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACxNhYGAQIQPDADl6sZllDsUMSDStAbpfaG0XpfZT26347BdBo2kBqBX+6GYQayY94x+X/SMdDHT448qX1LSDVPvpBYi1n1pqyLWfVmCw2D+Q9S8A5NIodwAIAAA=
+   H4sIAAAAAAAACxNhYGAQIQPDADl6sZnlCcUMSDStAbpfaG0XpfZT26347BdBo2kBqBX+6GYQayY94x+X/SMdDHT448qX1LSDVPvpBYi1n1pqyLWfVmCw2D+Q9S8AHfcotwAIAAA=
   </data>
  </layer>
  <layer name="Objet" width="32" height="16">

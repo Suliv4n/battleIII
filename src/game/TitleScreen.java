@@ -9,7 +9,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.fills.GradientFill;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.ShapeRenderer;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -58,6 +63,7 @@ public class TitleScreen extends BasicGameState{
 			afficherSauvegardes(g);
 		}
 		
+
 		g.drawImage(Jeu.getFleche(0), 30, 205+20*curseurMenu);
 		
 	}
@@ -126,7 +132,7 @@ public class TitleScreen extends BasicGameState{
 				i - curseurAbsolu + curseurRelatif<4 && i<saves.size();
 				i++){
 			
-			int x = i - curseurAbsolu + curseurRelatif; //?
+			int x = i - curseurAbsolu + curseurRelatif;
 			g.drawString("Sauvegarde " + (i+1) , 390,  50 + x * pas );
 			
 			if(saves.get(i) != null)

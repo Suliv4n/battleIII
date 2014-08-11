@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 
 import map.Coffre;
+import map.Commande;
+import map.Interact;
 import map.Map;
 import map.Portail;
 
@@ -131,9 +133,10 @@ public class GenerateurDonnees
 					String map = e.getAttribute("map");
 					String nom = e.getAttribute("nom", "Inconnu");
 					boolean exterieur = e.getBooleanAttribute("exterieur", true);
-					ArrayList<String> ennemis = GenererEquipesEnnemisId(e.getChildrenByName("ennemis"));
-					ArrayList<Portail> portails = GenererPortailsMap(e.getChildrenByName("portails"));
-					ArrayList<Coffre> coffres = GenererCoffresMap(e.getChildrenByName("coffres"), idMap);
+					ArrayList<String> ennemis = genererEquipesEnnemisId(e.getChildrenByName("ennemis"));
+					ArrayList<Portail> portails = genererPortailsMap(e.getChildrenByName("portails"));
+					ArrayList<Coffre> coffres = genererCoffresMap(e.getChildrenByName("coffres"), idMap);
+					ArrayList<Commande> commandes = genererCommandesMap(e.getChildrenByName("commandes"));
 					
 					ArrayList<PNJ> pnjListe = new ArrayList<PNJ>();
 					
@@ -157,7 +160,7 @@ public class GenerateurDonnees
 						}
 					}
 					
-					return new Map(idMap, nom, map, terrain, x, y, musique, exterieur, ennemis, portails, coffres, pnjListe, load); 
+					return new Map(idMap, nom, map, terrain, x, y, musique, exterieur, ennemis, portails, coffres, pnjListe, commandes, load); 
 				}
 
 				
@@ -175,7 +178,7 @@ public class GenerateurDonnees
 	}
 
 	
-	private static ArrayList<Portail> GenererPortailsMap(
+	private static ArrayList<Portail> genererPortailsMap(
 			XMLElementList portails) throws SlickXMLException 
 	{
 		ArrayList<Portail> res = new ArrayList<Portail>();
@@ -210,16 +213,12 @@ public class GenerateurDonnees
 	}
 	
 	
-	private static ArrayList<Coffre> GenererCoffresMap(
+	private static ArrayList<Coffre> genererCoffresMap(
 			XMLElementList coffres, String idMap) throws SlickXMLException 
 	{
 		ArrayList<Coffre> res = new ArrayList<Coffre>();
 		
-		if(coffres == null)
-		{
-			return res;
-		}
-		if(coffres.size()==0)
+		if(coffres == null || coffres.size() == 0)
 		{
 			return res;
 		}
@@ -254,12 +253,67 @@ public class GenerateurDonnees
 		
 		return res;
 	}
+	
+	private static ArrayList<Commande> genererCommandesMap(XMLElementList XMLCommandes) throws SlickXMLException{
+		ArrayList<Commande> res = new ArrayList<Commande>();
+		
+		if(XMLCommandes == null || XMLCommandes.size() == 0){
+			return res;
+		}
+		
+		ArrayList<XMLElement> collecCommandes = new ArrayList<XMLElement>();		
+		XMLElementList listeCommandes = XMLCommandes.get(0).getChildrenByName("commande");
+		listeCommandes.addAllTo(collecCommandes);
+		
+		for(XMLElement e : collecCommandes){
+			int x = e.getIntAttribute("x",0);
+			int y = e.getIntAttribute("y",0);
+			int z = e.getIntAttribute("z",0);
+			
+			ArrayList<Interact> targets = new ArrayList<Interact>();
+			
+			
+			System.out.println("Commande détectée à " + x + ";" + y + ";" + z);
+			targets = genererInteractsMap(e.getChildrenByName("interaction"));
+			
+			res.add(new Commande(x,y,z,targets));
+			
+		}
+		
+		return res;
+	}
+	
+	
+	private static ArrayList<Interact> genererInteractsMap(XMLElementList XMLInteracts) throws SlickXMLException{
+		ArrayList<Interact> res = new ArrayList<Interact>();
+		
+		if(XMLInteracts == null || XMLInteracts.size() == 0){
+			return res;
+		}
+		
+		ArrayList<XMLElement> collecInteracts = new ArrayList<XMLElement>();		
+		XMLInteracts.addAllTo(collecInteracts);
+		
+		for(XMLElement e : collecInteracts){
+			int x = e.getIntAttribute("x",0);
+			int y = e.getIntAttribute("y",0);
+			int z = e.getIntAttribute("z",0);
+			
+			int change = e.getIntAttribute("change",0);
+			
+			System.out.println("\t- Intéraction détectée à " + x + ";" + y + ";" + z);
+			
+			res.add(new Interact(x, y, z, change));
+		}
+		
+		return res;
+	}
 
 	/**
 	 * Récupère un groupe d'ennemis à partir d'une noeud xml groupe.
 	 * @throws SlickException 
 	 */
-	private static ArrayList<String> GenererEquipesEnnemisId(XMLElementList  groupesEnnemis) throws SlickException 
+	private static ArrayList<String> genererEquipesEnnemisId(XMLElementList  groupesEnnemis) throws SlickException 
 	{
 		ArrayList<String> res = new ArrayList<String>();
 

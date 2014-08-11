@@ -34,8 +34,6 @@ map => path de la map tmx
 			<coffre x="3" y="1" po="200" />
 			<coffre x="5" y="1" contenu="objet:2" qte="5" />
 		</coffres>
-		
-
 	</map>
 	
 	<map id="test1" nom="Salle de test" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/salle_test1.tmx" exterieur="false" image="">
@@ -53,4 +51,22 @@ map => path de la map tmx
 			<portail x="7" y="1" target="foret1" xt="14" yt="15"/>
 		</portails>		
 	</map>
+	
+	<map id="donjon1" nom="Donjon" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/donjon_1.tmx">	
+		
+		<coffres>
+			<coffre x="30" y="3" contenu="objet:1" qte="3" />
+			<coffre x="35" y="3" po="200" />
+		</coffres>
+		
+		<commandes>
+			<commande x="32" y="22" change="+1" > 
+				<interaction x="3" y="9" z="1" type="toggle" />
+				<interaction x="3" y="10" z="1" type="toggle" />
+				<interaction x="33" y="9" z="1" type="toggle" />
+				<interaction x="33" y="10" z="1" type="toggle" />
+			</commande>
+		</commandes>
+	</map>
+	
 </maps>

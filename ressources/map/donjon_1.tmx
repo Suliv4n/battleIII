@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="donjon" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileset/donjon.png" trans="ff00ff" width="895" height="427"/>
+  <tile id="0">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="collision" value="true"/>
+    <property name="open" value="false"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="active" value="false"/>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="325" name="systeme" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileset/systeme.png" trans="ff00ff" width="306" height="214"/>
+  <tile id="0">
+   <properties>
+    <property name="coffre" value="true"/>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Background1" width="40" height="30" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3OwQkAIAwEwSN92H+bVuAnDyE6B/MM2UpSQ6zmTefuxT4AAICfdXfrjz59+s7bhSXYWcASAAA=
+  </data>
+ </layer>
+ <layer name="Background2" width="40" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2USQ7AIAwDg9qv8f8v9dwqJDQOYpFH4gIYzyUUESmbLAlmIrmT/Cy88x60N6qy+d2b6debo9/5ft78omT9G9ckv1bvLn6rQr93T3Q+6Le+XzRHP/qh0A/D6ridHLL++I3u0DpH3M2Cfhj0w7BmLXMOH3VXuazAEgAA
+  </data>
+ </layer>
+ <layer name="Objet" width="40" height="30" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BMQEAAADCoPVPbQ0PoAAAAADg1wAW4j6/wBIAAA==
+  </data>
+ </layer>
+ <layer name="Foreground1" width="40" height="30" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3ToQ0AMAwDQWf/pQtbUmyQO8kLWPrkmtDie+hqNah9+JtnAADsdgBbrHDYwBIAAA==
+  </data>
+ </layer>
+ <layer name="Foreground1" width="40" height="30" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BMQEAAADCoPVPbQ0PoAAAAADg1wAW4j6/wBIAAA==
+  </data>
+ </layer>
+</map>

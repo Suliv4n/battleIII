@@ -5,12 +5,15 @@ import game.dialogue.Replique;
 import game.dialogue.Selectionneur;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 
 import map.Coffre;
+import map.Commande;
 import map.Map;
 import map.Portail;
 
@@ -20,6 +23,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -70,7 +75,7 @@ public class Exploration extends BasicGameState
 	public void init(GameContainer arg0, StateBasedGame sbg)
 			throws SlickException 
 	{
-		/*
+		
 		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
 		
 		File xmlFile = new File("ressources/particles/rain.xml");
@@ -81,7 +86,7 @@ public class Exploration extends BasicGameState
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
+		
 		
 		equipe = Jeu.getEquipe();
 		animation = equipe.getAnimation();
@@ -149,6 +154,8 @@ public class Exploration extends BasicGameState
 			afficherFiltreTemporel(g);
 		}
 		
+		particles.render();
+		
 		//AFFICHAGE DU DIALOGUE
 		if(dialogue != null)
 		{
@@ -156,14 +163,14 @@ public class Exploration extends BasicGameState
 		}
 		//AFFICHAGE DU DIALOGUE
 		
-		//particles.render();
+		
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException 
 	{	
-		//particles.update(delta);
+		particles.update(delta);
 		
 		Input in = container.getInput();
 		in.disableKeyRepeat();
@@ -311,7 +318,8 @@ public class Exploration extends BasicGameState
 							}
 							else if(coffre.getPO() > 0)
 							{
-								rep.add(new Replique("Vous trouvez : " + coffre.getPO() + " pièces d'or")); 
+								Jeu.getEquipe().updatePO(coffre.getPO());
+								rep.add(new Replique("Vous trouvez : " + coffre.getPO() + " pièces d'or.")); 
 							}
 							else
 							{
@@ -323,6 +331,11 @@ public class Exploration extends BasicGameState
 							dialogue.suivant();
 						}
 					}
+				}
+				
+				Commande commande = equipe.getMap().getCommande(intX,intY);
+				if(commande != null){
+					commande.run(equipe.getMap());
 				}
 				
 				//-------------------PNJ-----------------------------

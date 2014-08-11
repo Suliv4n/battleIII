@@ -74,6 +74,8 @@ public class Jeu extends StateBasedGame
 	
 	private static UnicodeFont font;
 	
+	private static int currentSave = -1 ;
+	
 	//#endregion
 	
 	//#region --------CONSTRUCTEUR-----------
@@ -91,7 +93,14 @@ public class Jeu extends StateBasedGame
 	
 	public static void setEquipe(Equipe equipe) {
 		Jeu.equipe = equipe;
-		
+	}
+	
+	public static void setCurrentSave(int save){
+		currentSave = save;
+	}
+	
+	public static int getCurrentSave(){
+		return currentSave;
 	}
 	
 	/**

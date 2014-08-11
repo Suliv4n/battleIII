@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="24" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_foret" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileset/tileset_foret.png" trans="ff00ff" width="306" height="214"/>
+  <tile id="19">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Background1" width="24" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFo3gUj+JRPOgwAP0dAWk=
+  </data>
+ </layer>
+ <layer name="Background2" width="24" height="15">
+  <data encoding="base64" compression="zlib">
+   eJwTYWBgECEC8wIxH5Fq0TExAGY+KWCwm09ILy7zsYkNx/AhxnwJIrEYEeajuxXEVyQBa5LhfmLDhxwwGMynxH5quB+ffnqFDy0xAG1mCUI=
+  </data>
+ </layer>
+ <layer name="Objet" width="24" height="15" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMBgBAAWgAAE=
+  </data>
+ </layer>
+ <layer name="Foreground1" width="24" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzjZmBg4GGgPuACYm4oHozmw/Tj0ovLfEL6SLV/sIYPseZT2zweND6twHAJf2LSMCX5gxL347OfnuFDS0xrAAAl7wO8
+  </data>
+ </layer>
+ <layer name="Foreground2" width="24" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAd4KKh2aPmj5o/av6o+YTMpzWmNQAAFqYBcw==
+  </data>
+ </layer>
+</map>

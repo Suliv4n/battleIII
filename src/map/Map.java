@@ -66,6 +66,8 @@ public class Map
 	
 	private ArrayList<PNJ> pnj;
 	
+	private ArrayList<Commande> commandes;
+	
 	/**
 	 * Constructeur de Map.
 	 * 
@@ -84,7 +86,7 @@ public class Map
 	 * @see SlickException
 	 */
 	public Map(String id, String nom, String pathMap, String pathTerrain, double x, double y, 
-			String musique, boolean exterieur, ArrayList<String> ennemis, ArrayList<Portail> portails, ArrayList<Coffre> coffres, ArrayList<PNJ> pnj, boolean load) throws SlickException
+			String musique, boolean exterieur, ArrayList<String> ennemis, ArrayList<Portail> portails, ArrayList<Coffre> coffres, ArrayList<PNJ> pnj, ArrayList<Commande> commandes, boolean load) throws SlickException
 	{
 		this.id = id;
 		this.nom = nom;
@@ -94,7 +96,8 @@ public class Map
 		xTheorique=x;
 		yTheorique=y;
 		this.ennemis = ennemis;
-		
+		this.commandes = commandes;
+
 
 		
 		terrain = new Image(pathTerrain);
@@ -110,7 +113,7 @@ public class Map
 				for(int axeY=0; axeY<map.getHeight();axeY++)
 				{
 					collisions[axeX][axeY]=false;
-					for(int i=0;i<map.getLayerCount();i++)
+					for(int i=0;i<3;i++) //uniquement les 3 premières couches
 					{
 						//current tile
 						int tileID=map.getTileId((int) axeX,(int) axeY, i);
@@ -137,6 +140,13 @@ public class Map
 								tilesAnimes.put(tileID, atm);
 							}
 						}
+					}
+				}
+				
+				//init commandes
+				for(Commande  c : commandes){
+					for(Interact i : c.getInteracts()){
+						i.setTileId(map.getTileId(i.getX(), i.getY(), i.getZ()));
 					}
 				}
 			}
@@ -696,5 +706,46 @@ public class Map
 
 	public String getNom() {
 		return nom;
+	}
+
+	public Commande getCommande(int x, int y) {
+		for(Commande c : commandes){
+			if(c.getX() == x && c.getY() == y){
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Recalcul la matrice de collisions.
+	 */
+	public void reloadCollisions(){
+		collisions = new boolean[map.getWidth()][map.getHeight()];
+		for(int axeX=0; axeX<map.getWidth();axeX++)
+		{
+			for(int axeY=0; axeY<map.getHeight();axeY++)
+			{
+				collisions[axeX][axeY]=false;
+				for(int i=0;i<3;i++) //uniquement les 3 premières couches
+				{
+					//current tile
+					int tileID=map.getTileId((int) axeX,(int) axeY, i);
+					
+					/* Test collision */
+					boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
+					boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
+					if(portail)
+					{
+						collisions[axeX][axeY] = false;
+						break;
+					}
+					else if(collision)
+					{
+						collisions[axeX][axeY] = true;
+					}
+				}
+			}
+		}	
 	}
 }
