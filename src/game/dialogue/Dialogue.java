@@ -126,10 +126,10 @@ public class Dialogue implements Cloneable
 	}
 	
 	/**
-	 * Traduit une chaîne de caractères de type [choix1, choix2{1}] en selectionneur.
+	 * Traduit une chaîne de caractères de type [choix1; choix2{1}] en selectionneur.
 	 * 
 	 * @param syntaxe
-	 * 		Chaîne de caractères de type [choix1, choix2{n}] .
+	 * 		Chaîne de caractères de type [choix1; choix2{n}] .
 	 * 		
 	 * @return
 	 * 		Le sélectionneur correspondant à la chaîne de caractères passée en paramètre.

@@ -103,6 +103,10 @@ public class Jeu extends StateBasedGame
 		return currentSave;
 	}
 	
+	public static AppGameContainer getAppGameContainer(){
+		return app;
+	}
+	
 	/**
 	 * Retourne la fléche dont l'id est passé en paramètre.
 	 * @param id

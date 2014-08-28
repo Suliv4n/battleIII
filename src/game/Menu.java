@@ -27,6 +27,8 @@ public class Menu extends BasicGameState
 	private ArrayList<String> leMenu;
 	private int curseur;
 	private Image fleche;
+	
+	private StateBasedGame game;
 	//#endregion
 	
 	//#region ----OVERRIDE BASICGAMESTATE-----
@@ -35,6 +37,8 @@ public class Menu extends BasicGameState
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
+		this.game = game;
+				
 		curseur = 0;
 		leMenu = new ArrayList<String>();
 		leMenu.add("Continuer");
@@ -62,52 +66,69 @@ public class Menu extends BasicGameState
 	{
 		Input in = container.getInput();
 		in.disableKeyRepeat();
-		if(in.isKeyPressed(Input.KEY_DOWN))
+		if(in.isKeyPressed(Input.KEY_DOWN) || ControllerInput.isControllerDownPressed(0, in))
 		{
 			curseur = (curseur+1)%leMenu.size(); 
 		}
-		else if(in.isKeyPressed(Input.KEY_UP))
+		else if(in.isKeyPressed(Input.KEY_UP) || ControllerInput.isControllerUpPressed(0, in))
 		{
 			curseur = (curseur-1+leMenu.size())%leMenu.size(); 
 		}
 		else if(in.isKeyPressed(Input.KEY_RETURN))
 		{
-			switch(curseur)
-			{
-			case(0):
-				container.getInput().clearKeyPressedRecord();
-				game.enterState(Config.EXPLORATION);
-				break;
-			case(1):
-				container.getInput().clearKeyPressedRecord();
-				game.enterState(Config.GESTIONNAIRE_EQUIPE);
-				
-				break;
-			case(2):
-				container.getInput().clearKeyPressedRecord();
-				game.enterState(Config.CONFIGURATION);
-				
-				break;
-			case(3):
-				container.getInput().clearKeyPressedRecord();
-				game.enterState(Config.SAC);
-				
-				break;
-			case(4):
-				Sauvegarde.sauvegarder("save1");
-				break;
-			case(5):
-				//TODO confirmation
-				System.exit(0);
-			}
+			onConfirm();
 		}
 		
 		
-		if(in.isKeyPressed(Input.KEY_TAB) || in.isKeyPressed(Input.KEY_ESCAPE))
+		if(in.isKeyPressed(Input.KEY_TAB) || in.isKeyPressed(Input.KEY_ESCAPE) || in.isButtonPressed(ControllerInput.START, 0))
 		{
 			container.getInput().clearKeyPressedRecord();
 			game.enterState(Config.EXPLORATION);
-		}		
+		}	
+		
+		
+	}
+	
+	public void controllerButtonPressed(int controller, int button){
+		if(button == ControllerInput.VALIDATE){
+			onConfirm();
+		}
+		else if(button == ControllerInput.START){
+			game.enterState(Config.EXPLORATION);
+		}
+		
+	}
+	
+	
+	public void onConfirm(){
+		switch(curseur)
+		{
+		case(0):
+			game.getContainer().getInput().clearKeyPressedRecord();
+			game.enterState(Config.EXPLORATION);
+			break;
+		case(1):
+			game.getContainer().getInput().clearKeyPressedRecord();
+			game.enterState(Config.GESTIONNAIRE_EQUIPE);
+			
+			break;
+		case(2):
+			game.getContainer().getInput().clearKeyPressedRecord();
+			game.enterState(Config.CONFIGURATION);
+			
+			break;
+		case(3):
+			game.getContainer().getInput().clearKeyPressedRecord();
+			game.enterState(Config.SAC);
+			
+			break;
+		case(4):
+			Sauvegarde.sauvegarder("save1");
+			break;
+		case(5):
+			//TODO
+			System.exit(0);
+		}
 	}
 
 	@Override

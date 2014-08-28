@@ -70,7 +70,6 @@ public class Replique
 	
 	public String getReplique()
 	{
-		System.out.println(replique);
 		return replique;
 	}
 }

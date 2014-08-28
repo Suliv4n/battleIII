@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.ResourceBundle.Control;
 
 
 import map.Coffre;
@@ -52,6 +53,8 @@ public class Exploration extends BasicGameState
 
 	//#region -----------PROPRIETES----------------
 	
+	private StateBasedGame game;
+	
 	private Equipe equipe;
 	
 	//Vrai si l'equipe est en mouvement.
@@ -75,6 +78,15 @@ public class Exploration extends BasicGameState
 	public void init(GameContainer arg0, StateBasedGame sbg)
 			throws SlickException 
 	{
+		this.game = sbg;
+		
+		ArrayList<Replique> repliques = new ArrayList<Replique>();
+		repliques.add(new Replique("Hello world!", "Sul"));
+		repliques.add(new Replique("Ceci est un dialogue", "Sul"));
+		repliques.add(new Replique("Doit je répéter? $select[Oui{0};Non;Quitter{end}]", "Sul"));
+		repliques.add(new Replique("Au revoir"));
+		this.dialogue = new Dialogue(repliques);
+		dialogue.suivant();
 		
 		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
 		
@@ -144,7 +156,6 @@ public class Exploration extends BasicGameState
 		}
 		
 		
-		
 		map.afficherLayer(2);
 		map.afficherLayer(3);
 		map.afficherLayer(4);
@@ -173,7 +184,9 @@ public class Exploration extends BasicGameState
 		particles.update(delta);
 		
 		Input in = container.getInput();
+		
 		in.disableKeyRepeat();
+		
 		
 		if(dialogue == null)
 		{		
@@ -181,14 +194,15 @@ public class Exploration extends BasicGameState
 			int Y = (int) (equipe.getAbsolueY());
 			EquipeEnnemis ennemis = null; //Prend une valeur en cas de rencontre si mouvement
 			
-			if(!animation.equals(equipe.getAnimation()))
-			{
+			if(!animation.equals(equipe.getAnimation())){
 				animation = equipe.getAnimation();
 			}
 			
 			//GESTION DES MOUVEMENTS + INTERACTION________________________________________________
 			int d = 0;
-			if(in.isKeyDown(Input.KEY_LEFT))
+			
+			
+			if(in.isKeyDown(Input.KEY_LEFT) || in.isControllerLeft(0))
 			{
 				d = equipe.getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (-equipe.vitesse()), 0);
 				double marge = equipe.getMap().scrollX(d);
@@ -210,7 +224,7 @@ public class Exploration extends BasicGameState
 				
 				enMouvement = true;			
 			}		
-			else if(in.isKeyDown(Input.KEY_RIGHT))
+			else if(in.isKeyDown(Input.KEY_RIGHT) || in.isControllerRight(0))
 			{
 				d = equipe.getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (equipe.vitesse()), 0);
 				double marge = equipe.getMap().scrollX(d);
@@ -232,7 +246,7 @@ public class Exploration extends BasicGameState
 				enMouvement = true;
 			}
 			
-			else if(in.isKeyDown(Input.KEY_UP))
+			else if(in.isKeyDown(Input.KEY_UP) || in.isControllerUp(0))
 			{
 				d = equipe.getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-equipe.vitesse()));
 				double marge = equipe.getMap().scrollY(d);
@@ -254,7 +268,7 @@ public class Exploration extends BasicGameState
 				enMouvement = true;
 			}
 			
-			else if(in.isKeyDown(Input.KEY_DOWN))
+			else if(in.isKeyDown(Input.KEY_DOWN) || in.isControllerDown(0))
 			{
 				d = equipe.getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (equipe.vitesse()));
 				double marge = equipe.getMap().scrollY(d);
@@ -276,75 +290,6 @@ public class Exploration extends BasicGameState
 					animation = equipe.getAnimation();
 				}
 				enMouvement = true;
-			}
-			//INTERACTION_____________________________________________
-			else if(in.isKeyPressed(Input.KEY_RETURN))
-			{
-				int intX=0;
-				int intY=0;
-				if(equipe.getDirection() == Equipe.HAUT)
-				{
-					intX = (int) ((equipe.getAbsolueX())/32);
-					intY = (int) ((equipe.getAbsolueY()-16)/32);
-				}
-				else if(equipe.getDirection() == Equipe.BAS)
-				{
-					intX = (int) ((equipe.getAbsolueX())/32);
-					intY = (int) ((equipe.getAbsolueY()+16)/32);
-				}
-				else if(equipe.getDirection() == Equipe.GAUCHE)
-				{
-					intX = (int) ((equipe.getAbsolueX()-16)/32);
-					intY = (int) ((equipe.getAbsolueY())/32);
-				}
-				else if(equipe.getDirection() == Equipe.DROITE)
-				{
-					intX = (int) ((equipe.getAbsolueX()+16)/32);
-					intY = (int) ((equipe.getAbsolueY())/32);
-				}			
-				
-				if(equipe.getDirection() == Equipe.HAUT)
-				{
-					
-					Coffre coffre = equipe.getMap().getCoffre(intX, intY);
-					if(coffre != null)
-					{
-						if(!Jeu.estCoffreOuvert(coffre))
-						{
-							ArrayList<Replique> rep = new ArrayList<Replique>();
-							if(coffre.getContenu() != null)
-							{
-								rep.add(new Replique("Vous trouvez : " + coffre.getContenu() + " x " + coffre.getQuantite())); 
-							}
-							else if(coffre.getPO() > 0)
-							{
-								Jeu.getEquipe().updatePO(coffre.getPO());
-								rep.add(new Replique("Vous trouvez : " + coffre.getPO() + " pièces d'or.")); 
-							}
-							else
-							{
-								rep.add(new Replique("Le coffre est vide."));
-							}
-							coffre.recupererContenu(equipe);
-							equipe.getMap().updateCoffreSprite(coffre.getX(), coffre.getY());
-							dialogue = new Dialogue(rep);
-							dialogue.suivant();
-						}
-					}
-				}
-				
-				Commande commande = equipe.getMap().getCommande(intX,intY);
-				if(commande != null){
-					commande.run(equipe.getMap());
-				}
-				
-				//-------------------PNJ-----------------------------
-				PNJ pnj = equipe.getMap().getPNJ(intX, intY);
-				if(pnj != null)
-				{
-					dialogue = pnj.getDialogue();
-					if (!dialogue.suivant()) {dialogue = null;}
-				}
 			}
 			if(d == 0)
 			{
@@ -395,7 +340,7 @@ public class Exploration extends BasicGameState
 			if(in.isKeyPressed(Input.KEY_TAB))
 			{
 				in.clearKeyPressedRecord();
-				sbg.enterState(Config.MENU);
+				onStart();
 			}
 		}
 		
@@ -422,6 +367,12 @@ public class Exploration extends BasicGameState
 			{
 				gererSelectionneur(container.getInput());
 			}
+		}
+		
+		//INTERACTION_____________________________________________
+		if(in.isKeyPressed(Input.KEY_RETURN))
+		{
+			onValidate();
 		}
 		
 		equipe.getMap().updateAnimatedTile();
@@ -502,6 +453,17 @@ public class Exploration extends BasicGameState
 				i++;
 			}
 		}
+
+	}
+	
+	public void controllerButtonPressed(int controller, int button){
+		System.out.println(controller + " " + button);
+		if(button == ControllerInput.START){
+			onStart();
+		}
+		else if(button == ControllerInput.VALIDATE){
+			onValidate();
+		}
 	}
 	
 	
@@ -516,26 +478,110 @@ public class Exploration extends BasicGameState
 	 */
 	private void gererSelectionneur(Input in)
 	{
-		if(in.isKeyPressed(Input.KEY_DOWN))
-		{
+		if(ControllerInput.isControllerDownPressed(0, in)){
 			curseurSelect = (curseurSelect + 1) % selectionneur.nbChoix();
 		}
-		else if(in.isKeyPressed(Input.KEY_UP))
-		{
+		else if(ControllerInput.isControllerUpPressed(0, in)){
 			curseurSelect = (curseurSelect + selectionneur.nbChoix() - 1) % selectionneur.nbChoix();
-		}
-		else if(in.isKeyPressed(Input.KEY_RETURN))
-		{
-			
-			dialogue.validerSelectionneur(curseurSelect);
-			if(dialogue.estTermine())
-			{
-				dialogue = null;
-			}
-			curseurSelect = 0;
-			selectionneur = null;
 		}
 	}
 	//#endregion
+	
+	private void onStart(){
+		if(dialogue == null){
+			game.enterState(Config.MENU);
+		}
+	}
+	
+	private void onValidate(){
+		if(dialogue == null){ //Pas de dialogue => interaction avec les éléments du jeu (PNJ, coffre, commande)
+			int intX=0;
+			int intY=0;
+			if(equipe.getDirection() == Equipe.HAUT)
+			{
+				intX = (int) ((equipe.getAbsolueX())/32);
+				intY = (int) ((equipe.getAbsolueY()-16)/32);
+			}
+			else if(equipe.getDirection() == Equipe.BAS)
+			{
+				intX = (int) ((equipe.getAbsolueX())/32);
+				intY = (int) ((equipe.getAbsolueY()+16)/32);
+			}
+			else if(equipe.getDirection() == Equipe.GAUCHE)
+			{
+				intX = (int) ((equipe.getAbsolueX()-16)/32);
+				intY = (int) ((equipe.getAbsolueY())/32);
+			}
+			else if(equipe.getDirection() == Equipe.DROITE)
+			{
+				intX = (int) ((equipe.getAbsolueX()+16)/32);
+				intY = (int) ((equipe.getAbsolueY())/32);
+			}			
+			
+			if(equipe.getDirection() == Equipe.HAUT)
+			{
+				
+				Coffre coffre = equipe.getMap().getCoffre(intX, intY);
+				if(coffre != null)
+				{
+					if(!Jeu.estCoffreOuvert(coffre))
+					{
+						ArrayList<Replique> rep = new ArrayList<Replique>();
+						if(coffre.getContenu() != null)
+						{
+							rep.add(new Replique("Vous trouvez : " + coffre.getContenu() + " x " + coffre.getQuantite())); 
+						}
+						else if(coffre.getPO() > 0)
+						{
+							Jeu.getEquipe().updatePO(coffre.getPO());
+							rep.add(new Replique("Vous trouvez : " + coffre.getPO() + " pièces d'or.")); 
+						}
+						else
+						{
+							rep.add(new Replique("Le coffre est vide."));
+						}
+						coffre.recupererContenu(equipe);
+						equipe.getMap().updateCoffreSprite(coffre.getX(), coffre.getY());
+						dialogue = new Dialogue(rep);
+						dialogue.suivant();
+					}
+				}
+			}
+			
+			Commande commande = equipe.getMap().getCommande(intX,intY);
+			if(commande != null){
+				commande.run(equipe.getMap());
+			}
+			
+			//-------------------PNJ-----------------------------
+			PNJ pnj = equipe.getMap().getPNJ(intX, intY);
+			if(pnj != null)
+			{
+				dialogue = pnj.getDialogue();
+				if (!dialogue.suivant()) {dialogue = null;}
+			}
+		}
+		else{ //Gestion dialogue
+			if(selectionneur == null && dialogue.getSelectionneur() != null) //selectionneur
+			{
+				selectionneur = dialogue.getSelectionneur();
+			}
+			
+			if(selectionneur == null){ //S'il n'y a pas de sélectionneur
+				 if(!dialogue.suivant()){
+					 dialogue = null;
+					 game.getContainer().getInput().clearKeyPressedRecord();
+				 }
+			}
+			else{ //s'il y a un selectionneur
+				dialogue.validerSelectionneur(curseurSelect);
+				if(dialogue.estTermine()){
+					dialogue = null;
+				}
+				curseurSelect = 0;
+				selectionneur = null;
+			}
+		}
+	}
 
 }
