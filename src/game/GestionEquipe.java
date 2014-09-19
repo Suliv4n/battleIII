@@ -2,6 +2,7 @@ package game;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -15,6 +16,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import personnage.Equipe;
 import personnage.Personnage;
 import skill.Skill;
+import ui.GUIList;
+import ui.ListRenderer.ElementRenderer;
 
 import donnees.Formatage;
 
@@ -52,6 +55,9 @@ public class GestionEquipe extends BasicGameState
 	
 	private int action = -1;
 	
+	//Liste des skills;
+	private HashMap<Personnage,GUIList<Skill>> listesSkill;
+	
 	//#endregion
 	
 	//#region ------OVERRIDE BASICGAMESTATE---
@@ -62,6 +68,24 @@ public class GestionEquipe extends BasicGameState
 	{
 		equipe = Jeu.getEquipe();
 		fleche = Jeu.getFleche(0);
+		listesSkill = new HashMap<Personnage,GUIList<Skill>>();
+		ElementRenderer renderer = new ElementRenderer() {
+			
+			@Override
+			public void render(int x, int y, Object element) {
+				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				g.setColor(Color.white);
+				Skill skill = (Skill) element;
+				g.drawString(skill.getNom(), x+20, y);
+			}
+		};
+		
+		for(Personnage p : equipe){
+			GUIList<Skill> liste = new GUIList<>(204, 440, 20, Config.couleur1, Config.couleur2, true);
+			liste.setData(p.getSkills());
+			liste.setElementRenderer(renderer);
+			listesSkill.put(p, liste);
+		}
 	}
 
 	@Override
@@ -170,30 +194,8 @@ public class GestionEquipe extends BasicGameState
 				}
 				break;
 			case(COMPETENCES):
-				if(in.isKeyPressed(Input.KEY_DOWN) && selection.getSkills().size()!=0)
-				{
-					curseur_competences = (curseur_competences + 1)%selection.getSkills().size();
-					if(curseur_competences>=21)
-					{
-						premier_competences++;
-					}
-					else if(curseur_competences == 0)
-					{
-						premier_competences = 0;
-					}
-				}
-				else if(in.isKeyPressed(Input.KEY_UP) && selection.getSkills().size()!=0)
-				{
-					curseur_competences = (curseur_competences - 1 + selection.getSkills().size())%selection.getSkills().size();
-					if(curseur_competences-premier_competences < 0)
-					{
-						premier_competences--;
-					}
-					else if(curseur_competences == selection.getSkills().size()-1)
-					{
-						premier_competences = Math.max(0,selection.getSkills().size()-21);
-					}
-				}
+				listesSkill.get(selection).update(in);
+			
 				if (in.isKeyPressed(Input.KEY_ESCAPE))
 				{
 					in.clearKeyPressedRecord();
@@ -308,34 +310,27 @@ public class GestionEquipe extends BasicGameState
 		g.drawRect(1, 1, 637, 477);
 		g.drawLine(0, 40, 640, 40);
 		g.drawLine(0, 41, 640, 41);
-		g.drawLine(200, 42, 200, 638);
-		g.drawLine(201, 42, 201, 638);
+		//g.drawLine(200, 42, 200, 638);
+		//g.drawLine(201, 42, 201, 638);
 		
 		
 		g.setColor(Color.white);
 		g.drawString("Compétences", 250, 10);
 		g.drawImage(personnage.getAnimation(Equipe.BAS).getImage(2), 5,5);
 		
-		ArrayList<Skill> lesSkills = selection.getSkills();
 		
-		
-		g.setColor(Color.white);
-		for(int i=premier_competences; i<lesSkills.size() && i<premier_competences+21; i++)
-		{
-			g.drawString(lesSkills.get(i).getNom(),20,50+20*(i-premier_competences));
-		}
+		listesSkill.get(selection).render(0, 40);
 
-		afficherCurseurCompetences(g);
 		
-		//Eviter le nullPOinterException
-		if(lesSkills.size()!=0)
+		//Eviter le nullPointerException
+		if(listesSkill.get(selection).size() !=0)
 		{
-			g.drawString("Nom : "+lesSkills.get(curseur_competences).getNom(),205,50);
-			g.drawString("Description :\n"+Formatage.multiLignes(lesSkills.get(curseur_competences).getDescription(),46),205,100);
-			g.drawString("Puissance : "+lesSkills.get(curseur_competences).getPuissance(), 205, 200);
-			g.drawString("Coût : "+lesSkills.get(curseur_competences).getConsommation(), 205, 220);
-			
-			g.drawString("Niveau : "+lesSkills.get(curseur_competences).getLevel()+"/"+lesSkills.get(curseur_competences).getNiveauMax(), 205, 240);
+			Skill skill = listesSkill.get(selection).getObject();
+			g.drawString("Nom : "+skill.getNom(),205,50);
+			g.drawString("Description :\n"+Formatage.multiLignes(skill.getDescription(),46),205,100);
+			g.drawString("Puissance : "+skill.getPuissance(), 205, 200);
+			g.drawString("Coût : "+skill.getConsommation(), 205, 220);
+			g.drawString("Niveau : "+skill.getLevel()+"/"+skill.getNiveauMax(), 205, 240);
 		}
 	}
 	//#endregion

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.ResourceBundle.Control;
 
 
 import map.Coffre;
@@ -38,8 +37,10 @@ import donnees.GenerateurDonnees;
 import personnage.Equipe;
 import personnage.EquipeEnnemis;
 import personnage.PNJ;
-
-import static org.lwjgl.opengl.GL11.*;
+import skill.Skill;
+import ui.GUIList;
+import ui.ListRenderer.ElementRenderer;
+import ui.listController.ListController;
 
 /**
  * 
@@ -71,6 +72,8 @@ public class Exploration extends BasicGameState
 	
 	private ParticleSystem particles;
 	
+	private GUIList<Skill> test;
+	
 	//#endregion
 
 	//#region ------OVERRIDE BASICGAMESTATE--------
@@ -79,6 +82,30 @@ public class Exploration extends BasicGameState
 			throws SlickException 
 	{
 		this.game = sbg;
+		
+		this.test = new GUIList<Skill>(100, 100, 2, Config.couleur1, Config.couleur2, true);
+		test.setData(Jeu.getEquipe().getMage().getSkills());
+		test.setElementRenderer(new ElementRenderer() {
+			
+			@Override
+			public void render(int x, int y, Object element) {
+				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				Skill s = (Skill) element;
+				g.drawString(s.getNom(), x + 15, y );
+			}
+		});
+		
+		test.setListController(new ListController() {
+			@Override
+			public boolean isUp(Input in) {
+				return in.isKeyPressed(Input.KEY_UP) || ControllerInput.isControllerUpPressed(0, in);
+			}
+			
+			@Override
+			public boolean isDown(Input in) {
+				return in.isKeyPressed(Input.KEY_DOWN) || ControllerInput.isControllerDownPressed(0, in);
+			}
+		});
 		
 		ArrayList<Replique> repliques = new ArrayList<Replique>();
 		repliques.add(new Replique("Hello world!", "Sul"));
@@ -111,8 +138,6 @@ public class Exploration extends BasicGameState
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
 			throws SlickException 
 	{
-		
-		
 		Map map = equipe.getMap();
 		
 		map.afficherLayer(0);
@@ -172,9 +197,9 @@ public class Exploration extends BasicGameState
 		{
 			afficherDialogue(g);
 		}
-		//AFFICHAGE DU DIALOGUE
+		//!AFFICHAGE DU DIALOGUE
 		
-		
+		test.render(50, 50);
 	}
 
 	@Override
@@ -378,6 +403,8 @@ public class Exploration extends BasicGameState
 		equipe.getMap().updateAnimatedTile();
 		
 		in.clearKeyPressedRecord();
+		
+		test.update(in);
 	}
 
 	@Override
@@ -478,10 +505,10 @@ public class Exploration extends BasicGameState
 	 */
 	private void gererSelectionneur(Input in)
 	{
-		if(ControllerInput.isControllerDownPressed(0, in)){
+		if(ControllerInput.isControllerDownPressed(0, in) || in.isKeyPressed(Input.KEY_DOWN)){
 			curseurSelect = (curseurSelect + 1) % selectionneur.nbChoix();
 		}
-		else if(ControllerInput.isControllerUpPressed(0, in)){
+		else if(ControllerInput.isControllerUpPressed(0, in) || in.isKeyPressed(Input.KEY_UP)){
 			curseurSelect = (curseurSelect + selectionneur.nbChoix() - 1) % selectionneur.nbChoix();
 		}
 	}

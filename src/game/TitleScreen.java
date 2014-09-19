@@ -17,6 +17,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.ShapeRenderer;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.xml.SlickXMLException;
 
 import donnees.Sauvegarde;
 
@@ -40,12 +41,15 @@ public class TitleScreen extends BasicGameState{
 	private ArrayList<Equipe> saves;
 	private int time;
 	
+	private StateBasedGame game;
+	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
+	public void init(GameContainer arg0, StateBasedGame game)
 			throws SlickException {
 		fond = new Image("ressources/images/title_screen.png");
 		menu = new String[]{"Nouveau jeu",
 							"Charger"};
+		this.game = game;
 	}
 
 	@Override
@@ -76,21 +80,14 @@ public class TitleScreen extends BasicGameState{
 		Input in = container.getInput();
 		time += delta;
 		if(selectionMenu == -1){ //------------------MENU PRINCIPAL-------------------------
-			if(in.isKeyPressed(Input.KEY_UP)){
+			if(in.isKeyPressed(Input.KEY_UP) || ControllerInput.isControllerUpPressed(0, in)){
 				curseurMenu = (curseurMenu - 1 + menu.length) % menu.length;
 			}
-			else if(in.isKeyPressed(Input.KEY_DOWN)){
+			else if(in.isKeyPressed(Input.KEY_DOWN) || ControllerInput.isControllerDownPressed(0, in)){
 				curseurMenu = (curseurMenu + 1) % menu.length;
 			}
 			else if(in.isKeyPressed(Input.KEY_RETURN)){
-				selectionMenu = curseurMenu;
-				if(curseurMenu == 1){
-					try {
-						saves = Sauvegarde.getAllSauvegardes();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-				}
+				onValidate();
 			}
 		}
 		else if(selectionMenu == 1){//--------------------SAUVEGARDES-----------------------
@@ -99,18 +96,14 @@ public class TitleScreen extends BasicGameState{
 			}
 			else if(in.isKeyPressed(Input.KEY_ENTER)){
 				in.clearKeyPressedRecord();
-				if(saves.get(curseurAbsolu) != null)
-				{
-					Sauvegarde.charger("save"+(curseurAbsolu+1));
-					sbg.enterState(Config.EXPLORATION);
-				}
+				onValidate();
 			}
-			else if(time > 500 && in.isKeyDown(Input.KEY_UP)){
+			else if(time > 500 && in.isKeyDown(Input.KEY_UP) || ControllerInput.isControllerUpPressed(0, in)){
 				time= 0;
 				curseurAbsolu = Math.max(curseurAbsolu - 1, 0);
 				curseurRelatif = Math.max(curseurRelatif - 1, 0);
 			}
-			else if(time > 500 && in.isKeyDown(Input.KEY_DOWN)){
+			else if(time > 500 && in.isKeyDown(Input.KEY_DOWN) || ControllerInput.isControllerDownPressed(0, in)){
 				time=0;
 				curseurAbsolu = Math.min(curseurAbsolu + 1, saves.size() - 1);
 				curseurRelatif = Math.min(curseurRelatif + 1, 3);
@@ -125,6 +118,38 @@ public class TitleScreen extends BasicGameState{
 		return Config.TITLE_SCREEN;
 	}
 	
+	
+	@Override
+	public void controllerButtonPressed(int controller, int button){
+		if(button == ControllerInput.VALIDATE){
+			onValidate();
+		}
+		
+	}
+	
+	private void onValidate(){
+		if(selectionMenu == -1){
+			selectionMenu = curseurMenu;
+			if(curseurMenu == 1){
+				try {
+					saves = Sauvegarde.getAllSauvegardes();
+				} catch (FileNotFoundException | SlickXMLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else if(selectionMenu == 1){
+			if(saves.get(curseurAbsolu) != null)
+			{
+				try {
+					Sauvegarde.charger("save"+(curseurAbsolu+1));
+				} catch (SlickException e) {
+					e.printStackTrace();
+				}
+				game.enterState(Config.EXPLORATION);
+			}
+		}
+	}
 	
 	private void afficherSauvegardes(Graphics g) {
 		int pas = 90;
