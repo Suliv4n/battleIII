@@ -20,6 +20,7 @@ public class GUIList<T> {
 	private int height;
 	
 	private int count; //nombre d'éléments à afficher.
+	private int step = 20;
 	
 	private ElementRenderer elementRenderer;
 	private CursorRenderer cursorRenderer;
@@ -32,6 +33,9 @@ public class GUIList<T> {
 	private Color undergroundColor;
 	
 	private boolean drawGUI = true;
+	
+	private int cursorMargeX = 0;
+	private int cursorMargeY = 0;
 	
 	
 	
@@ -48,9 +52,9 @@ public class GUIList<T> {
 		//Renderer par défaut;
 		elementRenderer = new ElementRenderer() {
 			@Override
-			public void render(int x, int y, Object element){
+			public void render(int x, int y, Object element, int index){
 				Graphics g = Jeu.getAppGameContainer().getGraphics();
-				g.drawString(element.toString(), x + 15, y );
+				g.drawString(element == null ? "null" : element.toString(), x + 15, y );
 			}
 		};
 		
@@ -87,12 +91,11 @@ public class GUIList<T> {
 		}
 		g.setColor(Color.white);
 		int n = 0;
-		System.out.println(absoluteIndex + "  " + relativIndex);
 		for(int i = absoluteIndex - relativIndex; i < Math.min(list.size() ,absoluteIndex - relativIndex + count); i++){
-			elementRenderer.render(x, y + 5 + n *20, list.get(i));
+			elementRenderer.render(x, y + 5 + n * step, list.get(i),i);
 			n++;
 		}
-		cursorRenderer.render(x + (drawGUI ? frame : 0), y + relativIndex * 20 + (drawGUI ? frame : 0));
+		cursorRenderer.render(x + (drawGUI ? frame : 0) + cursorMargeX, y + relativIndex * step + (drawGUI ? frame : 0) + cursorMargeY);
 	}
 	
 	public void update(Input in){
@@ -131,5 +134,18 @@ public class GUIList<T> {
 	
 	public void setListController(ListController listController){
 		this.listController = listController;
+	}
+	
+	public void setStep(int step){
+		this.step = step;
+	}
+	
+	public void setCursorMarges(int x, int y){
+		cursorMargeX = x;
+		cursorMargeY = y;
+	}
+	
+	public int getSelectedIndex(){
+		return absoluteIndex;
 	}
 }

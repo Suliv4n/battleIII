@@ -72,7 +72,7 @@ public class GestionEquipe extends BasicGameState
 		ElementRenderer renderer = new ElementRenderer() {
 			
 			@Override
-			public void render(int x, int y, Object element) {
+			public void render(int x, int y, Object element, int index) {
 				Graphics g = Jeu.getAppGameContainer().getGraphics();
 				g.setColor(Color.white);
 				Skill skill = (Skill) element;

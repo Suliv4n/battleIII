@@ -9,12 +9,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.fills.GradientFill;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.ShapeRenderer;
+
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.xml.SlickXMLException;
@@ -23,6 +19,8 @@ import donnees.Sauvegarde;
 
 import personnage.Equipe;
 import personnage.Personnage;
+import ui.GUIList;
+import ui.ListRenderer.ElementRenderer;
 
 
 public class TitleScreen extends BasicGameState{
@@ -35,10 +33,11 @@ public class TitleScreen extends BasicGameState{
 	private int selectionMenu = -1;
 	
 	//Sauvegardes
-	private int curseurRelatif = 0;
-	private int curseurAbsolu = 0;
+	//private int curseurRelatif = 0;
+	//private int curseurAbsolu = 0;
 	
-	private ArrayList<Equipe> saves;
+	//private ArrayList<Equipe> saves;
+	private GUIList<Equipe> listeSaves;
 	private int time;
 	
 	private StateBasedGame game;
@@ -50,6 +49,41 @@ public class TitleScreen extends BasicGameState{
 		menu = new String[]{"Nouveau jeu",
 							"Charger"};
 		this.game = game;
+		
+		this.listeSaves = new GUIList<Equipe>(250, 390, 4, null, null, false);
+		listeSaves.setStep(70);
+		listeSaves.setCursorMarges(-15, 30);
+		listeSaves.setElementRenderer(new ElementRenderer() {
+			
+			@Override
+			public void render(int x, int y, Object element, int index) {
+				Equipe save = (Equipe) element;
+				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				g.setColor(new Color(132,105,55));
+				g.drawString("Sauvegarde " + (index+1) , x, y );
+					
+					if(save != null)
+					{
+						int j=0;
+						for(Personnage p : save)
+						{
+							if(p != null)
+							{
+								g.drawImage(p.getAnimation(Equipe.BAS).getImage(2), x + 40 * j, y+20);
+								j++;
+							}
+						}
+						g.drawString(save.get(0).getNom(), 510, 15 + y);
+						g.drawString("Niv. "+save.get(0).getLevel(), 510, 35 + y);
+						g.drawString(save.getMap().getNom(), 390, 55 + y);
+					}
+					else
+					{
+						g.drawString("Vide", 500, 35 + y);
+					}
+					
+					g.drawLine(380,70 + y, 630, 70 + y);
+				}});
 	}
 
 	@Override
@@ -98,16 +132,9 @@ public class TitleScreen extends BasicGameState{
 				in.clearKeyPressedRecord();
 				onValidate();
 			}
-			else if(time > 500 && in.isKeyDown(Input.KEY_UP) || ControllerInput.isControllerUpPressed(0, in)){
-				time= 0;
-				curseurAbsolu = Math.max(curseurAbsolu - 1, 0);
-				curseurRelatif = Math.max(curseurRelatif - 1, 0);
-			}
-			else if(time > 500 && in.isKeyDown(Input.KEY_DOWN) || ControllerInput.isControllerDownPressed(0, in)){
-				time=0;
-				curseurAbsolu = Math.min(curseurAbsolu + 1, saves.size() - 1);
-				curseurRelatif = Math.min(curseurRelatif + 1, 3);
-			}
+			
+			listeSaves.update(in);
+
 		}
 		
 		in.clearKeyPressedRecord();
@@ -132,17 +159,18 @@ public class TitleScreen extends BasicGameState{
 			selectionMenu = curseurMenu;
 			if(curseurMenu == 1){
 				try {
-					saves = Sauvegarde.getAllSauvegardes();
+					//saves = Sauvegarde.getAllSauvegardes();
+					listeSaves.setData(Sauvegarde.getAllSauvegardes());
 				} catch (FileNotFoundException | SlickXMLException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		else if(selectionMenu == 1){
-			if(saves.get(curseurAbsolu) != null)
+			if(listeSaves.getObject() != null)
 			{
 				try {
-					Sauvegarde.charger("save"+(curseurAbsolu+1));
+					Sauvegarde.charger("save"+(listeSaves.getSelectedIndex()+1));
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}
@@ -152,6 +180,8 @@ public class TitleScreen extends BasicGameState{
 	}
 	
 	private void afficherSauvegardes(Graphics g) {
+		listeSaves.render(390, 50);
+		/*
 		int pas = 90;
 		for(int i = curseurAbsolu - curseurRelatif; 
 				i - curseurAbsolu + curseurRelatif<4 && i<saves.size();
@@ -185,6 +215,7 @@ public class TitleScreen extends BasicGameState{
 		}
 		
 		g.drawImage(Jeu.getFleche(0), 380, 80 + curseurRelatif * pas);
+		*/
 	}
 
 }

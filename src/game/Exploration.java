@@ -74,6 +74,7 @@ public class Exploration extends BasicGameState
 	
 	private GUIList<Skill> test;
 	
+	
 	//#endregion
 
 	//#region ------OVERRIDE BASICGAMESTATE--------
@@ -88,7 +89,7 @@ public class Exploration extends BasicGameState
 		test.setElementRenderer(new ElementRenderer() {
 			
 			@Override
-			public void render(int x, int y, Object element) {
+			public void render(int x, int y, Object element, int index) {
 				Graphics g = Jeu.getAppGameContainer().getGraphics();
 				Skill s = (Skill) element;
 				g.drawString(s.getNom(), x + 15, y );
