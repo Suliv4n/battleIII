@@ -293,7 +293,28 @@ public class Equipe implements Iterable<Personnage>
 	{
 		return equipe[i];
 		
-	}	
+	}
+	
+	/**
+	 * Retourne le personnage à l'index passé en paramètre ou retourne
+	 * null si le personnage n'existe pas.
+	 * 
+	 * @param i
+	 * 	Index du personnage.
+	 * @return
+	 * 	le personnage à l'indexe i sauf, ou null s'il n'existe pas.
+	 */
+	public Personnage getIfExists(int i) {
+		Personnage res;
+		try{
+			res = equipe[i];
+		}
+		catch(IndexOutOfBoundsException e){
+			res = null;
+		}
+
+		return res;
+	}
 	
 	
 	public void setValRelativeY(double i) 
@@ -546,6 +567,11 @@ public class Equipe implements Iterable<Personnage>
 	{
 		sac.ajouter(objet, qte);
 	}
+	
+	public Personnage[] getPersonnages()
+	{
+		return equipe;
+	}
 
 	/**
 	 * Ajoute un ennemi à la liste des ennemis analysés.
@@ -582,4 +608,6 @@ public class Equipe implements Iterable<Personnage>
 	{
 		argent += po;
 	}
+
+
 }

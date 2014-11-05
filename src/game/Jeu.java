@@ -29,7 +29,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
@@ -38,8 +37,6 @@ import org.newdawn.slick.util.ResourceLoader;
 import animation.RessourceAnimationLoader;
 import audio.GestionnaireMusique;
 import personnage.*;
-import sac.objet.stuff.Arme;
-import donnees.GenerateurDonnees;
 import donnees.Sauvegarde;
 
 
@@ -61,6 +58,7 @@ public class Jeu extends StateBasedGame
 	private GameOver gameOver;
 	private InterfaceSac interfaceSac;
 	private static Combat combat;
+	private static BattleWithATB battleWithATB;
 	private CombatResult combatResult;
 	private TitleScreen titleScreen;
 	
@@ -128,7 +126,7 @@ public class Jeu extends StateBasedGame
 	public void initStatesList(GameContainer container) throws SlickException 
 	{
 		fleches = new Image("ressources/images/fleches.png",new Color(255,0,255));
-		
+		equipe = new Equipe(0);
 		//FONT
 	    try {
 	        InputStream inputStream = ResourceLoader.getResourceAsStream("ressources/fonts/8bitoperator.ttf");
@@ -151,7 +149,6 @@ public class Jeu extends StateBasedGame
 
 		
 		//TEST
-		Sauvegarde.charger("save1");
 		
 		//F_TEST
 		
@@ -171,6 +168,7 @@ public class Jeu extends StateBasedGame
 		interfaceSac = new InterfaceSac();
 		combatResult = new CombatResult();
 		titleScreen = new TitleScreen();
+		battleWithATB = new BattleWithATB();
 		
 		
 		addState(titleScreen);
@@ -181,11 +179,9 @@ public class Jeu extends StateBasedGame
 		addState(configuration);
 		addState(interfaceSac);
 		addState(combat);
+		addState(battleWithATB);
 		addState(gameOver);
 		addState(combatResult);
-		
-		
-
 	}
 	
 	//#endregion
@@ -218,6 +214,11 @@ public class Jeu extends StateBasedGame
 		sbg.enterState(Config.COMBAT, new _TransitionCombat() ,null);
 		GestionnaireMusique.jouerEnBoucle(ennemis.getMusique());
 		
+	}
+	
+	public static void launchBattle(EquipeEnnemis ennemis, StateBasedGame game) {
+		battleWithATB.launch(ennemis);
+		game.enterState(Config.BATTLE_ATB);
 	}
 	//#endregion
 	

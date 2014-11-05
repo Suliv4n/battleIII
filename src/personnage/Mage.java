@@ -4,6 +4,7 @@ package personnage;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
@@ -83,6 +84,11 @@ public class Mage extends Personnage
 	public Color couleurEnergie()
 	{
 		return new Color(0,100,150);
+	}
+
+	@Override
+	public String getLibelleEnergie() {
+		return "Mana";
 	}
 	
 }

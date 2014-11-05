@@ -52,7 +52,7 @@ map => path de la map tmx
 		</portails>		
 	</map>
 	
-	<map id="donjon1" nom="Donjon" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/donjon_1.tmx">	
+	<map id="donjon1" nom="Donjon" terrain="ressources/map/terrains/donjon.png" musique="test2" map="ressources/map/donjon_1.tmx">	
 		
 		<coffres>
 			<coffre x="30" y="3" contenu="objet:1" qte="3" />
@@ -67,6 +67,11 @@ map => path de la map tmx
 				<interaction x="33" y="10" z="1" type="toggle" />
 			</commande>
 		</commandes>
+		
+		<ennemis>
+			<groupe id="1"/>		
+		</ennemis>
+		
 	</map>
 	
 </maps>

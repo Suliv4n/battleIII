@@ -4,10 +4,15 @@ import game.ControllerInput;
 import game.Jeu;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import javax.xml.crypto.Data;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+
+import personnage.Personnage;
 
 import ui.ListRenderer.CursorRenderer;
 import ui.ListRenderer.ElementRenderer;
@@ -37,7 +42,7 @@ public class GUIList<T> {
 	private int cursorMargeX = 0;
 	private int cursorMargeY = 0;
 	
-	
+	private boolean renderCursor = true;
 	
 	public GUIList(int width, int height, int count, Color underground, Color frame, boolean drawGUI){
 		list = new ArrayList<T>();
@@ -95,7 +100,9 @@ public class GUIList<T> {
 			elementRenderer.render(x, y + 5 + n * step, list.get(i),i);
 			n++;
 		}
-		cursorRenderer.render(x + (drawGUI ? frame : 0) + cursorMargeX, y + relativIndex * step + (drawGUI ? frame : 0) + cursorMargeY);
+		if(renderCursor){
+			cursorRenderer.render(x + (drawGUI ? frame : 0) + cursorMargeX, y + relativIndex * step + (drawGUI ? frame : 0) + cursorMargeY);
+		}
 	}
 	
 	public void update(Input in){
@@ -114,6 +121,14 @@ public class GUIList<T> {
 	
 	public void setData(ArrayList<T> list){
 		this.list = list;
+	}
+	
+	public void setData(T[] list){
+		this.list = new ArrayList<>();
+		System.out.println(list);
+		for(T t : list){
+			this.list.add(t);
+		}
 	}
 	
 	public int size(){
@@ -147,5 +162,23 @@ public class GUIList<T> {
 	
 	public int getSelectedIndex(){
 		return absoluteIndex;
+	}
+	
+	public void setRenderCursor(boolean renderCursor){
+		this.renderCursor = renderCursor;
+	}
+
+	
+	/**
+	 * Sélectionne le premier item passé en paramètre de la liste trouvé 
+	 * (ne fait rien si l'item n'est pas dans la liste).
+	 * @param item
+	 * 	L'item à sélectionner.
+	 */
+	public void select(T item) {
+		if(list.contains(item)){
+			relativIndex = list.indexOf(item);
+			absoluteIndex = list.indexOf(item);
+		}
 	}
 }

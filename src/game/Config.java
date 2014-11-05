@@ -40,6 +40,7 @@ public class Config
 	public static final int SAC = 8;
 	public static final int COMBATRESULT = 9;
 	public static final int TITLE_SCREEN = 0;
+	public static final int BATTLE_ATB = 10;
 	//#endregion
 	
 	
@@ -62,4 +63,5 @@ public class Config
 	public static int musique = 0;
 	public static int son = 100;
 	//#endregion
+	protected static Color couleurPV = new Color(50,200,50);
 }

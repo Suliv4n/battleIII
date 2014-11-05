@@ -167,9 +167,11 @@ public class TitleScreen extends BasicGameState{
 			}
 		}
 		else if(selectionMenu == 1){
+			System.out.println("Validate on save"+(listeSaves.getSelectedIndex()+1));
 			if(listeSaves.getObject() != null)
 			{
 				try {
+					System.out.println("Execute load save"+(listeSaves.getSelectedIndex()+1));
 					Sauvegarde.charger("save"+(listeSaves.getSelectedIndex()+1));
 				} catch (SlickException e) {
 					e.printStackTrace();

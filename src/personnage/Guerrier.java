@@ -84,4 +84,10 @@ public class Guerrier extends Personnage
 		return new Color(150,50,0);
 	}
 
+
+	@Override
+	public String getLibelleEnergie() {
+		return "Furie";
+	}
+
 }

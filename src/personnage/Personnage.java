@@ -4,7 +4,6 @@
 
 package personnage;
 
-
 import game.Combat;
 import game.Config;
 
@@ -64,6 +63,7 @@ public abstract class Personnage implements IBattle
 	//Action en cours => state combat
 	private Object action;
 	private ArrayList<IBattle> cibles;
+	private ATBManager atbManager;
 	
 	/**
 	 * Constructeur de joueur. A la construction, le nom est initialisé.
@@ -93,6 +93,7 @@ public abstract class Personnage implements IBattle
 		
 		skills = new ArrayList<Skill>();
 		cibles = new ArrayList<IBattle>();
+		atbManager = new ATBManager(20);
 	}
 	
 
@@ -358,6 +359,7 @@ public abstract class Personnage implements IBattle
 	 * @return l'énergie (furie/mana/concentration) du personnage.
 	 */
 	public abstract int getEnergie();
+	public abstract String getLibelleEnergie();
 
 	/**
 	 * Retourne la vitesse de marche du personnage en fonction des bonus
@@ -898,7 +900,14 @@ public abstract class Personnage implements IBattle
 				}
 			}
 		}
-		
+	}
+
+	@Override
+	public Image getImageForBattle() {
+		return getImagePositionAttaque().getScaledCopy(2);
 	}
 	
+	public ATBManager getATBManager(){
+		return atbManager;
+	}
 }

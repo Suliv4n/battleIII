@@ -37,7 +37,7 @@ public class Ennemi implements IBattle
 
 	private ArrayList<Skill> skills;
 
-	
+	private ATBManager atbManager;
 	
 	public Ennemi(String id, String nom, String description, int atq_p, int atq_m, int def_p, int def_m, int dext, int soin, int pv_max,int xp, int argent, Image image)
 	{
@@ -57,13 +57,26 @@ public class Ennemi implements IBattle
 		pv = pv_max;
 		
 		cibles = new ArrayList<IBattle>();
+		atbManager = new ATBManager(1000);
 	}
 
+	/**
+	 * @deprecated use getImageForBattle instead
+	 * @return
+	 */
+	@Deprecated
 	public Image getImage()
 	{
 		return image;
 	}
+	
+	
+	public Image getImageForBattle()
+	{
+		return image;
+	}
 
+	
 	public int getDexterite() 
 	{
 		return dexterite;
@@ -247,6 +260,11 @@ public class Ennemi implements IBattle
 	public int getXP() 
 	{
 		return experience;
+	}
+
+	@Override
+	public ATBManager getATBManager() {
+		return atbManager;
 	}
 	
 }

@@ -35,7 +35,6 @@ public class GestionEquipe extends BasicGameState
 	
 	//#region ----------PROPRIETES------------
 	
-	private Equipe equipe;
 	private int curseur = 0;
 	private int curseur_action = 0;
 	private int curseur_ordre = 0;
@@ -66,7 +65,6 @@ public class GestionEquipe extends BasicGameState
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		equipe = Jeu.getEquipe();
 		fleche = Jeu.getFleche(0);
 		listesSkill = new HashMap<Personnage,GUIList<Skill>>();
 		ElementRenderer renderer = new ElementRenderer() {
@@ -80,7 +78,7 @@ public class GestionEquipe extends BasicGameState
 			}
 		};
 		
-		for(Personnage p : equipe){
+		for(Personnage p : Jeu.getEquipe()){
 			GUIList<Skill> liste = new GUIList<>(204, 440, 20, Config.couleur1, Config.couleur2, true);
 			liste.setData(p.getSkills());
 			liste.setElementRenderer(renderer);
@@ -92,9 +90,9 @@ public class GestionEquipe extends BasicGameState
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException 
 	{
-		equipe.afficherListeEquipe(g,curseur);
-		equipe.get(curseur).afficherStats(g);
-		equipe.get(curseur).afficherEquipements(g);
+		Jeu.getEquipe().afficherListeEquipe(g,curseur);
+		Jeu.getEquipe().get(curseur).afficherStats(g);
+		Jeu.getEquipe().get(curseur).afficherEquipements(g);
 		afficherCurseur(g);
 		if(selection != null)
 		{
@@ -127,11 +125,11 @@ public class GestionEquipe extends BasicGameState
 		{		
 			if(in.isKeyPressed(Input.KEY_DOWN))
 			{
-				curseur = (curseur + 1)%equipe.nbPersonnages();
+				curseur = (curseur + 1)%Jeu.getEquipe().nbPersonnages();
 			}
 			else if(in.isKeyPressed(Input.KEY_UP))
 			{
-				curseur = (curseur + equipe.nbPersonnages() - 1)%equipe.nbPersonnages();
+				curseur = (curseur + Jeu.getEquipe().nbPersonnages() - 1)%Jeu.getEquipe().nbPersonnages();
 			}
 			
 			if (in.isKeyPressed(Input.KEY_ESCAPE))
@@ -142,7 +140,7 @@ public class GestionEquipe extends BasicGameState
 			
 			if(in.isKeyPressed(Input.KEY_RETURN))
 			{
-				selection = equipe.get(curseur);
+				selection = Jeu.getEquipe().get(curseur);
 			}
 		}
 		else
@@ -153,29 +151,29 @@ public class GestionEquipe extends BasicGameState
 			case(ORDRE):
 				if(curseur == curseur_ordre)
 				{
-					curseur_ordre = (curseur_ordre + 1)%equipe.nbPersonnages();
+					curseur_ordre = (curseur_ordre + 1)%Jeu.getEquipe().nbPersonnages();
 				}
 				
 				if(in.isKeyPressed(Input.KEY_DOWN))
 				{
-					if((curseur_ordre + 1)%equipe.nbPersonnages() != curseur)
+					if((curseur_ordre + 1)%Jeu.getEquipe().nbPersonnages() != curseur)
 					{
-						curseur_ordre = (curseur_ordre + 1)%equipe.nbPersonnages();
+						curseur_ordre = (curseur_ordre + 1)%Jeu.getEquipe().nbPersonnages();
 					}
 					else
 					{
-						curseur_ordre = (curseur_ordre + 2)%equipe.nbPersonnages();
+						curseur_ordre = (curseur_ordre + 2)%Jeu.getEquipe().nbPersonnages();
 					}
 				}
 				else if(in.isKeyPressed(Input.KEY_UP))
 				{
-					if((curseur_ordre - 1)%equipe.nbPersonnages() != curseur)
+					if((curseur_ordre - 1)%Jeu.getEquipe().nbPersonnages() != curseur)
 					{
-						curseur_ordre = (curseur_ordre - 1 + equipe.nbPersonnages())%equipe.nbPersonnages();
+						curseur_ordre = (curseur_ordre - 1 + Jeu.getEquipe().nbPersonnages())%Jeu.getEquipe().nbPersonnages();
 					}
 					else
 					{
-						curseur_ordre = (curseur_ordre - 2 + equipe.nbPersonnages())%equipe.nbPersonnages();
+						curseur_ordre = (curseur_ordre - 2 + Jeu.getEquipe().nbPersonnages())%Jeu.getEquipe().nbPersonnages();
 					}
 					
 				}
@@ -188,7 +186,7 @@ public class GestionEquipe extends BasicGameState
 				
 				if(in.isKeyPressed(Input.KEY_RETURN))
 				{
-					equipe.swap(curseur, curseur_ordre);
+					Jeu.getEquipe().swap(curseur, curseur_ordre);
 					curseur = curseur_ordre;
 					action = -1;
 				}

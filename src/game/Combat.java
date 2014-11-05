@@ -457,7 +457,7 @@ public class Combat extends BasicGameState
 	private void barreBas(Graphics g)
 	{
 		g.setColor(Config.couleur1);
-		g.fillRect(0, 380, 640, 65100);		
+		g.fillRect(0, 380, 640, 100);
 		g.setColor(Config.couleur2);
 		g.drawRect(0,380,640,99);
 		g.drawRect(1,381,638,97);

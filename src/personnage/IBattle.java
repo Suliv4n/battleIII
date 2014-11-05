@@ -4,6 +4,8 @@ import game.Combat;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Image;
+
 public interface IBattle 
 {
 	public int getAttaquePhysique();
@@ -12,6 +14,8 @@ public interface IBattle
 	public int getDefenseMagique();
 	public int getDexterite();
 	public int getSoin();
+	public Image getImageForBattle();
+	public ATBManager getATBManager();
 	
 	public int getPV();
 	public int getPVMaximum();

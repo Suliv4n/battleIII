@@ -107,6 +107,8 @@ public class Sauvegarde
 		XMLParser parser = new XMLParser();
 		XMLElement root = parser.parse("ressources/donnees/saves/"+sauvegarde+".xml");
 		
+		System.out.println("Now loading "+sauvegarde);
+		
 		//récupération de l'équipe de personnages
 		Equipe equipe = new Equipe(3);
 		XMLElementList personnages = root.getChildrenByName("personnages").get(0).getChildren();

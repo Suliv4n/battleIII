@@ -87,4 +87,10 @@ public class Rodeur extends Personnage
 	{
 		return new Color(0,150,0);
 	}
+
+
+	@Override
+	public String getLibelleEnergie() {
+		return "Conc.";
+	}
 }
