@@ -1,7 +1,7 @@
 package map;
 
 
-import game.Jeu;
+import game.Launcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,61 +12,52 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
-import donnees.GenerateurDonnees;
-import personnage.Ennemi;
-import personnage.Equipe;
-import personnage.EquipeEnnemis;
-import personnage.PNJ;
-import audio.GestionnaireMusique;
+import data.DataManager;
+import personnage.Ennemy;
+import personnage.Party;
+import personnage.EnnemisParty;
+import personnage.NonPlayerCharacter;
+import audio.MusicManager;
 
-
-
-// TODO Particules : pluie neige OU filtres / particles
 
 /**
- * Une Map possède les caratéristiques :
- * <ul>
- * <li>x;y : les coordonées d'afffichage de la Map</li>
- * <li>map : la TiledMap associée à la map</li>
- * <li>xThéorique;yThéorique : Coordonnées utilisées pour le SAB</li>
- * </ul>
+ * 
+ * Classe représentant une Map.
  * 
  * @author Darklev
- * 
- * @see TiledMap
  *
  */
 public class Map 
 {
-	public static int LONG;
-	public static int LARG;
+	//largeur et longueur affichés de la map.
+	public static int WIDTH;
+	public static int HEIGHT;
 	
+	//coordonnées d'affichage
 	private double x;
 	private double y;
 	
-	private double xTheorique;
-	private double yTheorique;
-	
+	//Id de la map
 	private String id;
-	private String nom;
+	private String name;
 	private TiledMap map;
-	private Image terrain;
-	private ArrayList<Portail> portails;
-	private HashMap<Integer, AnimatedTileManager> tilesAnimes;
+	private Image backgroundBattle;
+	private ArrayList<Gate> gates;
+	private HashMap<Integer, AnimatedTileManager> animatedTiles;
 	
-	private ArrayList<Coffre> coffres;
+	private ArrayList<Chest> chests;
 	
-	private boolean exterieur;
+	private boolean outDoor;
 	
 	private boolean[][] collisions;
 	
 	private ArrayList<String> ennemis;
 	
-	private String musique;
+	private String music;
 	
-	private ArrayList<PNJ> pnj;
+	private ArrayList<NonPlayerCharacter> NPC;
 	
-	private ArrayList<Commande> commandes;
+	private ArrayList<Command> commands;
 	
 	/**
 	 * Constructeur de Map.
@@ -86,25 +77,23 @@ public class Map
 	 * @see SlickException
 	 */
 	public Map(String id, String nom, String pathMap, String pathTerrain, double x, double y, 
-			String musique, boolean exterieur, ArrayList<String> ennemis, ArrayList<Portail> portails, ArrayList<Coffre> coffres, ArrayList<PNJ> pnj, ArrayList<Commande> commandes, boolean load) throws SlickException
+			String musique, boolean exterieur, ArrayList<String> ennemis, ArrayList<Gate> portails, ArrayList<Chest> coffres, ArrayList<NonPlayerCharacter> pnj, ArrayList<Command> commandes, boolean load) throws SlickException
 	{
 		this.id = id;
-		this.nom = nom;
-		this.exterieur = exterieur;
+		this.name = nom;
+		this.outDoor = exterieur;
 		this.x=x;
 		this.y=y;
-		xTheorique=x;
-		yTheorique=y;
 		this.ennemis = ennemis;
-		this.commandes = commandes;
+		this.commands = commandes;
 
 
 		
-		terrain = new Image(pathTerrain);
+		backgroundBattle = new Image(pathTerrain);
 		if(load)
 		{
 			map = new TiledMap(pathMap);
-			tilesAnimes = new HashMap<Integer, AnimatedTileManager>();
+			animatedTiles = new HashMap<Integer, AnimatedTileManager>();
 			
 			//Propriétés des tiles:
 			collisions = new boolean[map.getWidth()][map.getHeight()];
@@ -132,19 +121,19 @@ public class Map
 						}
 						
 						/* Test animation de tiles */
-						if(!tilesAnimes.containsKey(tileID))
+						if(!animatedTiles.containsKey(tileID))
 						{
 							AnimatedTileManager atm = FactoryAnimatedTileManager.make(map, tileID);
 							if(atm != null)
 							{
-								tilesAnimes.put(tileID, atm);
+								animatedTiles.put(tileID, atm);
 							}
 						}
 					}
 				}
 				
 				//init commandes
-				for(Commande  c : commandes){
+				for(Command  c : commandes){
 					for(Interact i : c.getInteracts()){
 						i.setTileId(map.getTileId(i.getX(), i.getY(), i.getZ()));
 					}
@@ -162,7 +151,7 @@ public class Map
 						int tileID=map.getTileId((int) axeX,(int) axeY, i);
 						if("true".equals(map.getTileProperty(tileID, "coffre", "false")))
 						{
-							if(Jeu.estCoffreOuvert(new Coffre(id, axeX, axeY)))
+							if(Launcher.estCoffreOuvert(new Chest(id, axeX, axeY)))
 							{
 								map.setTileId((int) axeX,(int) axeY, i, tileID+1);  //coffre ouvert
 							}
@@ -172,14 +161,14 @@ public class Map
 			}
 		}
 		
-		this.portails = portails;
+		this.gates = portails;
 		
-		this.coffres = coffres;
+		this.chests = coffres;
 		
-		this.musique = musique;
+		this.music = musique;
 		
 		
-		this.pnj = pnj;
+		this.NPC = pnj;
 		
 		
 		/*
@@ -230,10 +219,15 @@ public class Map
 	}
 	*/
 	
-	public static void init(int longEcran, int largEcran)
+	/**
+	 * Initialisation de la map.
+	 * @param width
+	 * @param height
+	 */
+	public static void init(int width, int height)
 	{
-		LONG=longEcran;
-		LARG=largEcran;
+		WIDTH = width;
+		HEIGHT = height;
 	}
 	
 	
@@ -270,9 +264,9 @@ public class Map
 	DIMENSIONS : LONG * LARG
 	*/
 	
-	public Image getTerrain()
+	public Image getBackgroundBattle()
 	{
-		return terrain;
+		return backgroundBattle;
 	}
 	
 	/**
@@ -445,11 +439,11 @@ public class Map
 			{
 				for(int z=0;z<map.getLayerCount();z++)
 				{
-					for(Integer atm : tilesAnimes.keySet())
+					for(Integer atm : animatedTiles.keySet())
 					{
-						if(tilesAnimes.get(atm).containsTile(map.getTileId(x, y, z)))
+						if(animatedTiles.get(atm).containsTile(map.getTileId(x, y, z)))
 						{
-							map.setTileId(x, y, z, tilesAnimes.get(atm).next());
+							map.setTileId(x, y, z, animatedTiles.get(atm).next());
 						}
 					}
 				}
@@ -457,11 +451,14 @@ public class Map
 		}
 	}
 	
-	public void afficherPNJ()
+	/**
+	 * Affiche les personnages non joueurs
+	 */
+	public void renderNPC()
 	{
-		for(PNJ pnj : this.pnj)
+		for(NonPlayerCharacter pnj : this.NPC)
 		{
-			if(pnj.enMouvement())
+			if(pnj.isMoving())
 			{
 				pnj.getAnimation().draw((float) x + pnj.getX()*32, (float) y + pnj.getY()*32);
 			}
@@ -482,7 +479,7 @@ public class Map
 	 */
 	public boolean getExterieur()
 	{
-		return exterieur;
+		return outDoor;
 	}
 	
 	/**
@@ -503,7 +500,7 @@ public class Map
 		try
 		{
 			boolean perso = false;
-			for(PNJ p : pnj)
+			for(NonPlayerCharacter p : NPC)
 			{
 				perso = p.getX() == xC && p.getY() == yC;
 				if(perso) break;
@@ -622,14 +619,14 @@ public class Map
 	 * @return
 	 * 		Groupe d'ennemis générés ou null.
 	 */
-	public EquipeEnnemis genererEnnemis()
+	public EnnemisParty generateEnnemis()
 	{
 		if(ennemis.size()>0)
 		{
 			double r = Math.random();
 			if(r>0.99)
 			{			
-				return GenerateurDonnees.genererGroupeEnnemis(ennemis.get(0));
+				return DataManager.loadEnnemisParty(ennemis.get(0));
 			}
 		}
 		
@@ -637,11 +634,22 @@ public class Map
 		
 	}
 	
-	public Portail getPortail(int tilex, int tiley)
+	/**
+	 * Retourne le portail aux coordonnées spécifiées.
+	 * Retourne null s'il n'y a pas de portail à cet endroit.
+	 * 
+	 * @param x
+	 * 		Abscisse du portail. (en tile)
+	 * @param y
+	 * 		ordonnée du portail. (en tile)
+	 * @return
+	 * 		Portail aux coordonnées en paramètre, null s'il n'y a pas de portail.
+	 */
+	public Gate getGate(int x, int y)
 	{		
-		for(Portail p : portails)
+		for(Gate p : gates)
 		{
-			if(tilex == p.getX() && tiley == p.getY())
+			if(x == p.getX() && y == p.getY())
 			{
 				return p;
 			}
@@ -649,12 +657,22 @@ public class Map
 		return null;
 	}
 
-	public Coffre getCoffre(int tilex, int tiley) 
+	/**
+	 * Retourne le coffre aux coordonnées spécifiées.
+	 * Retourne null s'il n'y a pas de portail à cet endroit.
+	 * 
+	 * @param x
+	 * 		Abscisse du coffre. (en tile)
+	 * @param y
+	 * 		ordonnée du coffre. (en tile)
+	 * @return
+	 * 		Portail aux coordonnées en paramètre, null s'il n'y a pas de coffre.
+	 */
+	public Chest getChest(int x, int y) 
 	{
-		System.out.println("TEST COFFRE "+ tilex + "  -   " + tiley);
-		for(Coffre c : coffres)
+		for(Chest c : chests)
 		{
-			if(tilex == c.getX() && tiley == c.getY())
+			if(x == c.getX() && y == c.getY())
 			{
 				return c;
 			}
@@ -662,7 +680,15 @@ public class Map
 		return null;
 	}
 	
-	public void updateCoffreSprite(int x , int y)
+	/**
+	 * Met à jour les sprites des coffres.
+	 * (Si le coffre est ouvert, affiche le sprite de coffre ouvert).
+	 * @param x
+	 * 		Abscisse du coffre à mettre à jour.
+	 * @param y
+	 * 		Ordonnées du coffre à mettre à jour.
+	 */
+	public void updateChestSprite(int x , int y)
 	{
 		
 		
@@ -673,8 +699,6 @@ public class Map
 			if("true".equals(map.getTileProperty(tileID, "coffre", "false")))
 			{
 				map.setTileId(x,y, i, tileID+1);  //coffre ouvert
-				
-				System.out.println(map.getTileId(x,y,i));
 			}
 		}
 
@@ -685,12 +709,23 @@ public class Map
 	 */
 	public String getMusic()
 	{
-		return musique;
+		return music;
 	}
 
-	public PNJ getPNJ(int x, int y) 
+	/**
+	 * Récupère le PNJ(NPC) aux coordonnées passées en paramètre.
+	 * Renvoie null s'il n'y a pas de PNJ à ces coordonnées.
+	 * 
+	 * @param x
+	 * 		Abscisse du PNJ(NPC).
+	 * @param y
+	 * 		Ordonnées du PNJ(NPC).
+	 * @return
+	 * 		Le PNJ(NPC) aux coordonnées pasées en paramètre ou null s'il n'y a pas de PNJ à ces coordonnées.
+	 */
+	public NonPlayerCharacter getNPC(int x, int y) 
 	{
-		for(PNJ p : pnj)
+		for(NonPlayerCharacter p : NPC)
 		{
 			if(p.getX() == x && p.getY() == y)
 			{
@@ -700,16 +735,35 @@ public class Map
 		return null;
 	}
 
+	/**
+	 * Retourne l'id de la map.
+	 * 
+	 * @return l'id de la map.
+	 */
 	public String getId() {	
 		return id;
 	}
 
-	public String getNom() {
-		return nom;
+	/**
+	 * Retourne le nom de la map.
+	 * @return le nom de la map.
+	 */
+	public String getName() {
+		return name;
 	}
 
-	public Commande getCommande(int x, int y) {
-		for(Commande c : commandes){
+	/**
+	 * Récupère la commande aux coordonnées spécifiées.
+	 * @param x
+	 * 		Abscisse de la commande.
+	 * @param y
+	 * 		ordonnée de la commande.
+	 * @return
+	 * 		La commande aux coordonnées passées en paramètre ou null s'il n'y a
+	 * pas de commande à ces coordonnées.
+	 */
+	public Command getCommande(int x, int y) {
+		for(Command c : commands){
 			if(c.getX() == x && c.getY() == y){
 				return c;
 			}

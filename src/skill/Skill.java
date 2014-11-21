@@ -4,106 +4,122 @@ import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Random;
 
-import personnage.Personnage;
+import personnage.Character;
 
+/**
+ * Cette classe représente une compétence.
+ * 
+ * @author Darklev
+ *
+ */
 public class Skill 
 {
-	public static final int ALLIE = 0;
-	public static final int ENNEMI = 1;
-	public static final int TOUS_ALLIES = 2;
-	public static final int TOUS_ENNEMIS = 3;
+	public static final int ALLY = 0;
+	public static final int ENNEMY = 1;
+	public static final int ALL_ALLIES = 2;
+	public static final int ALL_ENNEMIS = 3;
 	// public static final int TOUS = 4;
 	
-	public static final int PHYSIQUE = 0;
-	public static final int MAGIQUE = 1;
-	public static final int SOIN = 2;
+	public static final int PHYSIC = 0;
+	public static final int MAGIC = 1;
+	public static final int HEALTH = 2;
 
 	private String id;
-	private String nom;
+	private String name;
 	private String description;
 	
-	private int puissance;
-	private int precision;
+	private int power;
+	private int accuracy;
 	private int consommation;
 	private int type;
 	
-	private int UPpuissance;
+	//Valeur ajouté à la puissance lors de monté de niveau.
+	private int UPPower;
 	
 	/**
 	 * Un effet est écrit : 
 	 * effet:x
 	 * x étant la probabilité/ ":x" facultatif => probabilté = 100%
 	 */
-	private ArrayList<String> effets;
+	private ArrayList<String> effects;
 	
 	private int level = 1;
 	private int levelMax = 10;
 	
-	private int xp = 0;
+	//Expérience dans la compétence
+	private int experience = 0;
 	
-	private int cibles;	
+	//Type de cible.
+	private int targets;	
 	
 	/**
 	 * Constructeur de Skill.
 	 * 
-	 * @param nom
+	 * @param name
 	 * 		Le nom du Skill.
 	 * @param description
 	 * 		Description du Skill.
-	 * @param puissance
+	 * @param power
 	 * 		Puissance du Skill.
-	 * @param precision
+	 * @param accuracy
 	 * 		Précision du Skill.
-	 * @param conso
+	 * @param consomation
 	 * 		Consommation du Skill.
-	 * @param UP
+	 * @param UPPower
 	 * 		Nombre de points de puissance ajoutés à la puissance du Skill par monté de niveau.
-	 * @param lvlMax
+	 * @param levelMax
 	 * 		Niveau maximum du Skill.
-	 * @param effets
+	 * @param effects
 	 * 		Effets du skill (null ok)
 	 * @param cible
 	 * 		Cible du Skill (Skill.ALLIE, Skill.ENNEMI, Skill.TOUS_ALLIE, Skill.TOUS_ENNEMIS)
 	 * @param type
 	 * 		Physique, Magique 
 	 */
-	public Skill(String id, String nom, String description, int puissance, int precision, int conso, int UP ,int lvlMax, String effets, int cibles, int type)
+	public Skill(String id, String name, String description, int power, int accuracy, int consomation, int UPPower ,int levelMax, String effects, int targets, int type)
 	{
 		this.id = id;
-		this.nom = nom;
+		this.name = name;
 		this.description = description;
 		
 		
-		this.cibles = cibles;
+		this.targets = targets;
 		
-		this.puissance = puissance;
-		this.precision = precision;
-		this.consommation = conso;
+		this.power = power;
+		this.accuracy = accuracy;
+		this.consommation = consomation;
 		
-		UPpuissance = UP;
+		this.UPPower = UPPower;
 		
-		this.levelMax = lvlMax;
+		this.levelMax = levelMax;
 		
-		this.effets = new ArrayList<String>();
-		String[] lesEffets = effets.split(";");
+		this.effects = new ArrayList<String>();
+		String[] lesEffets = effects.split(";");
 		
 		for(String e : lesEffets)
 		{
-			this.effets.add(e);
+			this.effects.add(e);
 		}
 		
 		this.type = type;
 	}
 	
+	/**
+	 * Retourne le type de compétence (Physic, magic ou health).
+	 * @return le type de compétence (Physic, magic ou health).
+	 */
 	public int getType()
 	{
 		return type;
 	}
 	
+	/**
+	 * Monte la compétence d'un niveau.
+	 */
 	private void levelUp()
 	{
 		level++;
-		puissance+=UPpuissance;
+		power+=UPPower;
 	}
 	
 	
@@ -116,6 +132,10 @@ public class Skill
 		return level;
 	}
 	
+	/**
+	 * Retourne le level max du skill.
+	 * @return le level max du skill.
+	 */
 	public int getLevelMax(){
 		return levelMax;
 	}
@@ -126,10 +146,10 @@ public class Skill
 	 * 
 	 * @return les effets de la compétence.
 	 */
-	public ArrayList<String> genererEffets()
+	public ArrayList<String> generateEffects()
 	{
-		ArrayList<String> lesEffetsGeneres = new ArrayList<String>();
-		for(String e : effets)
+		ArrayList<String> effects = new ArrayList<String>();
+		for(String e : this.effects)
 		{
 			int r = (int) Math.random()*100;
 			if(e.matches(".+:[1-9]{1,2}"))
@@ -139,16 +159,16 @@ public class Skill
 				
 				if(r<proba)
 				{
-					lesEffetsGeneres.add(eff[0]);
+					effects.add(eff[0]);
 				}
 			}
 			else
 			{
-				lesEffetsGeneres.add(e);
+				effects.add(e);
 			}
 		}
 		
-		return lesEffetsGeneres;
+		return effects;
 	}
 	
 	/**
@@ -164,19 +184,19 @@ public class Skill
 	{
 		if(cible.toLowerCase().equalsIgnoreCase("ennemi"))
 		{
-			return ENNEMI;
+			return ENNEMY;
 		}
 		else if(cible.toLowerCase().equalsIgnoreCase("tous_ennemis"))
 		{
-			return TOUS_ENNEMIS;
+			return ALL_ENNEMIS;
 		}
 		else if(cible.toLowerCase().equalsIgnoreCase("tous_allies"))
 		{
-			return TOUS_ALLIES;
+			return ALL_ALLIES;
 		}
 		else if(cible.toLowerCase().equalsIgnoreCase("allie"))
 		{
-			return ALLIE;
+			return ALLY;
 		}
 		else
 		{
@@ -189,9 +209,9 @@ public class Skill
 	 * 
 	 * @return le nom du Skill.
 	 */
-	public String getNom()
+	public String getName()
 	{
-		return nom;
+		return name;
 	}
 	
 	/**
@@ -209,9 +229,9 @@ public class Skill
 	 * 
 	 * @return la puissance du Skill.
 	 */
-	public int getPuissance()
+	public int getPower()
 	{
-		return puissance;
+		return power;
 	}
 	
 	/**
@@ -243,7 +263,7 @@ public class Skill
 	 */
 	public int getCible()
 	{
-		return cibles;
+		return targets;
 	}
 	
 	/**
@@ -258,13 +278,13 @@ public class Skill
 	{
 		switch(cible)
 		{
-		case(TOUS_ENNEMIS):
+		case(ALL_ENNEMIS):
 			return "Tous les ennemis";
-		case(TOUS_ALLIES):
+		case(ALL_ALLIES):
 			return "Tous les alliés";
-		case(ENNEMI):
+		case(ENNEMY):
 			return "Ennemi";
-		case(ALLIE):
+		case(ALLY):
 			return "Allié";
 		default:
 			return "Cible inconnue";
@@ -274,7 +294,7 @@ public class Skill
 	@Override
 	public String toString()
 	{
-		String res = nom+" : "+description+"\nPuissance : "+puissance+"\nPrecision : "+precision+"\nConsommation : "+consommation +"\nNiveau : "+level+"/"+levelMax;
+		String res = name+" : "+description+"\nPuissance : "+power+"\nPrecision : "+accuracy+"\nConsommation : "+consommation +"\nNiveau : "+level+"/"+levelMax;
 		return res;
 	}
 
@@ -299,10 +319,10 @@ public class Skill
 	 * 		Le libellé d'erreur si le personnage ne peut pas lancer le skill,
 	 * null sinon.
 	 */
-	public String libErreurLancer(Personnage personnage)
+	public String getErrorCastMessage(Character personnage)
 	{
 	
-		if(personnage.getEnergie() < consommation)
+		if(personnage.getEnergy() < consommation)
 		{
 			if(personnage.getClass().getName().equalsIgnoreCase("personnage.Mage"))
 			{
@@ -321,10 +341,16 @@ public class Skill
 		return null;
 	}
 
+	/**
+	 * Paramètre le level de la compétence.
+	 * 
+	 * @param level
+	 * 		Nouveu lvel de la compétence.
+	 */
 	public void setLevel(int level) {
 		
 		//retour à la puissance de base :
-		puissance = puissance - (this.level - 1)* UPpuissance;
+		power = power - (this.level - 1)* UPPower;
 		
 		
 		if(level < 1){
@@ -336,7 +362,7 @@ public class Skill
 		
 		this.level = level;
 		//nouvelle puissance
-		puissance = puissance + UPpuissance * (level-1);
+		power = power + UPPower * (level-1);
 	}
 
 

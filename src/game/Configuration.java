@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import audio.GestionnaireMusique;
+import audio.MusicManager;
 
 
 /**
@@ -35,7 +35,7 @@ public class Configuration extends BasicGameState
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		fleche = Jeu.getFleche(0);
+		fleche = Launcher.getArrow(0);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class Configuration extends BasicGameState
 
 		
 		g.setColor(Color.white);
-		if(Jeu.estPleinEcran())
+		if(Launcher.estPleinEcran())
 		{
 			g.drawString("Mode fenêtre", 40, 300);
 		}
@@ -173,7 +173,7 @@ public class Configuration extends BasicGameState
 				break;
 			case(9):
 				Config.musique = Math.max(Config.musique-1, 0);
-				GestionnaireMusique.setVolume();
+				MusicManager.setVolume();
 				break;
 			case(10):
 				Config.son = Math.max(Config.son-1, 0);
@@ -208,7 +208,7 @@ public class Configuration extends BasicGameState
 				break;
 			case(9):
 				Config.musique = Math.min(Config.musique+1, 100);
-				GestionnaireMusique.setVolume();
+				MusicManager.setVolume();
 				break;
 			case(10):
 				Config.son = Math.min(Config.son+1, 100);
@@ -228,7 +228,7 @@ public class Configuration extends BasicGameState
 			}
 			else if(curseur == 8)
 			{
-				Jeu.switchModeAffichage();
+				Launcher.switchModeAffichage();
 			}
 			else if(curseur == 11)
 			{

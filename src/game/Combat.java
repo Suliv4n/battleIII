@@ -14,15 +14,17 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import donnees.Formatage;
+import bag.IItems;
+
+import data.Format;
 
 import animation.AnimationFactory;
-import animation.CombatAnimation;
+import animation.BattleAnimation;
 import animation.EffectsDisplayer;
-import audio.GestionnaireMusique;
+import audio.MusicManager;
 
 import personnage.*;
-import sac.IObjet;
+import personnage.Character;
 import skill.Skill;
 
 
@@ -43,18 +45,18 @@ import skill.Skill;
 public class Combat extends BasicGameState
 {
 	//#region --------ATTRIBUTS--------------
-	private static Equipe equipe;
-	private static EquipeEnnemis ennemis;
+	private static Party equipe;
+	private static EnnemisParty ennemis;
 	
 	
 	//Personnage sélectionné pour une action
-	private Personnage selectionPersonnage;
-	private HashMap<Personnage, Integer>curseurAction;
+	private Character selectionPersonnage;
+	private HashMap<Character, Integer>curseurAction;
 	private int curseurCible = 0;
 	
 	//curseurs Skills :
-	private HashMap<Personnage, Integer> curseursAbsolusSkills;
-	private HashMap<Personnage, Integer> curseursRelatifsSkills;
+	private HashMap<Character, Integer> curseursAbsolusSkills;
+	private HashMap<Character, Integer> curseursRelatifsSkills;
 	
 	
 	
@@ -69,7 +71,7 @@ public class Combat extends BasicGameState
 	 */
 
 	//liste des personnages ayant préparé leur action
-	private ArrayList<Personnage> personnagesPrets;
+	private ArrayList<Character> personnagesPrets;
 	
 	private ArrayList<IBattle> ordrePassage;
 	
@@ -87,7 +89,7 @@ public class Combat extends BasicGameState
 	 * 2 = ennemis annihilés
 	 */
 	private int issueDuCombat = 0;
-	private CombatAnimation animEnCours; 
+	private BattleAnimation animEnCours; 
 	private EffectsDisplayer effectsDisplayerEnCours;
 	private int compteurFrame;
 	
@@ -103,26 +105,26 @@ public class Combat extends BasicGameState
 	 */
 	private int cumulXP;
 	private int cumulPO;
-	private ArrayList<IObjet> drops;
+	private ArrayList<IItems> drops;
 	
 	//#endregion
 	
 	//#region -----------GETTERS-------------
 	
 	//----------AIDE A L'IA------------------
-	public Equipe getEquipe()
+	public Party getEquipe()
 	{
 		return equipe;
 	}	
 	
-	public EquipeEnnemis getEnnemis()
+	public EnnemisParty getEnnemis()
 	{
 		return ennemis;
 	}
 	//#endregion
 
 	//#region ------------INIT-----------------
-	public static void init(Equipe joueur, EquipeEnnemis ennemis)
+	public static void init(Party joueur, EnnemisParty ennemis)
 	{
 		//initialisation des coordonnees
 		coords = new HashMap<IBattle, Point>();
@@ -163,11 +165,11 @@ public class Combat extends BasicGameState
 			throws SlickException 
 	{
 		ordrePassage = new ArrayList<IBattle>();
-		personnagesPrets = new ArrayList<Personnage>();
-		curseursAbsolusSkills = new HashMap<Personnage, Integer>();
-		curseursRelatifsSkills = new HashMap<Personnage, Integer>();
-		curseurAction = new HashMap<Personnage, Integer>();
-		drops = new ArrayList<IObjet>();
+		personnagesPrets = new ArrayList<Character>();
+		curseursAbsolusSkills = new HashMap<Character, Integer>();
+		curseursRelatifsSkills = new HashMap<Character, Integer>();
+		curseurAction = new HashMap<Character, Integer>();
+		drops = new ArrayList<IItems>();
 		
 		issueDuCombat = 0;
 	}
@@ -177,7 +179,7 @@ public class Combat extends BasicGameState
 			throws SlickException 
 	{
 		//Dessiner le terrain
-		g.drawImage(equipe.getMap().getTerrain(), 0,100);
+		g.drawImage(equipe.getMap().getBackgroundBattle(), 0,100);
 		
 		//Placer les ennemis
 		dessinerEnnemis(g);
@@ -263,7 +265,7 @@ public class Combat extends BasicGameState
 			{
 				if(!debutTour)
 				{
-					if(!ennemis.prets())
+					if(!ennemis.areReady())
 					{
 						preparerActionsEnnemis();
 					}
@@ -303,7 +305,7 @@ public class Combat extends BasicGameState
 			}
 			else if(issueDuCombat == 2)
 			{
-				GestionnaireMusique.jouerEnBoucle("victory");
+				MusicManager.playLoop("victory");
 				if(container.getInput().isKeyPressed(Input.KEY_RETURN))
 				{
 					container.getInput().clearKeyPressedRecord();
@@ -338,10 +340,10 @@ public class Combat extends BasicGameState
 
 		Object action;
 		action = lanceur.getAction();
-		lanceur.selectionnerCibleSuivante(this);
-		cibles = lanceur.getCibles();
+		lanceur.chooseNextTarget(this);
+		cibles = lanceur.getTargets();
 		
-		for(Object o : lanceur.getCibles())
+		for(Object o : lanceur.getTargets())
 		{
 			coordonneesCibles.add(coords.get(o));
 		}
@@ -351,16 +353,16 @@ public class Combat extends BasicGameState
 		{
 			if(action instanceof String)
 			{
-				message = lanceur.getNom() + " attaque!";
+				message = lanceur.getName() + " attaque!";
 				if(((String) action).equalsIgnoreCase("Attaquer"))
 				{
-					animEnCours = AnimationFactory.creerAnimation("attaquer");
+					animEnCours = AnimationFactory.createAnimation("attaquer");
 				}
 			}
 			else if(action instanceof Skill)
 			{
-				message = lanceur.getNom() + " utilise " + ((Skill)action).getNom() + " niv. " + ((Skill)action).getLevel();
-				animEnCours = AnimationFactory.creerAnimation(((Skill)action).getId());
+				message = lanceur.getName() + " utilise " + ((Skill)action).getName() + " niv. " + ((Skill)action).getLevel();
+				animEnCours = AnimationFactory.createAnimation(((Skill)action).getId());
 			}
 		}
 		else
@@ -398,18 +400,18 @@ public class Combat extends BasicGameState
 			}
 			else
 			{
-				b = effectsDisplayerEnCours.afficherEffets(g);
+				b = effectsDisplayerEnCours.displayEffets(g);
 				//à la fin de l'animation de l'effet de l'action en cours :
 				if(b)
 				{
 					//application des effets de l'action en cours
 					appliquerEffets(effetsCurrent);
 					
-					if(equipe.nombrePersonnagesVivants() == 0) //Perdu
+					if(equipe.numberOfAliveCharacter() == 0) //Perdu
 					{
 						issueDuCombat = 1;
 					}
-					else if(ennemis.nombreEnnemisVivants() == 0) //Gagne
+					else if(ennemis.getNumberOfAliveEnnemis() == 0) //Gagne
 					{
 						issueDuCombat = 2;
 					}
@@ -427,13 +429,13 @@ public class Combat extends BasicGameState
 		//nettoyage des données du tour si tout le monde est passé. 
 		if(indexAction >= ordrePassage.size())
 		{
-			for(Ennemi e : ennemis.getEnnemis().values())
+			for(Ennemy e : ennemis.getEnnemis().values())
 			{
-				e.annulerAction();
+				e.cancelAction();
 			}
-			for(Personnage p : equipe)
+			for(Character p : equipe)
 			{
-				p.annulerAction();
+				p.cancelAction();
 			}
 			ordrePassage.clear();
 			personnagesPrets.clear();
@@ -473,7 +475,7 @@ public class Combat extends BasicGameState
 	{
 		for(int place : ennemis.getEnnemis().keySet())
 		{
-			if(ennemis.getEnnemis().get(place).estVivant())
+			if(ennemis.getEnnemis().get(place).isAlive())
 			{
 				Image img = ennemis.getEnnemis().get(place).getImage();
 				if(place <= 1)
@@ -500,9 +502,9 @@ public class Combat extends BasicGameState
 	private void dessinerEquipe(Graphics g)
 	{
 		int i = 0;
-		for(Personnage p : equipe)
+		for(Character p : equipe)
 		{
-			if(p.estVivant())
+			if(p.isAlive())
 			{
 				if(issueDuCombat == 0)
 				{
@@ -536,15 +538,15 @@ public class Combat extends BasicGameState
 	{
 		if(curseur>=6)
 		{
-			g.drawImage(Jeu.getFleche(0),430+(curseur-6) *20,175+(curseur-6) *50);
+			g.drawImage(Launcher.getArrow(0),430+(curseur-6) *20,175+(curseur-6) *50);
 		}
 		else if(curseur%2==0)
 		{
-			g.drawImage(Jeu.getFleche(0),50+5*curseur,200+50*((int)(curseur/2)));
+			g.drawImage(Launcher.getArrow(0),50+5*curseur,200+50*((int)(curseur/2)));
 		}
 		else 
 		{
-			g.drawImage(Jeu.getFleche(0),150+5*curseur,200+50*((int)(curseur/2)));
+			g.drawImage(Launcher.getArrow(0),150+5*curseur,200+50*((int)(curseur/2)));
 		}
 	}
 	
@@ -558,10 +560,10 @@ public class Combat extends BasicGameState
 
 		barreBas(g);
 		
-		for(int i = 0; i<equipe.nbPersonnages();i++)
+		for(int i = 0; i<equipe.numberOfCharacters();i++)
 		{
 			g.setColor(Color.white);
-			g.drawString(equipe.get(i).getNom(),10,385+i*30);
+			g.drawString(equipe.get(i).getName(),10,385+i*30);
 			
 			
 			//pv
@@ -573,9 +575,9 @@ public class Combat extends BasicGameState
 			g.fillRect(100, 390+i*30, 149, 9);
 			
 			g.setColor(new Color(0,100,0));
-			g.fillRect(100, 390+i*30, (float) (equipe.get(i).getPV()/((double)equipe.get(i).getPVMaximum()))*149, 9);
+			g.fillRect(100, 390+i*30, (float) (equipe.get(i).getHealtPoints()/((double)equipe.get(i).getMaximumHealthPoints()))*149, 9);
 			g.setColor(new Color(255,255,255));
-			g.drawString((int)equipe.get(i).getPV()+"/"+equipe.get(i).getPVMaximum(),250,385+i*30);
+			g.drawString((int)equipe.get(i).getHealtPoints()+"/"+equipe.get(i).getMaximumHealthPoints(),250,385+i*30);
 			
 			//Energie
 			g.setColor(Config.couleur2);
@@ -585,10 +587,10 @@ public class Combat extends BasicGameState
 			g.setColor(Color.black);
 			g.fillRect(370, 390+i*30, 149, 9);
 			
-			g.setColor(equipe.get(i).couleurEnergie());
-			g.fillRect(370, 390+i*30, (float) (equipe.get(i).getEnergie()/((double)equipe.get(i).getEnergieMax()))*149, 9);
+			g.setColor(equipe.get(i).energyColor());
+			g.fillRect(370, 390+i*30, (float) (equipe.get(i).getEnergy()/((double)equipe.get(i).getMaximumEnergy()))*149, 9);
 			g.setColor(new Color(255,255,255));
-			g.drawString((int)equipe.get(i).getEnergie()+"/"+equipe.get(i).getEnergieMax(),520,385+i*30);
+			g.drawString((int)equipe.get(i).getEnergy()+"/"+equipe.get(i).getMaximumEnergy(),520,385+i*30);
 		}
 		
 		g.setColor(Config.couleur2);
@@ -606,7 +608,7 @@ public class Combat extends BasicGameState
 	private void dessinerInfoEnnemis(Graphics g) 
 	{
 		barreHaut(g);
-		Ennemi ennemi = null;
+		Ennemy ennemi = null;
 		if(selectionPersonnage != null)
 		{
 			if(curseurCible < 6 && selectionPersonnage.getAction() != null)
@@ -624,27 +626,27 @@ public class Combat extends BasicGameState
 		
 		if(ennemi != null)
 		{
-			if(equipe.estAnalyse(ennemi.getID()))
+			if(equipe.isAnalysed(ennemi.getID()))
 			{
 				g.setColor(Color.white);
-				g.drawString(ennemi.getNom(), 3, 2);
+				g.drawString(ennemi.getName(), 3, 2);
 				
-				g.drawString("Att phy : " + ennemi.getAttaquePhysique(), 3, 22);
-				g.drawString("Att mag : " + ennemi.getAttaqueMagique(), 3, 42);
-				g.drawString("Dexterité : " + ennemi.getDexterite(), 3, 62);
+				g.drawString("Att phy : " + ennemi.getPhysicAttack(), 3, 22);
+				g.drawString("Att mag : " + ennemi.getMagicAttack(), 3, 42);
+				g.drawString("Dexterité : " + ennemi.getAgility(), 3, 62);
 				
-				g.drawString("Déf phy : " + ennemi.getDefensePhysique(), 320, 22);
-				g.drawString("Déf mag : " + ennemi.getDefenseMagique(), 320, 42);
-				g.drawString("Soin : " + ennemi.getDexterite(), 320, 62);
+				g.drawString("Déf phy : " + ennemi.getPhysicDefense(), 320, 22);
+				g.drawString("Déf mag : " + ennemi.getMagicDefense(), 320, 42);
+				g.drawString("Soin : " + ennemi.getAgility(), 320, 62);
 
 				g.setColor(Config.couleur2);
 				g.drawRect(320, 3, 100, 15);
 				g.setColor(Color.black);
 				g.fillRect(321, 4, 99, 14);
 				g.setColor(new Color(0,100,0));
-				g.fillRect(321, 4, ennemi.getPV()/ennemi.getPVMaximum() * 99, 14);
+				g.fillRect(321, 4, ennemi.getHealtPoints()/ennemi.getMaximumHealthPoints() * 99, 14);
 				g.setColor(Color.white);
-				g.drawString(ennemi.getPV() + "/" + ennemi.getPVMaximum(), 430, 3);
+				g.drawString(ennemi.getHealtPoints() + "/" + ennemi.getMaximumHealthPoints(), 430, 3);
 				
 			}
 			else
@@ -681,7 +683,7 @@ public class Combat extends BasicGameState
 		{
 			curseurAction.put(selectionPersonnage, 0);
 		}
-		g.drawImage(Jeu.getFleche(0), 15, 390 + curseurAction.get(selectionPersonnage) * 20);
+		g.drawImage(Launcher.getArrow(0), 15, 390 + curseurAction.get(selectionPersonnage) * 20);
 	}
 	
 	
@@ -690,51 +692,51 @@ public class Combat extends BasicGameState
 	{
 		Object action = selectionPersonnage.getAction();
 
-		if(getCibleAction(action) == Skill.ENNEMI || getCibleAction(action) == Skill.ALLIE)
+		if(getCibleAction(action) == Skill.ENNEMY || getCibleAction(action) == Skill.ALLY)
 		{
 			if(curseurCible>=6)
 			{
-				g.drawImage(Jeu.getFleche(0),430+(curseurCible-6) * 20,175+(curseurCible-6) * 50);
+				g.drawImage(Launcher.getArrow(0),430+(curseurCible-6) * 20,175+(curseurCible-6) * 50);
 			}
 			else if(curseurCible%2==0)
 			{
-				g.drawImage(Jeu.getFleche(0),50+5*curseurCible,200+50*((int)(curseurCible/2)));
+				g.drawImage(Launcher.getArrow(0),50+5*curseurCible,200+50*((int)(curseurCible/2)));
 			}
 			else 
 			{
-				g.drawImage(Jeu.getFleche(0),150+5*curseurCible,200+50*((int)(curseurCible/2)));
+				g.drawImage(Launcher.getArrow(0),150+5*curseurCible,200+50*((int)(curseurCible/2)));
 			}
 			
 
 		}
-		else if(getCibleAction(action) == Skill.TOUS_ENNEMIS)
+		else if(getCibleAction(action) == Skill.ALL_ENNEMIS)
 		{
 			for(int e : ennemis.getEnnemis().keySet())
 			{
-				if(ennemis.getEnnemis().get(e).estVivant())
+				if(ennemis.getEnnemis().get(e).isAlive())
 				{
 					if(e>=6)
 					{
-						g.drawImage(Jeu.getFleche(0),430+(e-6) * 20,175+(e-6) * 50);
+						g.drawImage(Launcher.getArrow(0),430+(e-6) * 20,175+(e-6) * 50);
 					}
 					else if(e%2==0)
 					{
-						g.drawImage(Jeu.getFleche(0),50+5*e,200+50*((int)(e/2)));
+						g.drawImage(Launcher.getArrow(0),50+5*e,200+50*((int)(e/2)));
 					}
 					else 
 					{
-						g.drawImage(Jeu.getFleche(0),150+5*e,200+50*((int)(e/2)));
+						g.drawImage(Launcher.getArrow(0),150+5*e,200+50*((int)(e/2)));
 					}
 				}
 			}
 		}
-		else if(getCibleAction(action) == Skill.TOUS_ALLIES)
+		else if(getCibleAction(action) == Skill.ALL_ALLIES)
 		{
-			for(int i = 0; i<equipe.nbPersonnages() ;i++)
+			for(int i = 0; i<equipe.numberOfCharacters() ;i++)
 			{
-				if(equipe.get(i).estVivant())
+				if(equipe.get(i).isAlive())
 				{
-					g.drawImage(Jeu.getFleche(0),430+(i) *20,175+(i) *50);
+					g.drawImage(Launcher.getArrow(0),430+(i) *20,175+(i) *50);
 				}
 			}
 		}
@@ -760,7 +762,7 @@ public class Combat extends BasicGameState
 			
 			
 			Skill s = selectionPersonnage.getSkills().get(i);
-			if(s.libErreurLancer(selectionPersonnage) == null)
+			if(s.getErrorCastMessage(selectionPersonnage) == null)
 			{
 				g.setColor(Color.white);
 			}
@@ -769,7 +771,7 @@ public class Combat extends BasicGameState
 				g.setColor(Color.gray);
 			}
 			
-			g.drawString(s.getNom(), 45, 112 + 20*i);
+			g.drawString(s.getName(), 45, 112 + 20*i);
 			g.drawString(" Niv." + s.getLevel() + "/" + s.getNiveauMax() , 220, 112 + 20*i);
 			g.drawString(String.valueOf(s.getConsommation()) , 300, 112 + 20*i);
 		}
@@ -778,13 +780,13 @@ public class Combat extends BasicGameState
 		{
 			Skill s = selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage));
 			
-			g.drawString("Puissance : " + s.getPuissance(), 5,5);
+			g.drawString("Puissance : " + s.getPower(), 5,5);
 			g.drawString("Consommation : " + s.getConsommation(), 5,25);
-			g.drawString("Description : \n" + Formatage.multiLignes(s.getDescription(),150), 5,45);
+			g.drawString("Description : \n" + Format.multiLines(s.getDescription(),150), 5,45);
 		}
 		
 		//affichage du curseur :
-		g.drawImage(Jeu.getFleche(0), 12, 115 + 20 * curseursRelatifsSkills.get(selectionPersonnage));
+		g.drawImage(Launcher.getArrow(0), 12, 115 + 20 * curseursRelatifsSkills.get(selectionPersonnage));
 	}
 	
 	public void afficherTexte(Graphics g, String texte)
@@ -880,7 +882,7 @@ public class Combat extends BasicGameState
 		else if(input.isKeyPressed(Input.KEY_RETURN) && (curseur == 6 || curseur == 7 || curseur == 8))
 		{
 			input.clearKeyPressedRecord();
-			if(!equipe.get(curseur-6).estActionPreparee() && equipe.get(curseur-6).estVivant())
+			if(!equipe.get(curseur-6).estActionPreparee() && equipe.get(curseur-6).isAlive())
 			{
 				selectionPersonnage = equipe.get(curseur-6);
 			}
@@ -889,9 +891,9 @@ public class Combat extends BasicGameState
 		{
 			if(personnagesPrets.size()>0)
 			{	
-				Personnage p = personnagesPrets.remove(personnagesPrets.size() - 1);
+				Character p = personnagesPrets.remove(personnagesPrets.size() - 1);
 
-				p.annulerAction();
+				p.cancelAction();
 				selectionPersonnage = p;
 				curseur = equipe.indexOf(p) + 6;
 			}
@@ -991,10 +993,10 @@ public class Combat extends BasicGameState
 
 		if(input == Input.KEY_ESCAPE)
 		{
-			selectionPersonnage.annulerAction();
+			selectionPersonnage.cancelAction();
 		}
 		
-		if(typeCible == Skill.ENNEMI)
+		if(typeCible == Skill.ENNEMY)
 		{
 			if(input == Input.KEY_DOWN)
 			{
@@ -1055,14 +1057,14 @@ public class Combat extends BasicGameState
 			}
 			
 
-			if(selectionPersonnage != null && getCibleAction(selectionPersonnage.getAction()) == Skill.ENNEMI && input != -1 && !ennemis.estCibleValable(curseurCible))
+			if(selectionPersonnage != null && getCibleAction(selectionPersonnage.getAction()) == Skill.ENNEMY && input != -1 && !ennemis.isValidTarget(curseurCible))
 			{
 				gererCurseurCible(input);
 			}
 
 		}
 		
-		else if(typeCible == Skill.ALLIE)
+		else if(typeCible == Skill.ALLY)
 		{
 			if(input == Input.KEY_UP)
 			{
@@ -1085,13 +1087,13 @@ public class Combat extends BasicGameState
 			}
 		}
 		
-		else if(typeCible == Skill.TOUS_ENNEMIS)
+		else if(typeCible == Skill.ALL_ENNEMIS)
 		{
 			if(input == Input.KEY_RETURN)
 			{
 				for(int e : ennemis.getEnnemis().keySet())
 				{
-					if(ennemis.getEnnemis().get(e).estVivant())
+					if(ennemis.getEnnemis().get(e).isAlive())
 					{
 						selectionPersonnage.ajouterCible(ennemis.getEnnemis().get(e));
 					}
@@ -1102,13 +1104,13 @@ public class Combat extends BasicGameState
 				curseur = (curseur + 1)%3+6;
 			}
 		}
-		else if(typeCible == Skill.TOUS_ALLIES)
+		else if(typeCible == Skill.ALL_ALLIES)
 		{
 			if(input == Input.KEY_RETURN)
 			{
-				for(int i=0;i<equipe.nbPersonnages();i++)
+				for(int i=0;i<equipe.numberOfCharacters();i++)
 				{
-					if(equipe.get(i).estVivant())
+					if(equipe.get(i).isAlive())
 					{
 						selectionPersonnage.ajouterCible(equipe.get(i));
 					}				
@@ -1120,7 +1122,7 @@ public class Combat extends BasicGameState
 		}
 		
 		//-----------------
-		if(personnagesPrets.size() == equipe.nombrePersonnagesVivants())
+		if(personnagesPrets.size() == equipe.numberOfAliveCharacter())
 		{
 			trier();
 			debutTour = true;
@@ -1170,7 +1172,7 @@ public class Combat extends BasicGameState
 		{
 			if(!selectionPersonnage.getSkills().isEmpty())
 			{
-				if(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).libErreurLancer(selectionPersonnage) == null)
+				if(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).getErrorCastMessage(selectionPersonnage) == null)
 				{
 					showSkill = false;
 					selectionPersonnage.setAction(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)));
@@ -1178,7 +1180,7 @@ public class Combat extends BasicGameState
 				}
 				else
 				{
-					message = selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).libErreurLancer(selectionPersonnage);
+					message = selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).getErrorCastMessage(selectionPersonnage);
 				}
 			}
 		}
@@ -1203,31 +1205,31 @@ public class Combat extends BasicGameState
 		int defense = 0;
 		double marge = Math.random() * (1.1 - 0.9 ) + 0.9;
 		
-		if(cible instanceof Personnage)
+		if(cible instanceof Character)
 		{
-			defense = ((Personnage)cible).getDefensePhysique();
+			defense = ((Character)cible).getPhysicDefense();
 		}
 		else
 		{
-			defense = ((Ennemi)cible).getDefensePhysique();
+			defense = ((Ennemy)cible).getPhysicDefense();
 		}
 
-		if(lanceur instanceof Personnage)
+		if(lanceur instanceof Character)
 		{
-			int degatArme = ((Personnage)lanceur).getArmePrincipale() != null ? ((Personnage)lanceur).getArmePrincipale().getDegatPhysique() : 0;
-			return Math.max( ((int) (((((Personnage)lanceur).getAttaquePhysique() + ((Personnage)lanceur).getAttaquePhysique()*0.1*degatArme) - defense) * marge)), 1);
+			int degatArme = ((Character)lanceur).getMainWeapon() != null ? ((Character)lanceur).getMainWeapon().getPhysicDamage() : 0;
+			return Math.max( ((int) (((((Character)lanceur).getPhysicAttack() + ((Character)lanceur).getPhysicAttack()*0.1*degatArme) - defense) * marge)), 1);
 		}
 		else
 		{
-			return Math.max( (int) ((((Ennemi)lanceur).getAttaquePhysique() - defense) * marge), 1);
+			return Math.max( (int) ((((Ennemy)lanceur).getPhysicAttack() - defense) * marge), 1);
 		}
 	}
 	
 	private void preparerActionsEnnemis() 
 	{
-		for(Ennemi e : ennemis.getEnnemis().values())
+		for(Ennemy e : ennemis.getEnnemis().values())
 		{
-			if(e.estVivant())
+			if(e.isAlive())
 			{
 				e.doIA(this);
 			}
@@ -1244,15 +1246,15 @@ public class Combat extends BasicGameState
 	{
 		ArrayList<IBattle> priorites = new ArrayList<IBattle>();
 		
-		for(Personnage p1 : equipe)
+		for(Character p1 : equipe)
 		{
 			int max = -1;
-			Personnage persoMax = null;
-			for(Personnage p2 : equipe)
+			Character persoMax = null;
+			for(Character p2 : equipe)
 			{
-				if(p2.getStatMax("dexterite") > max && !priorites.contains(p2))
+				if(p2.getMaximumStatistic("dexterite") > max && !priorites.contains(p2))
 				{
-					max = p2.getStatMax("dexterite");
+					max = p2.getMaximumStatistic("dexterite");
 					persoMax = p2;
 				}
 			}
@@ -1260,7 +1262,7 @@ public class Combat extends BasicGameState
 			priorites.add(persoMax);
 		}
 		
-		for(Ennemi e : ennemis.getEnnemis().values())
+		for(Ennemy e : ennemis.getEnnemis().values())
 		{
 			int i = 0;
 			int dext = 0;
@@ -1269,16 +1271,16 @@ public class Combat extends BasicGameState
 			
 			do
 			{
-				if(priorites.get(i) instanceof Personnage)
+				if(priorites.get(i) instanceof Character)
 				{
-					dext = ((Personnage)priorites.get(i)).getStatMax("dexterite");
+					dext = ((Character)priorites.get(i)).getMaximumStatistic("dexterite");
 				}
 				else
 				{
-					dext = ((Ennemi)priorites.get(i)).getDexterite();
+					dext = ((Ennemy)priorites.get(i)).getAgility();
 				}
 				
-				if(e.getDexterite() >= dext)
+				if(e.getAgility() >= dext)
 				{
 					priorites.add(i,e);
 					ajout = true;
@@ -1299,21 +1301,21 @@ public class Combat extends BasicGameState
 		ArrayList<Object> suppressions = new ArrayList<Object>();
 		for(Object e : priorites)
 		{
-			if(e instanceof Ennemi)
+			if(e instanceof Ennemy)
 			{
-				if(!((Ennemi) e).estVivant())
+				if(!((Ennemy) e).isAlive())
 				{
 					suppressions.add(e);
-					((Ennemi) e).annulerAction();
+					((Ennemy) e).cancelAction();
 				}
 			}
 			else
 			{
-				if(!((Personnage) e).estVivant())
+				if(!((Character) e).isAlive())
 				{
 					suppressions.add(e);
 					personnagesPrets.remove(e);
-					((Personnage) e).annulerAction();
+					((Character) e).cancelAction();
 				}
 			}
 		}
@@ -1381,37 +1383,37 @@ public class Combat extends BasicGameState
 
 			for(IBattle ib : cibles)
 			{
-				if(ib.estVivant())
+				if(ib.isAlive())
 				{
 					double marge = Math.random() * (1.1 - 0.9 ) + 0.9;
 					
 					ArrayList<String> listeEffets = new ArrayList<String>();
 					int degatArmePhy = 0;
 					int degatArmeMag = 0;
-					if(lanceur instanceof Personnage)
+					if(lanceur instanceof Character)
 					{
-						if(((Personnage) lanceur).getArmePrincipale() != null)
+						if(((Character) lanceur).getMainWeapon() != null)
 						{
-							degatArmePhy = ((Personnage) lanceur).getArmePrincipale().getDegatPhysique();
-							degatArmeMag = ((Personnage) lanceur).getArmePrincipale().getDegatMagique();
+							degatArmePhy = ((Character) lanceur).getMainWeapon().getPhysicDamage();
+							degatArmeMag = ((Character) lanceur).getMainWeapon().getMagicDamage();
 						}
 					}
 					
-					if(skill.getType() == Skill.PHYSIQUE && skill.getPuissance() != 0)
+					if(skill.getType() == Skill.PHYSIC && skill.getPower() != 0)
 					{
-						int deg = (int) ((lanceur.getAttaquePhysique() + skill.getPuissance() + lanceur.getAttaquePhysique() * 0.1 * degatArmePhy - ib.getDefensePhysique()) * marge);
+						int deg = (int) ((lanceur.getPhysicAttack() + skill.getPower() + lanceur.getPhysicAttack() * 0.1 * degatArmePhy - ib.getPhysicDefense()) * marge);
 						listeEffets.add(String.valueOf(deg));
 						effets.put(ib, listeEffets);
 					}
-					else if(skill.getType() == Skill.MAGIQUE && skill.getPuissance() != 0)
+					else if(skill.getType() == Skill.MAGIC && skill.getPower() != 0)
 					{
-						int deg = (int) ((lanceur.getAttaqueMagique() + skill.getPuissance() + lanceur.getAttaqueMagique() * 0.1 * degatArmeMag - ib.getDefenseMagique()) * marge);
+						int deg = (int) ((lanceur.getMagicAttack() + skill.getPower() + lanceur.getMagicAttack() * 0.1 * degatArmeMag - ib.getMagicDefense()) * marge);
 						listeEffets.add(String.valueOf(deg));
 						effets.put(ib, listeEffets);
 					}
-					else if(skill.getType() == Skill.SOIN && skill.getPuissance() != 0)
+					else if(skill.getType() == Skill.HEALTH && skill.getPower() != 0)
 					{
-						int deg = (int) ((lanceur.getSoin() + skill.getPuissance() + lanceur.getAttaqueMagique() * 0.1 * degatArmeMag) * marge);
+						int deg = (int) ((lanceur.getHealth() + skill.getPower() + lanceur.getMagicAttack() * 0.1 * degatArmeMag) * marge);
 						listeEffets.add(String.valueOf(-deg));
 						effets.put(ib, listeEffets);
 					}
@@ -1431,26 +1433,26 @@ public class Combat extends BasicGameState
 				if(effet.matches("-?[0-9]+")) //nombre entier
 				{
 					int deg = Integer.parseInt(effet);
-					cible.updatePV(-deg);
+					cible.updateHealthPoints(-deg);
 				}
 				else if(effet.equalsIgnoreCase("analyse"))
 				{
-					if(cible instanceof Ennemi)
+					if(cible instanceof Ennemy)
 					{
-						equipe.analyser(((Ennemi)cible).getID());
+						equipe.analyse(((Ennemy)cible).getID());
 					}
 				}
 			}
 			
 			//si la cible est morte => suppression de la cble de l'ordrePassage(n'attaquera pas ce tour si elle n'a pas déjà attaquée)
 			//ajout de l'xp de la cible dans cumulXP et po dans cumulPO si c'est un ennemi qui est mort.
-			if(!cible.estVivant())
+			if(!cible.isAlive())
 			{
 				ordrePassage.remove(cible);
-				cible.annulerAction();
-				if(cible instanceof Ennemi)
+				cible.cancelAction();
+				if(cible instanceof Ennemy)
 				{
-					cumulXP += ((Ennemi)cible).getXP();
+					cumulXP += ((Ennemy)cible).getXP();
 				}
 			}
 		}
@@ -1468,7 +1470,7 @@ public class Combat extends BasicGameState
 		{
 			if(((String)action).equalsIgnoreCase("attaquer"))
 			{
-				return Skill.ENNEMI;
+				return Skill.ENNEMY;
 			}
 		}
 		
@@ -1477,7 +1479,7 @@ public class Combat extends BasicGameState
 			return ((Skill)action).getCible();
 		}
 		
-		return Skill.ENNEMI;
+		return Skill.ENNEMY;
 	}
 	
 	
@@ -1488,16 +1490,16 @@ public class Combat extends BasicGameState
 	 */
 	private void initCurseurCible() {
 		//si cible = allie, alors ajustement de curseurCible
-		if(getCibleAction(selectionPersonnage.getAction()) == Skill.ALLIE)
+		if(getCibleAction(selectionPersonnage.getAction()) == Skill.ALLY)
 		{
 			curseurCible = curseur;
 		}
 		//sinon si ennemi => curseurCible = premier ennemi vivant.
-		else if(getCibleAction(selectionPersonnage.getAction()) == Skill.ENNEMI)
+		else if(getCibleAction(selectionPersonnage.getAction()) == Skill.ENNEMY)
 		{
 			for(int i : ennemis.getEnnemis().keySet())
 			{
-				if(ennemis.getEnnemis().get(i).estVivant())
+				if(ennemis.getEnnemis().get(i).isAlive())
 				{
 					curseurCible = i;
 					break;

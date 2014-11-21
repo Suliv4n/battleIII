@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Fonctions d'aide pour les regex.
+ * 
+ * @author Darklev
+ *
+ */
 public class Regex {
 	
 	/**
-	 * Equivalent de la fonction eval en javascript, python...
+	 * Evalue une regex et retourne les valeurs capturés.
 	 * 
 	 * @param subject
 	 * 	Chaine de caractères à evaluer

@@ -12,6 +12,6 @@ import personnage.IBattle;
 
 public interface IAnimation 
 {
-	public boolean playFrame(Graphics g, Point coordonneesLanceur, ArrayList<Point> coordonneesCibles, 
-			IBattle lanceur, ArrayList<IBattle> cibles , Combat combat,  int frame)  throws SlickException ;
+	public boolean playFrame(Graphics g, Point casterPosition, ArrayList<Point> targetsPositions, 
+			IBattle caster, ArrayList<IBattle> targets , Combat battle,  int frame)  throws SlickException ;
 }

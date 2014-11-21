@@ -15,10 +15,10 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.xml.SlickXMLException;
 
-import donnees.Sauvegarde;
+import data.Save;
 
-import personnage.Equipe;
-import personnage.Personnage;
+import personnage.Party;
+import personnage.Character;
 import ui.GUIList;
 import ui.ListRenderer.ElementRenderer;
 
@@ -37,7 +37,7 @@ public class TitleScreen extends BasicGameState{
 	//private int curseurAbsolu = 0;
 	
 	//private ArrayList<Equipe> saves;
-	private GUIList<Equipe> listeSaves;
+	private GUIList<Party> listeSaves;
 	private int time;
 	
 	private StateBasedGame game;
@@ -50,32 +50,32 @@ public class TitleScreen extends BasicGameState{
 							"Charger"};
 		this.game = game;
 		
-		this.listeSaves = new GUIList<Equipe>(250, 390, 4, null, null, false);
+		this.listeSaves = new GUIList<Party>(250, 390, 4, null, null, false);
 		listeSaves.setStep(70);
 		listeSaves.setCursorMarges(-15, 30);
 		listeSaves.setElementRenderer(new ElementRenderer() {
 			
 			@Override
 			public void render(int x, int y, Object element, int index) {
-				Equipe save = (Equipe) element;
-				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				Party save = (Party) element;
+				Graphics g = Launcher.getAppGameContainer().getGraphics();
 				g.setColor(new Color(132,105,55));
 				g.drawString("Sauvegarde " + (index+1) , x, y );
 					
 					if(save != null)
 					{
 						int j=0;
-						for(Personnage p : save)
+						for(Character p : save)
 						{
 							if(p != null)
 							{
-								g.drawImage(p.getAnimation(Equipe.BAS).getImage(2), x + 40 * j, y+20);
+								g.drawImage(p.getAnimation(Party.SOUTH).getImage(2), x + 40 * j, y+20);
 								j++;
 							}
 						}
-						g.drawString(save.get(0).getNom(), 510, 15 + y);
+						g.drawString(save.get(0).getName(), 510, 15 + y);
 						g.drawString("Niv. "+save.get(0).getLevel(), 510, 35 + y);
-						g.drawString(save.getMap().getNom(), 390, 55 + y);
+						g.drawString(save.getMap().getName(), 390, 55 + y);
 					}
 					else
 					{
@@ -102,7 +102,7 @@ public class TitleScreen extends BasicGameState{
 		}
 		
 
-		g.drawImage(Jeu.getFleche(0), 30, 205+20*curseurMenu);
+		g.drawImage(Launcher.getArrow(0), 30, 205+20*curseurMenu);
 		
 	}
 
@@ -160,7 +160,7 @@ public class TitleScreen extends BasicGameState{
 			if(curseurMenu == 1){
 				try {
 					//saves = Sauvegarde.getAllSauvegardes();
-					listeSaves.setData(Sauvegarde.getAllSauvegardes());
+					listeSaves.setData(Save.getAllSauvegardes());
 				} catch (FileNotFoundException | SlickXMLException e) {
 					e.printStackTrace();
 				}
@@ -172,7 +172,7 @@ public class TitleScreen extends BasicGameState{
 			{
 				try {
 					System.out.println("Execute load save"+(listeSaves.getSelectedIndex()+1));
-					Sauvegarde.charger("save"+(listeSaves.getSelectedIndex()+1));
+					Save.loadSave("save"+(listeSaves.getSelectedIndex()+1));
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}

@@ -1,7 +1,7 @@
 package ui;
 
 import game.ControllerInput;
-import game.Jeu;
+import game.Launcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,14 +12,14 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-import personnage.Personnage;
+import personnage.Character;
 
 import ui.ListRenderer.CursorRenderer;
 import ui.ListRenderer.ElementRenderer;
 import ui.listController.ListController;
 
 public class GUIList<T> {
-	private int relativIndex = 0; //Index où le curseur doit s'afficher
+	private int relativeIndex = 0; //Index où le curseur doit s'afficher
 	private int absoluteIndex = 0; //Index réel
 	private int width;
 	private int height;
@@ -58,7 +58,7 @@ public class GUIList<T> {
 		elementRenderer = new ElementRenderer() {
 			@Override
 			public void render(int x, int y, Object element, int index){
-				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				Graphics g = Launcher.getAppGameContainer().getGraphics();
 				g.drawString(element == null ? "null" : element.toString(), x + 15, y );
 			}
 		};
@@ -66,8 +66,8 @@ public class GUIList<T> {
 		cursorRenderer = new CursorRenderer() {
 			@Override
 			public void render(int x, int y) {
-				Graphics g = Jeu.getAppGameContainer().getGraphics();
-				Jeu.getFleche(0).drawCentered(x + 6, y + 12);
+				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				Launcher.getArrow(0).drawCentered(x + 6, y + 12);
 			}
 		};
 		
@@ -85,7 +85,7 @@ public class GUIList<T> {
 	
 
 	public void render(int x, int y){
-		Graphics g = Jeu.getAppGameContainer().getGraphics();
+		Graphics g = Launcher.getAppGameContainer().getGraphics();
 		if(drawGUI){
 			g.setColor(undergroundColor);
 			g.fillRect(x, y, width, height);
@@ -96,12 +96,12 @@ public class GUIList<T> {
 		}
 		g.setColor(Color.white);
 		int n = 0;
-		for(int i = absoluteIndex - relativIndex; i < Math.min(list.size() ,absoluteIndex - relativIndex + count); i++){
+		for(int i = absoluteIndex - relativeIndex; i < Math.min(list.size() ,absoluteIndex - relativeIndex + count); i++){
 			elementRenderer.render(x, y + 5 + n * step, list.get(i),i);
 			n++;
 		}
 		if(renderCursor){
-			cursorRenderer.render(x + (drawGUI ? frame : 0) + cursorMargeX, y + relativIndex * step + (drawGUI ? frame : 0) + cursorMargeY);
+			cursorRenderer.render(x + (drawGUI ? frame : 0) + cursorMargeX, y + relativeIndex * step + (drawGUI ? frame : 0) + cursorMargeY);
 		}
 	}
 	
@@ -109,12 +109,12 @@ public class GUIList<T> {
 		if(list.size() > 0){
 			if(listController.isDown(in)){
 				absoluteIndex = absoluteIndex + 1 == list.size() ? 0 : absoluteIndex + 1;
-				relativIndex = relativIndex + 1 < count && relativIndex + 1 < list.size() ?  relativIndex + 1 : absoluteIndex == 0 ? 0 : count-1;
-				System.out.println("Check : " + relativIndex + " - " + count);
+				relativeIndex = relativeIndex + 1 < count && relativeIndex + 1 < list.size() ?  relativeIndex + 1 : absoluteIndex == 0 ? 0 : count-1;
+				System.out.println("Check : " + relativeIndex + " - " + count);
 			}
 			else if(listController.isUp(in)){
 				absoluteIndex = absoluteIndex  == 0 ? list.size() - 1: absoluteIndex - 1;
-				relativIndex = relativIndex > 0 ?  relativIndex - 1 : absoluteIndex ==  list.size() - 1  ? Math.min(list.size() - 1, count - 1) : 0;
+				relativeIndex = relativeIndex > 0 ?  relativeIndex - 1 : absoluteIndex ==  list.size() - 1  ? Math.min(list.size() - 1, count - 1) : 0;
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public class GUIList<T> {
 	 */
 	public void select(T item) {
 		if(list.contains(item)){
-			relativIndex = list.indexOf(item);
+			relativeIndex = list.indexOf(item);
 			absoluteIndex = list.indexOf(item);
 		}
 	}

@@ -1,10 +1,16 @@
 package ui;
 
-import game.Jeu;
+import game.Launcher;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
+/**
+ * Représente une zone.
+ * 
+ * @author Darklev
+ *
+ */
 public class Panel {
 	
 	private int width;
@@ -13,6 +19,20 @@ public class Panel {
 	private Color colorFrame;
 	private int frame;
 	
+	/**
+	 * Constructeur.
+	 * 
+	 * @param width
+	 * 		Longueur du panel.
+	 * @param height
+	 * 		Hauteur du panel.
+	 * @param frame
+	 * 		Epaisseur de la bordure.
+	 * @param color
+	 * 		Couleur du fond.
+	 * @param colorFrame
+	 * 		Couleur de la bordure.
+	 */
 	public Panel(int width, int height, int frame, Color color, Color colorFrame){
 		this.width = width;
 		this.height = height;
@@ -21,8 +41,16 @@ public class Panel {
 		this.frame = frame;
 	}
 	
+	/**
+	 * Affiche le panel aux coordonnées passées en paramètre.
+	 * 
+	 * @param x
+	 * 		Abscisse d'affichae.
+	 * @param y
+	 * 		Ordonnées d'affichage.
+	 */
 	public void render(int x, int y){
-		Graphics g = Jeu.getAppGameContainer().getGraphics();
+		Graphics g = Launcher.getAppGameContainer().getGraphics();
 		
 		g.setColor(color);
 		g.fillRect(x, y, width, height);

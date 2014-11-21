@@ -8,36 +8,48 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
-import sac.objet.stuff.Arme;
-import sac.objet.stuff.Armure;
+import bag.item.stuff.Weapon;
+import bag.item.stuff.Armor;
 
 
-public class Mage extends Personnage 
+/**
+ * Personnage mage.
+ * 
+ * @author Sulivan
+ *
+ */
+public class Mage extends Character 
 {
 	private int mana;
 	
-	public Mage(String nom) 
+	/**
+	 * Constructeur
+	 * 
+	 * @param name
+	 * 		Nom du personnage.
+	 */
+	public Mage(String name) 
 	{
-		super(nom);		
-		stats.put("endurance",10);
-		stats.put("force",5);
-		stats.put("dexterite",10);
-		stats.put("intelligence",20);
-		stats.put("sagesse",15);
+		super(name);		
+		statistics.put("endurance",10);
+		statistics.put("force",5);
+		statistics.put("dexterite",10);
+		statistics.put("intelligence",20);
+		statistics.put("sagesse",15);
 		
-		statsUP.put("endurance",3);
-		statsUP.put("force",1);
-		statsUP.put("dexterite",2);
-		statsUP.put("intelligence",5);
-		statsUP.put("sagesse",4);
+		statisticsUP.put("endurance",3);
+		statisticsUP.put("force",1);
+		statisticsUP.put("dexterite",2);
+		statisticsUP.put("intelligence",5);
+		statisticsUP.put("sagesse",4);
 		
-		pv=stats.get("endurance")*5-10;
+		healthPoints=statistics.get("endurance")*5-10;
 		
-		typesArmesPrincipales.add(Arme.BATON);
+		mainWeaponTypes.add(Weapon.STAFF);
 		
-		typesArmures.add(Armure.TISSU);
+		armorTypes.add(Armor.FABRIC);
 		
-		mana = stats.get("intelligence")*5;
+		mana = statistics.get("intelligence")*5;
 		
 		try 
 		{
@@ -52,42 +64,43 @@ public class Mage extends Personnage
 		}
 	}
 
+
 	@Override
-	public int getEnergie() 
+	public int getEnergy() 
 	{
 		return mana;
 	}
 
 	@Override
-	public int getEnergieMax()
+	public int getMaximumEnergy()
 	{
-		return getStatMax("intelligence")*5 + getBonusEnergie();
+		return getMaximumStatistic("intelligence")*5 + getBonusEnergy();
 	}
 	
 
 
 
 	@Override
-	public void afficherGestionPerso(Graphics g, int x, int y, boolean selectionne) 
+	public void renderCharacterPanel(Graphics g, int x, int y, boolean selectionne) 
 	{
-		super.afficherGestionPerso(g, x, y, selectionne);
-		super.afficherGestionPerso(g, x, y, selectionne);
+		super.renderCharacterPanel(g, x, y, selectionne);
+		super.renderCharacterPanel(g, x, y, selectionne);
 		
 		g.setColor(new Color(255,255,255));
 		g.drawString("Mana", x+54, y+86);
 		
-		g.setColor(couleurEnergie());
-		g.fillRect(x+96, y+91, mana/getEnergieMax()*149, 9);
+		g.setColor(energyColor());
+		g.fillRect(x+96, y+91, mana/getMaximumEnergy()*149, 9);
 	}
 	
 	@Override
-	public Color couleurEnergie()
+	public Color energyColor()
 	{
 		return new Color(0,100,150);
 	}
 
 	@Override
-	public String getLibelleEnergie() {
+	public String getEnergyLabel() {
 		return "Mana";
 	}
 	

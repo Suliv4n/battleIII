@@ -10,7 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import sac.objet.stuff.Equipable;
+
 
 
 public abstract class Top  extends BasicGameState
@@ -36,15 +36,7 @@ public abstract class Top  extends BasicGameState
 			throws SlickException 
 	{
 		g.setColor(Color.white);
-		if(debug)
-		{
-			Equipable test = (Equipable)meta.get("equipable");
-			if(test != null)
-			{
-				g.drawString("Test arme équipé "  +  test +  " : " + Jeu.getEquipe().estEquipeDe(test),0,0);
-				//g.drawString("Test null "  +  test ,0,0);
-			}
-		}
+
 		
 		container.getInput().clearKeyPressedRecord();
 	}

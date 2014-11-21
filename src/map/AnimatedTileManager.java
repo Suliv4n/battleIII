@@ -2,6 +2,12 @@ package map;
 
 import java.util.ArrayList;
 
+/**
+ * Cette classe permet de gérer les tiles animées d'une map.
+ * 
+ * @author Darklev
+ *
+ */
 public class AnimatedTileManager 
 {
 	public static final int REVERSE = 0; //animation de type : 0 - 1 - 2 - 3 - 2 - 1 - 0 - 1 - 2 ...
@@ -19,6 +25,16 @@ public class AnimatedTileManager
 	
 	private int id;
 	
+	/**
+	 * Constructeur
+	 * 
+	 * @param type
+	 * 		Type de de tile animée. (REVERSE ou LOOP)
+	 * @param frames
+	 * 		Nombres de frame entre 2 tiles.
+	 * @param begin
+	 * 		Id de la première tile
+	 */
 	public AnimatedTileManager(int type, ArrayList<Integer> frames, int begin)
 	{
 		this.type = type;
@@ -29,6 +45,11 @@ public class AnimatedTileManager
 		max = frames.get(frames.size()-1);
 	}
 	
+	/**
+	 * Met à jour l'animatedTileManager et retourne l'id du tile courant.
+	 * @return
+	 * 		l'id du tile courant.
+	 */
 	public int next()
 	{
 		currentFrame += 1;
@@ -43,11 +64,22 @@ public class AnimatedTileManager
 		return begin + index;
 	}
 	
+	/**
+	 * Retourne l'id du tile courant.
+	 * @return
+	 */
 	public int getID()
 	{
 		return id;
 	}
 	
+	/**
+	 * Retourne vrai si le tile passé en paramètre est inclu dans l'animation, sinon retourne faux.
+	 * @param tile
+	 * 	Id du tile à tester.
+	 * @return
+	 * 		Vrai si le tile est inclu dans l'animation, faux sinon.
+	 */
 	public boolean containsTile(int tile)
 	{
 		//System.out.println(begin >= tile && tile >= begin+frames.size());

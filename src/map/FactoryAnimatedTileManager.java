@@ -4,8 +4,24 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.tiled.TiledMap;
 
+/**
+ * Fabrique d'AnimatedTileManager.
+ * @author Sulivan
+ *
+ */
 public class FactoryAnimatedTileManager 
 {
+	/**
+	 * Fabrique une AnimatedTileManager à partir d'une tile d'une map.
+	 * 
+	 * @param map
+	 * 		Map dont le tile animé appartient.
+	 * @param idTile
+	 * 		Id de la tile animée.
+	 * @return
+	 * 		L'AnimatedTileManager du tile passé en paramètre ou retourne null 
+	 * 		si le tile n'est pas un tile animé.
+	 */
 	public static AnimatedTileManager make(TiledMap map, int idTile)
 	{
 		String animRequest = map.getTileProperty(idTile, "animation", "false");
@@ -23,17 +39,16 @@ public class FactoryAnimatedTileManager
 		
 		if(!animRequest.equals("false"))
 		{
-			System.out.println("animtation tile detectée pour : " + idTile);
+			//récupération de toutes les tiles nécessaire à l'animation
 			ArrayList<Integer> framekey = new ArrayList<Integer>();
 			int i = idTile;
 			int fk;
 			do
 			{
-				fk = analyserTile(i, map);
+				fk = parseTile(i, map);
 				if(fk != -1)
 				{
 					framekey.add(fk);
-					System.out.println("	-next : "+fk);
 				}
 				i++;
 			}
@@ -47,7 +62,17 @@ public class FactoryAnimatedTileManager
 		
 	}
 	
-	private static int analyserTile(int idTile, TiledMap map)
+	/**
+	 * Analyse une tile pour retourner la tile suivante de son animation.
+	 * Retourne -1 si c'est la dernière tile.
+	 * @param idTile
+	 * 		Tile qui doit être analysé.
+	 * @param map
+	 * 		Map où se trouve la tile à analyser.
+	 * @return
+	 * 		L'id du tile suivant dans l'animation ou -1 si c'est le dernier tile de l'animation.
+	 */
+	private static int parseTile(int idTile, TiledMap map)
 	{
 		String tid = map.getTileProperty(idTile, "animation", "false");
 		

@@ -13,13 +13,13 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import personnage.Equipe;
-import personnage.Personnage;
+import personnage.Party;
+import personnage.Character;
 import skill.Skill;
 import ui.GUIList;
 import ui.ListRenderer.ElementRenderer;
 
-import donnees.Formatage;
+import data.Format;
 
 
 
@@ -45,7 +45,7 @@ public class GestionEquipe extends BasicGameState
 	private int premier_competences = 0;
 	private Image fleche;
 	
-	private Personnage selection;
+	private Character selection;
 	
 	
 	
@@ -55,7 +55,7 @@ public class GestionEquipe extends BasicGameState
 	private int action = -1;
 	
 	//Liste des skills;
-	private HashMap<Personnage,GUIList<Skill>> listesSkill;
+	private HashMap<Character,GUIList<Skill>> listesSkill;
 	
 	//#endregion
 	
@@ -65,20 +65,20 @@ public class GestionEquipe extends BasicGameState
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		fleche = Jeu.getFleche(0);
-		listesSkill = new HashMap<Personnage,GUIList<Skill>>();
+		fleche = Launcher.getArrow(0);
+		listesSkill = new HashMap<Character,GUIList<Skill>>();
 		ElementRenderer renderer = new ElementRenderer() {
 			
 			@Override
 			public void render(int x, int y, Object element, int index) {
-				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				Graphics g = Launcher.getAppGameContainer().getGraphics();
 				g.setColor(Color.white);
 				Skill skill = (Skill) element;
-				g.drawString(skill.getNom(), x+20, y);
+				g.drawString(skill.getName(), x+20, y);
 			}
 		};
 		
-		for(Personnage p : Jeu.getEquipe()){
+		for(Character p : Launcher.getParty()){
 			GUIList<Skill> liste = new GUIList<>(204, 440, 20, Config.couleur1, Config.couleur2, true);
 			liste.setData(p.getSkills());
 			liste.setElementRenderer(renderer);
@@ -90,9 +90,9 @@ public class GestionEquipe extends BasicGameState
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException 
 	{
-		Jeu.getEquipe().afficherListeEquipe(g,curseur);
-		Jeu.getEquipe().get(curseur).afficherStats(g);
-		Jeu.getEquipe().get(curseur).afficherEquipements(g);
+		Launcher.getParty().renderTeamList(g,curseur);
+		Launcher.getParty().get(curseur).drawStatistiques(g);
+		Launcher.getParty().get(curseur).drawStuff(g);
 		afficherCurseur(g);
 		if(selection != null)
 		{
@@ -125,11 +125,11 @@ public class GestionEquipe extends BasicGameState
 		{		
 			if(in.isKeyPressed(Input.KEY_DOWN))
 			{
-				curseur = (curseur + 1)%Jeu.getEquipe().nbPersonnages();
+				curseur = (curseur + 1)%Launcher.getParty().numberOfCharacters();
 			}
 			else if(in.isKeyPressed(Input.KEY_UP))
 			{
-				curseur = (curseur + Jeu.getEquipe().nbPersonnages() - 1)%Jeu.getEquipe().nbPersonnages();
+				curseur = (curseur + Launcher.getParty().numberOfCharacters() - 1)%Launcher.getParty().numberOfCharacters();
 			}
 			
 			if (in.isKeyPressed(Input.KEY_ESCAPE))
@@ -140,7 +140,7 @@ public class GestionEquipe extends BasicGameState
 			
 			if(in.isKeyPressed(Input.KEY_RETURN))
 			{
-				selection = Jeu.getEquipe().get(curseur);
+				selection = Launcher.getParty().get(curseur);
 			}
 		}
 		else
@@ -151,29 +151,29 @@ public class GestionEquipe extends BasicGameState
 			case(ORDRE):
 				if(curseur == curseur_ordre)
 				{
-					curseur_ordre = (curseur_ordre + 1)%Jeu.getEquipe().nbPersonnages();
+					curseur_ordre = (curseur_ordre + 1)%Launcher.getParty().numberOfCharacters();
 				}
 				
 				if(in.isKeyPressed(Input.KEY_DOWN))
 				{
-					if((curseur_ordre + 1)%Jeu.getEquipe().nbPersonnages() != curseur)
+					if((curseur_ordre + 1)%Launcher.getParty().numberOfCharacters() != curseur)
 					{
-						curseur_ordre = (curseur_ordre + 1)%Jeu.getEquipe().nbPersonnages();
+						curseur_ordre = (curseur_ordre + 1)%Launcher.getParty().numberOfCharacters();
 					}
 					else
 					{
-						curseur_ordre = (curseur_ordre + 2)%Jeu.getEquipe().nbPersonnages();
+						curseur_ordre = (curseur_ordre + 2)%Launcher.getParty().numberOfCharacters();
 					}
 				}
 				else if(in.isKeyPressed(Input.KEY_UP))
 				{
-					if((curseur_ordre - 1)%Jeu.getEquipe().nbPersonnages() != curseur)
+					if((curseur_ordre - 1)%Launcher.getParty().numberOfCharacters() != curseur)
 					{
-						curseur_ordre = (curseur_ordre - 1 + Jeu.getEquipe().nbPersonnages())%Jeu.getEquipe().nbPersonnages();
+						curseur_ordre = (curseur_ordre - 1 + Launcher.getParty().numberOfCharacters())%Launcher.getParty().numberOfCharacters();
 					}
 					else
 					{
-						curseur_ordre = (curseur_ordre - 2 + Jeu.getEquipe().nbPersonnages())%Jeu.getEquipe().nbPersonnages();
+						curseur_ordre = (curseur_ordre - 2 + Launcher.getParty().numberOfCharacters())%Launcher.getParty().numberOfCharacters();
 					}
 					
 				}
@@ -186,7 +186,7 @@ public class GestionEquipe extends BasicGameState
 				
 				if(in.isKeyPressed(Input.KEY_RETURN))
 				{
-					Jeu.getEquipe().swap(curseur, curseur_ordre);
+					Launcher.getParty().swap(curseur, curseur_ordre);
 					curseur = curseur_ordre;
 					action = -1;
 				}
@@ -267,7 +267,7 @@ public class GestionEquipe extends BasicGameState
 	//#region ------AFFICHAGE-----------------
 	private void afficherCurseurOrdre(Graphics g) 
 	{
-		g.drawImage(Jeu.getFleche(1),5,75+curseur_ordre*160);
+		g.drawImage(Launcher.getArrow(1),5,75+curseur_ordre*160);
 	}
 	
 	private void afficherCurseurCompetences(Graphics g) 
@@ -293,7 +293,7 @@ public class GestionEquipe extends BasicGameState
 
 	}
 	
-	private void afficherCompetences(Personnage personnage, Graphics g) 
+	private void afficherCompetences(Character personnage, Graphics g) 
 	{
 		/*
 		g.setColor(Color.white);
@@ -314,7 +314,7 @@ public class GestionEquipe extends BasicGameState
 		
 		g.setColor(Color.white);
 		g.drawString("Compétences", 250, 10);
-		g.drawImage(personnage.getAnimation(Equipe.BAS).getImage(2), 5,5);
+		g.drawImage(personnage.getAnimation(Party.SOUTH).getImage(2), 5,5);
 		
 		
 		listesSkill.get(selection).render(0, 40);
@@ -324,9 +324,9 @@ public class GestionEquipe extends BasicGameState
 		if(listesSkill.get(selection).size() !=0)
 		{
 			Skill skill = listesSkill.get(selection).getObject();
-			g.drawString("Nom : "+skill.getNom(),205,50);
-			g.drawString("Description :\n"+Formatage.multiLignes(skill.getDescription(),46),205,100);
-			g.drawString("Puissance : "+skill.getPuissance(), 205, 200);
+			g.drawString("Nom : "+skill.getName(),205,50);
+			g.drawString("Description :\n"+Format.multiLines(skill.getDescription(),46),205,100);
+			g.drawString("Puissance : "+skill.getPower(), 205, 200);
 			g.drawString("Coût : "+skill.getConsommation(), 205, 220);
 			g.drawString("Niveau : "+skill.getLevel()+"/"+skill.getNiveauMax(), 205, 240);
 		}

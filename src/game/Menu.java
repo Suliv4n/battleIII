@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import donnees.Sauvegarde;
+import data.Save;
 
 /**
  * 
@@ -48,7 +48,7 @@ public class Menu extends BasicGameState
 		leMenu.add("Sauvegarder");
 		leMenu.add("Quitter");
 		
-		fleche = Jeu.getFleche(0);
+		fleche = Launcher.getArrow(0);
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class Menu extends BasicGameState
 			
 			break;
 		case(4):
-			Sauvegarde.sauvegarder("save1");
+			Save.sauvegarder("save1");
 			break;
 		case(5):
 			//TODO

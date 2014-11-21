@@ -44,7 +44,7 @@ public class EffectsDisplayer
 	 * @return
 	 * 	Vrai si l'animation est terminée, faux sinon.
 	 */
-	public boolean afficherEffets(Graphics g)
+	public boolean displayEffets(Graphics g)
 	{
 		//afficher les effets sur 30 frames (1s)
 		g.setColor(Color.white);
@@ -59,11 +59,9 @@ public class EffectsDisplayer
 			
 			for(Point p : cibles.keySet())
 			{
-				
 			
 				//FORMATAGE ET PARAMETRAGE DE L'AFFICHAGE DE L'EFFET EN COURS
-				String effet = formatageEtParametrage(p, g);
-				
+				String effet = stEffectsDisplay(p, g);
 				
 				if(frame < 15)
 				{
@@ -84,7 +82,7 @@ public class EffectsDisplayer
 			
 			for(Point p : cibles.keySet())
 			{
-				String effet = formatageEtParametrage(p, g);
+				String effet = stEffectsDisplay(p, g);
 				
 				g.drawString(effet, p.x, p.y);
 				
@@ -118,7 +116,7 @@ public class EffectsDisplayer
 		}
 	}
 	
-	private String formatageEtParametrage(Point p, Graphics g)
+	private String stEffectsDisplay(Point p, Graphics g)
 	{
 		String[] lesEffets = cibles.get(p).split(";");
 		String effet = lesEffets[index];

@@ -11,17 +11,18 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import donnees.Formatage;
+import bag.Bag;
+import bag.Category;
+import bag.IItems;
+import bag.item.stuff.Weapon;
+import bag.item.stuff.Armor;
+import bag.item.stuff.Stuff;
 
-import personnage.Equipe;
-import personnage.Personnage;
+import data.Format;
 
-import sac.Categorie;
-import sac.IObjet;
-import sac.Sac;
-import sac.objet.stuff.Arme;
-import sac.objet.stuff.Armure;
-import sac.objet.stuff.Equipable;
+import personnage.Party;
+import personnage.Character;
+
 
 /**
  * Game State permettant d'avoir un aperçu sur les objets du joueur 
@@ -75,19 +76,19 @@ public class InterfaceSac extends Top
 	private ArrayList<Integer> curseursRelatifs;
 	private int curseurAction;
 	
-	private Sac sac;
-	private Equipe equipe;
+	private Bag sac;
+	private Party equipe;
 	
 	private boolean categorieValidee;
 	private boolean confirmation = false; 
 	private String message;
 
-	private IObjet objetSelectionne;
+	private IItems objetSelectionne;
 	private ArrayList<Integer> listeActions;
 	private int actionSelectionnee = -1;
 	
 	private int curseurPersonnage = 0;
-	private Personnage personnageSelectionne; 
+	private Character personnageSelectionne; 
 	
 	private int curseurDeplacement = 0;
 	private int curseurConfirmation = 0;
@@ -100,8 +101,8 @@ public class InterfaceSac extends Top
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException 
 	{
-		equipe = Jeu.getEquipe();
-		sac = equipe.getSac();
+		equipe = Launcher.getParty();
+		sac = equipe.getBag();
 	
 		categorieValidee = false;
 		curseursAbsolus = new ArrayList<Integer>();
@@ -123,8 +124,8 @@ public class InterfaceSac extends Top
 		if(!categorieValidee)
 		{
 			//Affichage curseur catégorie
-			g.drawImage(Jeu.getFleche(0), 37 + curseurCategorie*160, 55);
-			if(getCategorie().getTaille() != 0)
+			g.drawImage(Launcher.getArrow(0), 37 + curseurCategorie*160, 55);
+			if(getCategorie().size() != 0)
 			{
 				afficherListeObjets(g);
 			}
@@ -133,7 +134,7 @@ public class InterfaceSac extends Top
 		{
 			afficherListeObjets(g);
 			afficherCurseurObjets(g);
-			if(getCategorie().getTaille() != 0)
+			if(getCategorie().size() != 0)
 			{				
 				if(objetSelectionne != null)
 				{
@@ -146,7 +147,7 @@ public class InterfaceSac extends Top
 						switch(actionSelectionnee)
 						{
 						case(JETER):
-							if(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)) > 1 && !confirmation)
+							if(getCategorie().getQuantity(curseursAbsolus.get(curseurCategorie)) > 1 && !confirmation)
 							{
 								afficherQuantiteAJeter(g);
 							}
@@ -211,7 +212,7 @@ public class InterfaceSac extends Top
 				switch(actionSelectionnee)
 				{
 				case(JETER):
-					if(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)) > 1 && !confirmation)
+					if(getCategorie().getQuantity(curseursAbsolus.get(curseurCategorie)) > 1 && !confirmation)
 					{
 						gererQuantiteAJeter(container.getInput());
 					}
@@ -227,7 +228,7 @@ public class InterfaceSac extends Top
 					}
 					else
 					{
-						if(personnageSelectionne.equipeStuff((Equipable)objetSelectionne))
+						if(personnageSelectionne.equipStuff((Stuff)objetSelectionne))
 						{
 							message = personnageSelectionne + " est équipé de  "+objetSelectionne+".";
 							actionSelectionnee = -1;
@@ -245,8 +246,8 @@ public class InterfaceSac extends Top
 					{
 						message="Déséquiper";
 						actionSelectionnee = -1;
-						Personnage perso = ((Equipable)objetSelectionne).quiEstEquipe(equipe);
-						perso.desequipe((Equipable)objetSelectionne);
+						Character perso = ((Stuff)objetSelectionne).whoIsEquipedOfThis(equipe);
+						perso.desequipe((Stuff)objetSelectionne);
 						objetSelectionne = null;
 					}
 					break;
@@ -257,10 +258,10 @@ public class InterfaceSac extends Top
 					}
 					else
 					{
-						if(personnageSelectionne.utiliserObjet(objetSelectionne))
+						if(personnageSelectionne.useItem(objetSelectionne))
 						{
 							sac.supprimer(objetSelectionne, 1);
-							if(sac.getQuantite(objetSelectionne) == 0)
+							if(sac.getQuantity(objetSelectionne) == 0)
 							{
 								objetSelectionne = null;
 							}
@@ -336,7 +337,7 @@ public class InterfaceSac extends Top
 		g.drawString("Combat", 370, 50);
 		g.drawString("Rares", 530, 50);
 		
-		g.drawString(Jeu.getEquipe().getArgent() + " PO" , 450, 10);
+		g.drawString(Launcher.getParty().getMoney() + " PO" , 450, 10);
 		
 		
 		
@@ -353,7 +354,7 @@ public class InterfaceSac extends Top
 	private void afficherCurseurObjets(Graphics g) 
 	{
 		int index = curseursRelatifs.get(curseurCategorie);
-		g.drawImage(Jeu.getFleche(0), 5, 93 + index * 25);
+		g.drawImage(Launcher.getArrow(0), 5, 93 + index * 25);
 	}
 	
 	/**
@@ -363,7 +364,7 @@ public class InterfaceSac extends Top
 	private void afficherDecriptionObjet(Graphics g)
 	{
 		g.setColor(Color.white);
-		g.drawString(Formatage.multiLignes(getCategorie().getObjet(curseursAbsolus.get(curseurCategorie)).getDescription(), 70), 5, 395);
+		g.drawString(Format.multiLines(getCategorie().getItem(curseursAbsolus.get(curseurCategorie)).getDescription(), 70), 5, 395);
 	}
 	
 	
@@ -378,7 +379,7 @@ public class InterfaceSac extends Top
 		}
 		
 		//affichage du curseur :
-		g.drawImage(Jeu.getFleche(0), 5, 400 + curseurAction * 20);
+		g.drawImage(Launcher.getArrow(0), 5, 400 + curseurAction * 20);
 	}
 	
 	/**
@@ -392,7 +393,7 @@ public class InterfaceSac extends Top
 	private void afficherQuantiteAJeter(Graphics g)
 	{
 		g.setColor(Color.white);
-		g.drawString(Formatage.multiLignes("Jeter combien de : " + getCategorie().getObjet(curseursAbsolus.get(curseurCategorie)).getNom() + " ?", 70), 5, 395);
+		g.drawString(Format.multiLines("Jeter combien de : " + getCategorie().getItem(curseursAbsolus.get(curseurCategorie)).getName() + " ?", 70), 5, 395);
 	
 		//affichage de la boite de comptage :
 		{
@@ -415,13 +416,13 @@ public class InterfaceSac extends Top
 	private void afficherConfirmation(Graphics g)
 	{
 		g.setColor(Color.white);
-		g.drawString(Formatage.multiLignes( getCategorie().getObjet(curseursAbsolus.get(curseurCategorie)).getNom()  + " : " + " en jeter " + boiteComptage +" ?", 70), 5, 395);
+		g.drawString(Format.multiLines( getCategorie().getItem(curseursAbsolus.get(curseurCategorie)).getName()  + " : " + " en jeter " + boiteComptage +" ?", 70), 5, 395);
 		
 		g.drawString("Non", 100, 415);
 		g.drawString("Oui", 180, 415);
 		
 		//desinerCurseur
-		g.drawImage(Jeu.getFleche(0), 87 + 80 * curseurConfirmation, 418);
+		g.drawImage(Launcher.getArrow(0), 87 + 80 * curseurConfirmation, 418);
 		
 	}
 	
@@ -435,13 +436,13 @@ public class InterfaceSac extends Top
 	{
 			int index = 0;
 			for(int i = curseursAbsolus.get(curseurCategorie) - curseursRelatifs.get(curseurCategorie);
-					i<getCategorie().getTaille() && index<12; i++)
+					i<getCategorie().size() && index<12; i++)
 			{
 				
-				g.drawImage(getCategorie().getObjet(i).getIcone(), 20, 90 + 25*index);
+				g.drawImage(getCategorie().getItem(i).getIcon(), 20, 90 + 25*index);
 				g.setColor(Color.white);
-				g.drawString(getCategorie().getObjet(i).getNom(), 45 ,90 + 25*index);
-				g.drawString("x"+getCategorie().getQuantite(i), 590 ,90 + 25*index);
+				g.drawString(getCategorie().getItem(i).getName(), 45 ,90 + 25*index);
+				g.drawString("x"+getCategorie().getQuantity(i), 590 ,90 + 25*index);
 				index++;
 			}
 	}
@@ -454,13 +455,13 @@ public class InterfaceSac extends Top
 	private void afficherEquipePourUtiliser(Graphics g)
 	{
 		int i = 0;
-		for(Personnage p : equipe)
+		for(Character p : equipe)
 		{
-			p.afficherGestionPerso(g,128, i*160, false);
+			p.renderCharacterPanel(g,128, i*160, false);
 			i++;
 		}
 		
-		Image fleche = Jeu.getFleche(0);
+		Image fleche = Launcher.getArrow(0);
 		g.drawImage(fleche, 130, 80 + curseurPersonnage*160);
 		
 	}
@@ -472,7 +473,7 @@ public class InterfaceSac extends Top
 	private void afficherMessage(Graphics g) 
 	{
 		g.setColor(Color.white);
-		g.drawString(Formatage.multiLignes(message, 70), 5, 395);
+		g.drawString(Format.multiLines(message, 70), 5, 395);
 	}
 	
 	
@@ -520,28 +521,28 @@ public class InterfaceSac extends Top
 			categorieValidee = false;
 			in.clearKeyPressedRecord();
 		}
-		else if(in.isKeyPressed(Input.KEY_UP )  && getCategorie().getTaille() != 0)
+		else if(in.isKeyPressed(Input.KEY_UP )  && getCategorie().size() != 0)
 		{
 			int indexA = curseursAbsolus.get(curseurCategorie);
-			curseursAbsolus.set(curseurCategorie, (indexA - 1 + getCategorie().getTaille()) % getCategorie().getTaille());
+			curseursAbsolus.set(curseurCategorie, (indexA - 1 + getCategorie().size()) % getCategorie().size());
 			indexA = curseursAbsolus.get(curseurCategorie);
 			int indexR = curseursRelatifs.get(curseurCategorie);
 			
 			System.out.println(curseursAbsolus.get(curseurCategorie));
 			
-			if(indexA + 1 == getCategorie().getTaille())
+			if(indexA + 1 == getCategorie().size())
 			{
-				curseursRelatifs.set(curseurCategorie, Math.min(getCategorie().getTaille()-1, 11));
+				curseursRelatifs.set(curseurCategorie, Math.min(getCategorie().size()-1, 11));
 			}
 			else
 			{
 				curseursRelatifs.set(curseurCategorie, Math.max(0, indexR-1));
 			}
 		}
-		else if(in.isKeyPressed(Input.KEY_DOWN)  && getCategorie().getTaille() != 0)
+		else if(in.isKeyPressed(Input.KEY_DOWN)  && getCategorie().size() != 0)
 		{
 			int indexA = curseursAbsolus.get(curseurCategorie);
-			curseursAbsolus.set(curseurCategorie, (indexA + 1) % getCategorie().getTaille());
+			curseursAbsolus.set(curseurCategorie, (indexA + 1) % getCategorie().size());
 			indexA = curseursAbsolus.get(curseurCategorie);
 			int indexR = curseursRelatifs.get(curseurCategorie);
 			
@@ -557,9 +558,9 @@ public class InterfaceSac extends Top
 		}
 		else if(in.isKeyPressed(Input.KEY_RETURN))
 		{
-			if(getCategorie().getTaille() > 0)
+			if(getCategorie().size() > 0)
 			{
-				objetSelectionne = getCategorie().getObjet(curseursAbsolus.get(curseurCategorie));
+				objetSelectionne = getCategorie().getItem(curseursAbsolus.get(curseurCategorie));
 				updateListeAtions();
 			}
 		}
@@ -610,11 +611,11 @@ public class InterfaceSac extends Top
 		}
 		else if(in.isKeyPressed(Input.KEY_UP))
 		{
-			boiteComptage = Math.min(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)), boiteComptage + 1);
+			boiteComptage = Math.min(getCategorie().getQuantity(curseursAbsolus.get(curseurCategorie)), boiteComptage + 1);
 		}
 		else if(in.isKeyPressed(Input.KEY_RIGHT))
 		{
-			boiteComptage = Math.min(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)), boiteComptage + 10);
+			boiteComptage = Math.min(getCategorie().getQuantity(curseursAbsolus.get(curseurCategorie)), boiteComptage + 10);
 		}
 		else if(in.isKeyPressed(Input.KEY_ESCAPE))
 		{
@@ -634,10 +635,10 @@ public class InterfaceSac extends Top
 	{
 		listeActions.clear();
 		listeActions.add(UTILISER);		
-		if(objetSelectionne instanceof Arme || objetSelectionne instanceof Armure)
+		if(objetSelectionne instanceof Weapon || objetSelectionne instanceof Armor)
 		{
-			Equipable equipable = (Equipable) objetSelectionne;
-			if(equipe.estEquipeDe(equipable))
+			Stuff equipable = (Stuff) objetSelectionne;
+			if(equipe.isEquiped(equipable))
 			{
 				listeActions.set(0, DESEQUIPER);
 			}
@@ -647,7 +648,7 @@ public class InterfaceSac extends Top
 			}
 		}
 		listeActions.add(DEPLACER);
-		if(!objetSelectionne.estRare())
+		if(!objetSelectionne.isRare())
 		{
 			listeActions.add(JETER);
 		}
@@ -682,8 +683,8 @@ public class InterfaceSac extends Top
 		{
 			if(curseurConfirmation == OUI)
 			{
-				getCategorie().supprimer(objetSelectionne, boiteComptage);
-				curseursAbsolus.set(curseurCategorie, Math.min(curseursAbsolus.get(curseurCategorie), getCategorie().getTaille() - 1));
+				getCategorie().remove(objetSelectionne, boiteComptage);
+				curseursAbsolus.set(curseurCategorie, Math.min(curseursAbsolus.get(curseurCategorie), getCategorie().size() - 1));
 				
 				actionSelectionnee = -1;
 				objetSelectionne = null;
@@ -692,12 +693,12 @@ public class InterfaceSac extends Top
 				
 				//correction curseur Relatif :
 				
-				if(curseursRelatifs.get(curseurCategorie) > getCategorie().getTaille() - 1 && getCategorie().getTaille() != 0)
+				if(curseursRelatifs.get(curseurCategorie) > getCategorie().size() - 1 && getCategorie().size() != 0)
 				{
-					curseursRelatifs.set(curseurCategorie, getCategorie().getTaille() - 1);
+					curseursRelatifs.set(curseurCategorie, getCategorie().size() - 1);
 				}
 				
-				if(getCategorie().getTaille() == 0)
+				if(getCategorie().size() == 0)
 				{
 					curseursAbsolus.set(curseurCategorie, 0);
 					curseursRelatifs.set(curseurCategorie, 0);
@@ -708,9 +709,9 @@ public class InterfaceSac extends Top
 			confirmation = false;
 			curseurConfirmation = NON;
 			
-			if(getCategorie().getTaille() > 0)
+			if(getCategorie().size() > 0)
 			{
-				if(getCategorie().getQuantite(curseursAbsolus.get(curseurCategorie)) == 1)
+				if(getCategorie().getQuantity(curseursAbsolus.get(curseurCategorie)) == 1)
 				{
 					actionSelectionnee = -1;
 				}
@@ -727,11 +728,11 @@ public class InterfaceSac extends Top
 	{
 		if(in.isKeyPressed(Input.KEY_DOWN))
 		{
-			curseurPersonnage = (curseurPersonnage + 1) % equipe.nbPersonnages();
+			curseurPersonnage = (curseurPersonnage + 1) % equipe.numberOfCharacters();
 		}
 		else if(in.isKeyPressed(Input.KEY_UP))
 		{
-			curseurPersonnage = (curseurPersonnage + equipe.nbPersonnages() - 1) % equipe.nbPersonnages();
+			curseurPersonnage = (curseurPersonnage + equipe.numberOfCharacters() - 1) % equipe.numberOfCharacters();
 		}
 		else if(in.isKeyPressed(Input.KEY_ESCAPE))
 		{
@@ -752,14 +753,14 @@ public class InterfaceSac extends Top
 	 * @return
 	 *  	la catégorie en cours.
 	 */
-	private Categorie getCategorie()
+	private Category getCategorie()
 	{
 		switch(curseurCategorie)
 		{
 		case(DIVERS):
-			return sac.getDivers();
+			return sac.getMiscellaneous();
 		case(EQUIPEMENT):
-			return sac.getEquipements();
+			return sac.getStuff();
 		case(COMBAT):
 			return sac.getCombat();
 		case(RARE):

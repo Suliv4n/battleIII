@@ -14,11 +14,11 @@ import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import personnage.Equipe;
-import personnage.EquipeEnnemis;
+import personnage.Party;
+import personnage.EnnemisParty;
 import personnage.IBattle;
-import personnage.Personnage;
-import ui.Barre;
+import personnage.Character;
+import ui.BarUI;
 import ui.GUIList;
 import ui.Panel;
 import ui.TypeBarre;
@@ -31,10 +31,10 @@ public class BattleWithATB extends BasicGameState
 {
 
 	private Image background;
-	private EquipeEnnemis ennemis;
-	private ArrayList<Personnage> queueATB;
+	private EnnemisParty ennemis;
+	private ArrayList<Character> queueATB;
 	
-	private GUIList<Personnage> equipeList;
+	private GUIList<Character> equipeList;
 	private Panel barreHaut;
 	private Panel barreBas;
 	
@@ -43,28 +43,28 @@ public class BattleWithATB extends BasicGameState
 	/**
 	 * Liste des actions
 	 */
-	private HashMap<Personnage,GUIList<String>>actions;
+	private HashMap<Character,GUIList<String>>actions;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		equipeList = new GUIList<Personnage>(640, 100, 3, Config.couleur1, Config.couleur2, false);
+		equipeList = new GUIList<Character>(640, 100, 3, Config.couleur1, Config.couleur2, false);
 		equipeList.setElementRenderer(new ElementRenderer() {
 			@Override
 			public void render(int x, int y, Object element, int index) {
-				Personnage p = (Personnage) element;
-				Graphics g = Jeu.getAppGameContainer().getGraphics();
-				Barre pv = new Barre(Config.couleurPV, Color.black, 150, 5, p.getPV(), p.getPVMaximum(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				Barre energie = new Barre(p.couleurEnergie(), Color.black, 150, 5, p.getEnergie(), p.getEnergieMax(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				Barre atb = new Barre(p.getATBManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getATBManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				pv.afficher(g, x, y+10);
-				energie.afficher(g, x+170, y+10);
-				atb.afficher(g,x+500,y+5);
+				Character p = (Character) element;
+				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				BarUI pv = new BarUI(Config.couleurPV, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				BarUI energie = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				BarUI atb = new BarUI(p.getActiveTimeBattleManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getActiveTimeBattleManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				pv.render(g, x, y+10);
+				energie.render(g, x+170, y+10);
+				atb.render(g,x+500,y+5);
 				g.setColor(Color.white);
-				g.drawString("PV:"+p.getPV() + "/" + p.getPVMaximum(), x, y-5);
-				g.drawString(p.getLibelleEnergie()+":"+p.getEnergie() + "/" + p.getEnergieMax(), x+170, y-5);
-				g.drawString(p.getNom(), x + 330, y+2);
+				g.drawString("PV:"+p.getHealtPoints() + "/" + p.getMaximumHealthPoints(), x, y-5);
+				g.drawString(p.getEnergyLabel()+":"+p.getEnergy() + "/" + p.getMaximumEnergy(), x+170, y-5);
+				g.drawString(p.getName(), x + 330, y+2);
 			}
 		});
 		equipeList.setStep(30);
@@ -72,7 +72,7 @@ public class BattleWithATB extends BasicGameState
 		equipeList.setCursorRenderer( new CursorRenderer() {
 			@Override
 			public void render(int x, int y) {
-				Graphics g = Jeu.getAppGameContainer().getGraphics();
+				Graphics g = Launcher.getAppGameContainer().getGraphics();
 				g.setColor(Config.couleur2);
 				g.drawRect(x, y, 580, 25);
 			}
@@ -80,7 +80,7 @@ public class BattleWithATB extends BasicGameState
 		equipeList.setCursorMarges(-1, 0);
 		barreHaut = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
 		barreBas = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
-		queueATB = new ArrayList<Personnage>();
+		queueATB = new ArrayList<Character>();
 	}
 	
 	/**
@@ -88,16 +88,16 @@ public class BattleWithATB extends BasicGameState
 	 * @param ennemis
 	 * 		Equipe d'ennemis du Battle en cours
 	 */
-	public void launch(EquipeEnnemis ennemis){
-		this.background = Jeu.getEquipe().getMap().getTerrain();
+	public void launch(EnnemisParty ennemis){
+		this.background = Launcher.getParty().getMap().getBackgroundBattle();
 		this.ennemis = ennemis;
 		
-		equipeList.setData(Jeu.getEquipe().getPersonnages());
+		equipeList.setData(Launcher.getParty().getCharacters());
 		
 		coords = new HashMap<IBattle, Point>();
-		if(Jeu.getEquipe().getIfExists(0) != null){coords.put(Jeu.getEquipe().get(0), new Point(450,150));}
-		if(Jeu.getEquipe().getIfExists(1) != null){coords.put(Jeu.getEquipe().get(1), new Point(470,220));}
-		if(Jeu.getEquipe().getIfExists(2) != null){coords.put(Jeu.getEquipe().get(2), new Point(490,290));}
+		if(Launcher.getParty().getIfExists(0) != null){coords.put(Launcher.getParty().get(0), new Point(450,150));}
+		if(Launcher.getParty().getIfExists(1) != null){coords.put(Launcher.getParty().get(1), new Point(470,220));}
+		if(Launcher.getParty().getIfExists(2) != null){coords.put(Launcher.getParty().get(2), new Point(490,290));}
 	
 		//Positionne les ennemis en fonction de la taille de leur image.
 		for(int i : this.ennemis.getEnnemis().keySet())
@@ -120,9 +120,9 @@ public class BattleWithATB extends BasicGameState
 		}
 		
 		
-		actions = new HashMap<Personnage,GUIList<String>>();
-		for(Personnage p : Jeu.getEquipe()){
-			p.getATBManager().launch();
+		actions = new HashMap<Character,GUIList<String>>();
+		for(Character p : Launcher.getParty()){
+			p.getActiveTimeBattleManager().launch();
 			GUIList<String> a = new GUIList<String>(100, 98, 3, Config.couleur1, Config.couleur2, true);
 			a.setData(new String[]{"Attaquer","Compétences"});
 			actions.put(p,a);
@@ -153,9 +153,9 @@ public class BattleWithATB extends BasicGameState
 			throws SlickException 
 	{
 		Input in = container.getInput();
-		for(Personnage p : Jeu.getEquipe()){
+		for(Character p : Launcher.getParty()){
 			//ATB à 100% le personnage est ajouté à la queue
-			if(p.getATBManager().getCurrent() == 100 && !queueATB.contains(p)){
+			if(p.getActiveTimeBattleManager().getCurrent() == 100 && !queueATB.contains(p)){
 				queueATB.add(p);
 			}
 		}
@@ -176,7 +176,7 @@ public class BattleWithATB extends BasicGameState
 
 	private void onPressR() {
 		if(queueATB.size() >= 2){
-			Personnage first = queueATB.get(0);
+			Character first = queueATB.get(0);
 			queueATB.remove(0);
 			queueATB.add(queueATB.size(),first);
 		}
@@ -184,7 +184,7 @@ public class BattleWithATB extends BasicGameState
 
 	private void onPressL() {
 		if(queueATB.size() >= 2){
-			Personnage last = queueATB.get(queueATB.size() - 1);
+			Character last = queueATB.get(queueATB.size() - 1);
 			queueATB.remove(queueATB.size() - 1);
 			queueATB.add(0,last);
 		}

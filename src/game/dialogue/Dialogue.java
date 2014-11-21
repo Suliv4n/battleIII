@@ -1,26 +1,38 @@
 package game.dialogue;
 
-import game.Jeu;
+import game.Launcher;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import personnage.Personnage;
+import personnage.Character;
 import util.Regex;
 
+/**
+ * Classe permettant de créer un dialogue.
+ * 
+ * @author Darklev
+ *
+ */
 public class Dialogue implements Cloneable
 {
-	private ArrayList<Replique> dialogue;
+	private ArrayList<Line> dialogue;
 	private int index;
-	private Selectionneur selectionneur;
-	private boolean notifEnd = false; //vaut true si $end est rencontré dans la réplique en cours.
+	private Select select;
+	private boolean notificationEnd = false; //vaut true si $end est rencontré dans la réplique en cours.
 	
-	public Dialogue(ArrayList<Replique> dialogue)
+	public Dialogue(ArrayList<Line> dialogue)
 	{
 		this.dialogue = dialogue;
 		index = -1;
 	}
 	
+	/**
+	 * Passe à la réplique suivante.
+	 * @return
+	 * 	Vrai s'il y a une réplique suivante ou faux s'il n'y en a pas ou une notification
+	 * end a été rencotrée.
+	 */
 	public boolean suivant()
 	{
 		index++;
@@ -28,10 +40,10 @@ public class Dialogue implements Cloneable
 		{
 			return false;
 		}
-		while(dialogue.get(index).getReplique().matches(".*\\$if\\[.*\\].*"))
+		while(dialogue.get(index).getLine().matches(".*\\$if\\[.*\\].*"))
 		{
-			String rep = dialogue.get(index).getReplique();
-			String condition = Regex.eval(rep, ".*\\$if\\[(.*)\\].*")[1];
+			String line = dialogue.get(index).getLine();
+			String condition = Regex.eval(line, ".*\\$if\\[(.*)\\].*")[1];
 			if(!condition(condition))
 			{
 				index++;
@@ -43,17 +55,17 @@ public class Dialogue implements Cloneable
 		}
 
 		//Si notifEnd vaut true alors mettre fin au dialogue
-		if(notifEnd == true){
-			notifEnd = false;
+		if(notificationEnd == true){
+			notificationEnd = false;
 			return false;
 		}
 		
-		if(dialogue.get(index).getReplique().contains("\\$end"))
+		if(dialogue.get(index).getLine().contains("\\$end"))
 		{
-			notifEnd = true;
+			notificationEnd = true;
 		}
 		else{
-			notifEnd = false;
+			notificationEnd = false;
 		}
 		return index < dialogue.size();
 	}
@@ -63,66 +75,77 @@ public class Dialogue implements Cloneable
 	 * si la condition est vraie, faux sinon.
 	 * @param condition
 	 * @return
+	 * 		Vrai si la condition est vraie, faux sinon.
 	 */
 	private boolean condition(String condition)
 	{
 		boolean res = false;
 		String[] eval = Regex.eval(condition,"([^>|<]*)(=|>=?|<=?)(.*)|(.*)"); 
 		String[] membres = new String[2];
-		String operateur = null;
+		String operator = null;
 		if(eval.length > 1)
 		{
 			membres[0] = eval[1];
 			
 			if(condition.matches("([^>|<]*)(=|>=?|<=?)(.*)|(.*)"))
 			{
-				operateur = eval[2];
+				operator = eval[2];
 				membres[1] = eval[3];
 			}
 		}
 		
 		
-		Personnage perso0 = null;
-		Personnage perso1 = null;
+		Character character0 = null;
+		Character character1 = null;
 		for(String m : membres){
 			if(m.matches("^equipe(\\d+)$")){
-				perso0 = Jeu.getEquipe().get(Integer.parseInt(Regex.eval(m, "^equipe(\\d+)$")[1]));
+				character0 = Launcher.getParty().get(Integer.parseInt(Regex.eval(m, "^equipe(\\d+)$")[1]));
 			}
 			else if(m.equalsIgnoreCase("mage")){
-				perso1 = Jeu.getEquipe().getMage();
+				character1 = Launcher.getParty().getMage();
 			}
 			else if(m.equalsIgnoreCase("rodeur")){
-				perso1 = Jeu.getEquipe().getRodeur();
+				character1 = Launcher.getParty().getRanger();
 			}
 			else if(m.equals("guerrier")){
-				perso1 = Jeu.getEquipe().getGuerrier();
+				character1 = Launcher.getParty().getWarrior();
 			}
 		}
 		
-		if(perso0 != null && perso1 != null)
+		if(character0 != null && character1 != null)
 		{
-			if(operateur.equals("=")){
-				res = perso0 == perso1;
+			if(operator.equals("=")){
+				res = character0 == character1;
 			}
 		}
 		
 		return res;
 	}
 	
-	
-	public Replique get()
+	/**
+	 * Retoune la réplqiue courrante.
+	 * 
+	 * @return
+	 * 	La réplique courante
+	 */
+	public Line get()
 	{
-		if(dialogue.get(index).getReplique().matches(".*\\$select\\[.*\\].*"))
+		if(dialogue.get(index).getLine().matches(".*\\$select\\[.*\\].*"))
 		{
-			String rep = dialogue.get(index).getReplique();
-			selectionneur = creerSelectionneur(rep.substring(rep.indexOf("[",rep.indexOf("$select"))+1, rep.indexOf("]", rep.indexOf("$select"))));
+			String rep = dialogue.get(index).getLine();
+			select = createSelect(rep.substring(rep.indexOf("[",rep.indexOf("$select"))+1, rep.indexOf("]", rep.indexOf("$select"))));
 		}
 		return dialogue.get(index);
 	}
 	
-	public Selectionneur getSelectionneur()
+	/**
+	 * Retourne le select courant.
+	 * @return
+	 * 	Le select courant ou null s'il n'y en a pas.
+	 */
+	public Select getSelect()
 	{
-		return selectionneur;
+		return select;
 	}
 	
 	/**
@@ -134,10 +157,10 @@ public class Dialogue implements Cloneable
 	 * @return
 	 * 		Le sélectionneur correspondant à la chaîne de caractères passée en paramètre.
 	 */
-	private Selectionneur creerSelectionneur(String syntaxe)
+	private Select createSelect(String syntaxe)
 	{
-		ArrayList<String> choix = new ArrayList<String>();
-		ArrayList<Integer> allerA = new ArrayList<Integer>();
+		ArrayList<String> choice = new ArrayList<String>();
+		ArrayList<Integer> goTo = new ArrayList<Integer>();
 		
 		for(String c : syntaxe.split(";"))
 		{
@@ -152,33 +175,48 @@ public class Dialogue implements Cloneable
 				{
 					n = dialogue.size(); //end
 				}
-				allerA.add(n);
+				goTo.add(n);
 			}
 			else
 			{
-				allerA.add(index + 1);
+				goTo.add(index + 1);
 			}
 			
-			choix.add(c.replaceAll("\\{([0-9]*|end)\\}", ""));
+			choice.add(c.replaceAll("\\{([0-9]*|end)\\}", ""));
 		}
 		
-		return new Selectionneur(choix, allerA);
+		return new Select(choice, goTo);
 	}
 	
-	public void validerSelectionneur(int i)
+	/**
+	 * Valide le sélecteur. Exécute le goto associer au Select à l'index passer en paramètre.
+	 * Le select n'existe plus.
+	 * @param i
+	 * 		Index à valider.
+	 */
+	public void validateSelect(int i)
 	{
-		if(selectionneur != null)
+		if(select != null)
 		{
-			index = selectionneur.getAllerA(i);
-			selectionneur = null;
+			index = select.getGoTo(i);
+			select = null;
 		}
 	}
 	
-	public boolean estTermine()
+	/**
+	 * Retourne vrai si le dialogue est fini. Faux sinon.
+	 * @return
+	 * 		vrai si le dialogue est fini. Faux sinon.
+	 */
+	public boolean isEnd()
 	{
 		return index >= dialogue.size();
 	}
 	
+	/**
+	 * Clone le dialogue.
+	 */
+	@Override
 	public Dialogue clone()
 	{
 		try 

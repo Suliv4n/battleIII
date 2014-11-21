@@ -1,8 +1,8 @@
 package game;
 
 import game.dialogue.Dialogue;
-import game.dialogue.Replique;
-import game.dialogue.Selectionneur;
+import game.dialogue.Line;
+import game.dialogue.Select;
 
 
 import java.io.File;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-import map.Coffre;
-import map.Commande;
+import map.Chest;
+import map.Command;
 import map.Map;
-import map.Portail;
+import map.Gate;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -29,15 +29,15 @@ import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import audio.GestionnaireMusique;
+import audio.MusicManager;
 
-import donnees.Formatage;
-import donnees.GenerateurDonnees;
+import data.Format;
+import data.DataManager;
 
 
-import personnage.Equipe;
-import personnage.EquipeEnnemis;
-import personnage.PNJ;
+import personnage.Party;
+import personnage.EnnemisParty;
+import personnage.NonPlayerCharacter;
 
 
 /**
@@ -64,7 +64,7 @@ public class Exploration extends BasicGameState
 	
 	//dialogue en cours
 	private Dialogue dialogue;
-	private Selectionneur selectionneur;
+	private Select selectionneur;
 	private int curseurSelect = 0;
 	
 	private ParticleSystem particles;
@@ -81,11 +81,11 @@ public class Exploration extends BasicGameState
 		this.game = sbg;
 
 		
-		ArrayList<Replique> repliques = new ArrayList<Replique>();
-		repliques.add(new Replique("Hello world!", "Sul"));
-		repliques.add(new Replique("Ceci est un dialogue", "Sul"));
-		repliques.add(new Replique("Doit je répéter? $select[Oui{0};Non;Quitter{end}]", "Sul"));
-		repliques.add(new Replique("Au revoir"));
+		ArrayList<Line> repliques = new ArrayList<Line>();
+		repliques.add(new Line("Hello world!", "Sul"));
+		repliques.add(new Line("Ceci est un dialogue", "Sul"));
+		repliques.add(new Line("Doit je répéter? $select[Oui{0};Non;Quitter{end}]", "Sul"));
+		repliques.add(new Line("Au revoir"));
 		this.dialogue = new Dialogue(repliques);
 		dialogue.suivant();
 		
@@ -111,40 +111,40 @@ public class Exploration extends BasicGameState
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
 			throws SlickException 
 	{
-		if(animation == null){animation = Jeu.getEquipe().getAnimation();}
+		if(animation == null){animation = Launcher.getParty().getAnimation();}
 		
-		Map map = Jeu.getEquipe().getMap();
+		Map map = Launcher.getParty().getMap();
 		
 		map.afficherLayer(0);
 		map.afficherLayer(1);
 		
-		double X = Jeu.getEquipe().getRelativeX();
-		double Y = Jeu.getEquipe().getRelativeY();
+		double X = Launcher.getParty().getRelativeX();
+		double Y = Launcher.getParty().getRelativeY();
 		
 
 		
-		if(Jeu.getEquipe().getRelativeX()<Map.LONG/2)
+		if(Launcher.getParty().getRelativeX()<Map.WIDTH/2)
 		{
-			X = Jeu.getEquipe().getAbsolueX();
+			X = Launcher.getParty().getAbsoluteX();
 		}
-		else if(Jeu.getEquipe().getRelativeX()>Map.LONG/2)
+		else if(Launcher.getParty().getRelativeX()>Map.WIDTH/2)
 		{
-			X = Map.LONG-Jeu.getEquipe().getMap().getTiledMap().getWidth()*32+Jeu.getEquipe().getAbsolueX();
+			X = Map.WIDTH-Launcher.getParty().getMap().getTiledMap().getWidth()*32+Launcher.getParty().getAbsoluteX();
 		}
-		if(Jeu.getEquipe().getRelativeY()<Map.LARG/2)
+		if(Launcher.getParty().getRelativeY()<Map.HEIGHT/2)
 		{
-			Y = Jeu.getEquipe().getAbsolueY();
+			Y = Launcher.getParty().getAbsoluteY();
 		}
-		else if(Jeu.getEquipe().getRelativeY()>Map.LARG/2)
+		else if(Launcher.getParty().getRelativeY()>Map.HEIGHT/2)
 		{
-			Y = Map.LARG - Jeu.getEquipe().getMap().getTiledMap().getHeight()*32+ Jeu.getEquipe().getAbsolueY();
+			Y = Map.HEIGHT - Launcher.getParty().getMap().getTiledMap().getHeight()*32+ Launcher.getParty().getAbsoluteY();
 		}
 			
 		X -= animation.getWidth()/2;
 		Y -= animation.getHeight()/2;
 				
 		
-		map.afficherPNJ();
+		map.renderNPC();
 		//afficher Jeu.getEquipe()
 		if(enMouvement)
 		{		
@@ -190,12 +190,12 @@ public class Exploration extends BasicGameState
 		
 		if(dialogue == null)
 		{		
-			int X = (int) (Jeu.getEquipe().getAbsolueX());
-			int Y = (int) (Jeu.getEquipe().getAbsolueY());
-			EquipeEnnemis ennemis = null; //Prend une valeur en cas de rencontre si mouvement
+			int X = (int) (Launcher.getParty().getAbsoluteX());
+			int Y = (int) (Launcher.getParty().getAbsoluteY());
+			EnnemisParty ennemis = null; //Prend une valeur en cas de rencontre si mouvement
 			
-			if(!animation.equals(Jeu.getEquipe().getAnimation())){
-				animation = Jeu.getEquipe().getAnimation();
+			if(!animation.equals(Launcher.getParty().getAnimation())){
+				animation = Launcher.getParty().getAnimation();
 			}
 			
 			//GESTION DES MOUVEMENTS + INTERACTION________________________________________________
@@ -204,98 +204,98 @@ public class Exploration extends BasicGameState
 			
 			if(in.isKeyDown(Input.KEY_LEFT) || in.isControllerLeft(0))
 			{
-				d = Jeu.getEquipe().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (-Jeu.getEquipe().vitesse()), 0);
-				double marge = Jeu.getEquipe().getMap().scrollX(d);
+				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (-Launcher.getParty().speed()), 0);
+				double marge = Launcher.getParty().getMap().scrollX(d);
 				if(marge == 0)
 				{
-					Jeu.getEquipe().setValRelativeX(Map.LONG/2);
+					Launcher.getParty().setValRelativeX(Map.WIDTH/2);
 				}
 				else
 				{
-					Jeu.getEquipe().setRelativeX(marge);
+					Launcher.getParty().setRelativeX(marge);
 				}
 				
-				Jeu.getEquipe().setAbsolueX(d);
-				Jeu.getEquipe();
-				if(Jeu.getEquipe().getDirection() != Equipe.GAUCHE)
+				Launcher.getParty().setAbsoluteX(d);
+				Launcher.getParty();
+				if(Launcher.getParty().getDirection() != Party.WEST)
 				{
-					Jeu.getEquipe();
-					Jeu.getEquipe().setDirection(Equipe.GAUCHE);
-					animation = Jeu.getEquipe().getAnimation();
+					Launcher.getParty();
+					Launcher.getParty().setDirection(Party.WEST);
+					animation = Launcher.getParty().getAnimation();
 				}
 				
 				enMouvement = true;			
 			}		
 			else if(in.isKeyDown(Input.KEY_RIGHT) || in.isControllerRight(0))
 			{
-				d = Jeu.getEquipe().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Jeu.getEquipe().vitesse()), 0);
-				double marge = Jeu.getEquipe().getMap().scrollX(d);
+				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Launcher.getParty().speed()), 0);
+				double marge = Launcher.getParty().getMap().scrollX(d);
 				if(marge == 0)
 				{
-					Jeu.getEquipe().setValRelativeX(Map.LONG/2);
+					Launcher.getParty().setValRelativeX(Map.WIDTH/2);
 				}
 				else
 				{
-					Jeu.getEquipe().setRelativeX(marge);
+					Launcher.getParty().setRelativeX(marge);
 				}
-				Jeu.getEquipe().setAbsolueX(d);
+				Launcher.getParty().setAbsoluteX(d);
 				
-				Jeu.getEquipe();
-				if(Jeu.getEquipe().getDirection() != Equipe.DROITE)
+				Launcher.getParty();
+				if(Launcher.getParty().getDirection() != Party.EAST)
 				{
-					Jeu.getEquipe();
-					Jeu.getEquipe().setDirection(Equipe.DROITE);
-					animation = Jeu.getEquipe().getAnimation();
+					Launcher.getParty();
+					Launcher.getParty().setDirection(Party.EAST);
+					animation = Launcher.getParty().getAnimation();
 				}
 				enMouvement = true;
 			}
 			
 			else if(in.isKeyDown(Input.KEY_UP) || in.isControllerUp(0))
 			{
-				d = Jeu.getEquipe().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Jeu.getEquipe().vitesse()));
-				double marge = Jeu.getEquipe().getMap().scrollY(d);
+				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Launcher.getParty().speed()));
+				double marge = Launcher.getParty().getMap().scrollY(d);
 				if(marge == 0)
 				{
-					Jeu.getEquipe().setValRelativeY(Map.LARG/2);
+					Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
 				}
 				else
 				{
-					Jeu.getEquipe().setRelativeY(marge);
+					Launcher.getParty().setRelativeY(marge);
 				}
-				Jeu.getEquipe().setAbsolueY(d);
+				Launcher.getParty().setAbsoluteY(d);
 				
-				Jeu.getEquipe();
-				if(Jeu.getEquipe().getDirection() != Equipe.HAUT)
+				Launcher.getParty();
+				if(Launcher.getParty().getDirection() != Party.NORTH)
 				{
-					Jeu.getEquipe();
-					Jeu.getEquipe().setDirection(Equipe.HAUT);
-					animation = Jeu.getEquipe().getAnimation();
+					Launcher.getParty();
+					Launcher.getParty().setDirection(Party.NORTH);
+					animation = Launcher.getParty().getAnimation();
 				}
 				enMouvement = true;
 			}
 			
 			else if(in.isKeyDown(Input.KEY_DOWN) || in.isControllerDown(0))
 			{
-				d = Jeu.getEquipe().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Jeu.getEquipe().vitesse()));
-				double marge = Jeu.getEquipe().getMap().scrollY(d);
+				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Launcher.getParty().speed()));
+				double marge = Launcher.getParty().getMap().scrollY(d);
 	
 				if(marge == 0)
 				{
-					Jeu.getEquipe().setValRelativeY(Map.LARG/2);
+					Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
 				}
 				else
 				{
-					Jeu.getEquipe().setRelativeY(marge);
+					Launcher.getParty().setRelativeY(marge);
 				}
-				Jeu.getEquipe().setAbsolueY(d);
+				Launcher.getParty().setAbsoluteY(d);
 		
 				
-				Jeu.getEquipe();
-				if(Jeu.getEquipe().getDirection() != Equipe.BAS)
+				Launcher.getParty();
+				if(Launcher.getParty().getDirection() != Party.SOUTH)
 				{
-					Jeu.getEquipe();
-					Jeu.getEquipe().setDirection(Equipe.BAS);
-					animation = Jeu.getEquipe().getAnimation();
+					Launcher.getParty();
+					Launcher.getParty().setDirection(Party.SOUTH);
+					animation = Launcher.getParty().getAnimation();
 				}
 				enMouvement = true;
 			}
@@ -306,43 +306,43 @@ public class Exploration extends BasicGameState
 			else
 			{
 				//Activer portail -- Detecter portail au pied du personnage (en bas du sprite)
-				Portail portail = Jeu.getEquipe().getMap().getPortail((int) ((Jeu.getEquipe().getAbsolueX())/32), (int) ((Jeu.getEquipe().getAbsolueY()+16)/32));
+				Gate portail = Launcher.getParty().getMap().getGate((int) ((Launcher.getParty().getAbsoluteX())/32), (int) ((Launcher.getParty().getAbsoluteY()+16)/32));
 				if(portail != null)
 				{
-					Jeu.getEquipe().setMap(GenerateurDonnees.genererMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
+					Launcher.getParty().setMap(DataManager.loadMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
 					System.out.println("new coords : " + (int) (portail.getXT()*32 - Config.LONGUEUR/2)+ "  -  " + ((int) portail.getYT()*32 - Config.LARGEUR/2));
-					Jeu.getEquipe().setValAbsolueX(portail.getXT() * 32 +16);
-					Jeu.getEquipe().setValAbsolueY(portail.getYT() * 32 +16);
+					Launcher.getParty().setValAbsoluteX(portail.getXT() * 32 +16);
+					Launcher.getParty().setValAbsoluteY(portail.getYT() * 32 +16);
 					
 				}
 				else
 				{
 					//_-_-_-GENERER COMBAT-_-_-_
-					ennemis = Jeu.getEquipe().getMap().genererEnnemis();
+					ennemis = Launcher.getParty().getMap().generateEnnemis();
 					if(ennemis != null)
 					{
 						in.clearKeyPressedRecord();
 						enMouvement = false;
 						//Jeu.entrerCombat(Jeu.getEquipe(), ennemis, sbg);
-						Jeu.launchBattle(ennemis, sbg);
+						Launcher.launchBattle(ennemis, sbg);
 					}
 				}
 			}		
 			//FIN GESTION MOUVEMENT___________________________________________________		
 			
-			Map map = Jeu.getEquipe().getMap();
+			Map map = Launcher.getParty().getMap();
 			
 			//GESTION MUSIQUE---NE PAS JOUER MUSIQUE SI Jeu.getEquipe()ENNEMIS
 			//JouerEnBoucle() ne fait rien si la musique est déjà en train de jouer.
 			if( map.getMusic() == null)
 			{
-				GestionnaireMusique.stopper();
+				MusicManager.stop();
 			}
 			else
 			{
 				if(ennemis == null)
 				{
-					GestionnaireMusique.jouerEnBoucle(map.getMusic());
+					MusicManager.playLoop(map.getMusic());
 				}
 			}
 			
@@ -356,9 +356,9 @@ public class Exploration extends BasicGameState
 		//DIALOGUE_____________________________________________________________________
 		else
 		{
-			if(selectionneur == null && dialogue.getSelectionneur() != null)
+			if(selectionneur == null && dialogue.getSelect() != null)
 			{
-				selectionneur = dialogue.getSelectionneur();
+				selectionneur = dialogue.getSelect();
 			}
 			
 			if(selectionneur == null)
@@ -384,7 +384,7 @@ public class Exploration extends BasicGameState
 			onValidate();
 		}
 		
-		Jeu.getEquipe().getMap().updateAnimatedTile();
+		Launcher.getParty().getMap().updateAnimatedTile();
 		
 		in.clearKeyPressedRecord();
 	}
@@ -431,7 +431,7 @@ public class Exploration extends BasicGameState
 	    	//soir
 	    	g.setColor(new Color(150,50,000,50));	
 	    }
-		g.fillRect(0, 0, Map.LONG, Map.LARG);
+		g.fillRect(0, 0, Map.WIDTH, Map.HEIGHT);
 	}
 
 	private void afficherDialogue(Graphics g)
@@ -441,9 +441,9 @@ public class Exploration extends BasicGameState
 		g.setColor(Config.couleur1);
 		g.fillRect(1, 401, 639, 79);
 		g.setColor(Color.white);
-		g.setFont(Jeu.getFont());
+		g.setFont(Launcher.getFont());
 		//Jeu.getFont().drawString(10,405, Formatage.multiLignes(dialogue.get().getFormatStandard(),70));
-		g.drawString(Formatage.multiLignes(dialogue.get().getFormatStandard(),70),10,405);
+		g.drawString(Format.multiLines(dialogue.get().getFormatStandard(),70),10,405);
 		if(selectionneur != null)
 		{
 			int l = selectionneur.getDimensionBoite().width;
@@ -453,7 +453,7 @@ public class Exploration extends BasicGameState
 			g.setColor(Config.couleur1);
 			g.fillRect(1, 401 - h, l-1 , h - 1);
 			g.setColor(Color.white);
-			g.drawImage(Jeu.getFleche(0), 2, (406 - h) + 20 * curseurSelect);
+			g.drawImage(Launcher.getArrow(0), 2, (406 - h) + 20 * curseurSelect);
 			
 			int i = 0;
 			for(String c : selectionneur.getChoix())
@@ -506,72 +506,72 @@ public class Exploration extends BasicGameState
 		if(dialogue == null){ //Pas de dialogue => interaction avec les éléments du jeu (PNJ, coffre, commande)
 			int intX=0;
 			int intY=0;
-			Jeu.getEquipe();
-			if(Jeu.getEquipe().getDirection() == Equipe.HAUT)
+			Launcher.getParty();
+			if(Launcher.getParty().getDirection() == Party.NORTH)
 			{
-				intX = (int) ((Jeu.getEquipe().getAbsolueX())/32);
-				intY = (int) ((Jeu.getEquipe().getAbsolueY()-16)/32);
+				intX = (int) ((Launcher.getParty().getAbsoluteX())/32);
+				intY = (int) ((Launcher.getParty().getAbsoluteY()-16)/32);
 			} else {
-				Jeu.getEquipe();
-				if(Jeu.getEquipe().getDirection() == Equipe.BAS)
+				Launcher.getParty();
+				if(Launcher.getParty().getDirection() == Party.SOUTH)
 				{
-					intX = (int) ((Jeu.getEquipe().getAbsolueX())/32);
-					intY = (int) ((Jeu.getEquipe().getAbsolueY()+16)/32);
+					intX = (int) ((Launcher.getParty().getAbsoluteX())/32);
+					intY = (int) ((Launcher.getParty().getAbsoluteY()+16)/32);
 				} else {
-					Jeu.getEquipe();
-					if(Jeu.getEquipe().getDirection() == Equipe.GAUCHE)
+					Launcher.getParty();
+					if(Launcher.getParty().getDirection() == Party.WEST)
 					{
-						intX = (int) ((Jeu.getEquipe().getAbsolueX()-16)/32);
-						intY = (int) ((Jeu.getEquipe().getAbsolueY())/32);
+						intX = (int) ((Launcher.getParty().getAbsoluteX()-16)/32);
+						intY = (int) ((Launcher.getParty().getAbsoluteY())/32);
 					} else {
-						Jeu.getEquipe();
-						if(Jeu.getEquipe().getDirection() == Equipe.DROITE)
+						Launcher.getParty();
+						if(Launcher.getParty().getDirection() == Party.EAST)
 						{
-							intX = (int) ((Jeu.getEquipe().getAbsolueX()+16)/32);
-							intY = (int) ((Jeu.getEquipe().getAbsolueY())/32);
+							intX = (int) ((Launcher.getParty().getAbsoluteX()+16)/32);
+							intY = (int) ((Launcher.getParty().getAbsoluteY())/32);
 						}
 					}
 				}
 			}			
 			
-			Jeu.getEquipe();
-			if(Jeu.getEquipe().getDirection() == Equipe.HAUT)
+			Launcher.getParty();
+			if(Launcher.getParty().getDirection() == Party.NORTH)
 			{
 				
-				Coffre coffre = Jeu.getEquipe().getMap().getCoffre(intX, intY);
+				Chest coffre = Launcher.getParty().getMap().getChest(intX, intY);
 				if(coffre != null)
 				{
-					if(!Jeu.estCoffreOuvert(coffre))
+					if(!Launcher.estCoffreOuvert(coffre))
 					{
-						ArrayList<Replique> rep = new ArrayList<Replique>();
+						ArrayList<Line> rep = new ArrayList<Line>();
 						if(coffre.getContenu() != null)
 						{
-							rep.add(new Replique("Vous trouvez : " + coffre.getContenu() + " x " + coffre.getQuantite())); 
+							rep.add(new Line("Vous trouvez : " + coffre.getContenu() + " x " + coffre.getQuantity())); 
 						}
-						else if(coffre.getPO() > 0)
+						else if(coffre.getMoney() > 0)
 						{
-							Jeu.getEquipe().updatePO(coffre.getPO());
-							rep.add(new Replique("Vous trouvez : " + coffre.getPO() + " pièces d'or.")); 
+							Launcher.getParty().updateMoney(coffre.getMoney());
+							rep.add(new Line("Vous trouvez : " + coffre.getMoney() + " pièces d'or.")); 
 						}
 						else
 						{
-							rep.add(new Replique("Le coffre est vide."));
+							rep.add(new Line("Le coffre est vide."));
 						}
-						coffre.recupererContenu(Jeu.getEquipe());
-						Jeu.getEquipe().getMap().updateCoffreSprite(coffre.getX(), coffre.getY());
+						coffre.gainContent(Launcher.getParty());
+						Launcher.getParty().getMap().updateChestSprite(coffre.getX(), coffre.getY());
 						dialogue = new Dialogue(rep);
 						dialogue.suivant();
 					}
 				}
 			}
 			
-			Commande commande = Jeu.getEquipe().getMap().getCommande(intX,intY);
+			Command commande = Launcher.getParty().getMap().getCommande(intX,intY);
 			if(commande != null){
-				commande.run(Jeu.getEquipe().getMap());
+				commande.run(Launcher.getParty().getMap());
 			}
 			
 			//-------------------PNJ-----------------------------
-			PNJ pnj = Jeu.getEquipe().getMap().getPNJ(intX, intY);
+			NonPlayerCharacter pnj = Launcher.getParty().getMap().getNPC(intX, intY);
 			if(pnj != null)
 			{
 				dialogue = pnj.getDialogue();
@@ -579,9 +579,9 @@ public class Exploration extends BasicGameState
 			}
 		}
 		else{ //Gestion dialogue
-			if(selectionneur == null && dialogue.getSelectionneur() != null) //selectionneur
+			if(selectionneur == null && dialogue.getSelect() != null) //selectionneur
 			{
-				selectionneur = dialogue.getSelectionneur();
+				selectionneur = dialogue.getSelect();
 			}
 			
 			if(selectionneur == null){ //S'il n'y a pas de sélectionneur
@@ -591,8 +591,8 @@ public class Exploration extends BasicGameState
 				 }
 			}
 			else{ //s'il y a un selectionneur
-				dialogue.validerSelectionneur(curseurSelect);
-				if(dialogue.estTermine()){
+				dialogue.validateSelect(curseurSelect);
+				if(dialogue.isEnd()){
 					dialogue = null;
 				}
 				curseurSelect = 0;

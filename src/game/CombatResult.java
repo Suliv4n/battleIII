@@ -10,22 +10,23 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import audio.GestionnaireMusique;
+import bag.IItems;
 
-import personnage.Equipe;
-import personnage.Personnage;
+import audio.MusicManager;
 
-import sac.IObjet;
+import personnage.Party;
+import personnage.Character;
+
 
 public class CombatResult extends BasicGameState
 {
 	
 	private static int po;
 	private static int exp;
-	private static ArrayList<IObjet> drops;
+	private static ArrayList<IItems> drops;
 	
 
-	public static void init(int po, int exp, ArrayList<IObjet> drops)
+	public static void init(int po, int exp, ArrayList<IItems> drops)
 	{
 		CombatResult.po = po;
 		CombatResult.exp = exp;
@@ -53,18 +54,18 @@ public class CombatResult extends BasicGameState
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException 
 	{
-		Equipe equipe = Jeu.getEquipe();
+		Party equipe = Launcher.getParty();
 		
-		equipe.updatePO(po);
+		equipe.updateMoney(po);
 		po=0;
 		
 		if(exp>0)
 		{
-			for(Personnage p : equipe)
+			for(Character p : equipe)
 			{
-				if(p.estVivant())
+				if(p.isAlive())
 				{
-					p.gagnerXP(1);
+					p.gainExperience(1);
 				}
 			}
 		}
@@ -81,7 +82,7 @@ public class CombatResult extends BasicGameState
 		{
 			if(exp > 0)
 			{
-				Jeu.getEquipe().updatePO(po);
+				Launcher.getParty().updateMoney(po);
 				exp = 0;
 			}
 			else
@@ -112,9 +113,9 @@ public class CombatResult extends BasicGameState
 	
 	private void dessinerEquipe(Graphics g) 
 	{
-		Equipe equipe = Jeu.getEquipe();
+		Party equipe = Launcher.getParty();
 		int delta=100; // pixel entre 2 persos
-		for(int i=0;i<equipe.nbPersonnages();i++)
+		for(int i=0;i<equipe.numberOfCharacters();i++)
 		{
 			//dessiner barre xp :
 			g.setColor(Config.couleur2);
@@ -122,13 +123,13 @@ public class CombatResult extends BasicGameState
 			g.setColor(Color.black);
 			g.fillRect(71, 71+delta*i, 199, 19);
 			g.setColor(Config.couleurXP);
-			g.fillRect(71, 71+delta*i, (float) (equipe.get(i).getXP()/(double) (equipe.get(i).prochainNiveau())*199) , 19);
-			System.out.println((double) (equipe.get(i).getXP()/equipe.get(i).prochainNiveau())*198);
+			g.fillRect(71, 71+delta*i, (float) (equipe.get(i).getExperience()/(double) (equipe.get(i).experienceRequiredForNextLevel())*199) , 19);
+			System.out.println((double) (equipe.get(i).getExperience()/equipe.get(i).experienceRequiredForNextLevel())*198);
 			
-			g.drawImage(equipe.get(i).getAnimation(Equipe.BAS).getImage(2), 10, 60+i*delta);
+			g.drawImage(equipe.get(i).getAnimation(Party.SOUTH).getImage(2), 10, 60+i*delta);
 			g.setColor(Color.white);
-			g.drawString(equipe.get(i).getNom(), 70, 45+delta*i);
-			g.drawString("Exp. : " + equipe.get(i).getXP(), 500, 70+delta*i);
+			g.drawString(equipe.get(i).getName(), 70, 45+delta*i);
+			g.drawString("Exp. : " + equipe.get(i).getExperience(), 500, 70+delta*i);
 		}
 	}
 
