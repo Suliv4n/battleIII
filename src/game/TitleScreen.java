@@ -23,7 +23,7 @@ import ui.GUIList;
 import ui.ListRenderer.ElementRenderer;
 
 
-public class TitleScreen extends BasicGameState{
+public class TitleScreen extends Top{
 
 	private Image fond;
 	private String[] menu;
@@ -87,8 +87,10 @@ public class TitleScreen extends BasicGameState{
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
+	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		
+		
 		g.drawImage(fond,0,0);
 		
 		g.setColor(new Color(132,105,55));
@@ -104,6 +106,7 @@ public class TitleScreen extends BasicGameState{
 
 		g.drawImage(Launcher.getArrow(0), 30, 205+20*curseurMenu);
 		
+		super.render(container, sbg, g);
 	}
 
 
@@ -111,6 +114,8 @@ public class TitleScreen extends BasicGameState{
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
+		super.update(container, sbg, delta);
+		
 		Input in = container.getInput();
 		time += delta;
 		if(selectionMenu == -1){ //------------------MENU PRINCIPAL-------------------------

@@ -125,16 +125,31 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne l'animation du premier personnage de l'équipe en fonction
+	 * Retourne l'animation du premier personnage vivant de l'équipe en fonction
 	 * de la direction dans laquelle il regarde.
 	 * 
 	 * @return l'animation de l'équipe.
 	 */
 	public Animation getAnimation()
 	{
-		return party[0].getAnimation(direction);
+		return firstAliveCharacter().getAnimation(direction);
 	}
 	
+	/**
+	 * Retourne le premier personnage vivant de l'équipe.
+	 * @return
+	 */
+	private Character firstAliveCharacter() {
+		for(Character c : this)
+		{
+			if(c.isAlive()){
+				return c;
+			}
+		}
+		return null;
+	}
+
+
 	/**
 	 * Retourne la direction dans la quelle regarde l'équipe.
 	 * 
@@ -490,7 +505,6 @@ public class Party implements Iterable<Character>
 			while (!party[a].isAlive())
 			{
 				a = (a + 1) % numberOfCharacters();
-				System.out.println("Test b2 oo : " + a + " - "  + !party[a].isAlive());
 			}
 			return party[a];
 		}

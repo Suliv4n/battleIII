@@ -990,4 +990,12 @@ public abstract class Character implements IBattle
 	public ActiveTimeBattleManager getActiveTimeBattleManager(){
 		return activeTimeBattleManager;
 	}
+
+
+	/**
+	 * Réduit les pv du personnage à 0.
+	 */
+	public void kill() {
+		healthPoints = 0;
+	}
 }

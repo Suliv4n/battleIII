@@ -15,40 +15,37 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public abstract class Top  extends BasicGameState
 {
-	
-	private boolean debug = false;
-	
-	private Hashtable<String, Object> meta;
-	
-	
-	public Top()
-	{
-		meta = new Hashtable<String, Object>();
-	}
-	
-	public void ajouterMeta(String key, Object value)
-	{
-		meta.put(key, value);
-	}
+	private boolean console = false;
 	
 	@Override
 	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
 			throws SlickException 
 	{
-		g.setColor(Color.white);
-
-		
-		container.getInput().clearKeyPressedRecord();
+		if(console){
+			Launcher.console().render();
+		}
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame arg1, int arg2)
 			throws SlickException 
 	{
-		if(container.getInput().isKeyPressed(Input.KEY_F3))
-		{
-			debug = !debug;
+		Input in = container.getInput();
+		if(in.isKeyPressed(Input.KEY_0)){
+			toggleConsole();
 		}
+		if(console){
+			Launcher.console().setFocus(true);
+			if(in.isKeyPressed(Input.KEY_ENTER)){
+				Launcher.console().validate();
+			}
+			in.clearKeyPressedRecord();
+		}
+	}
+	
+	private void toggleConsole(){
+		console = !console;
+		Launcher.console().setFocus(console);
 	}
 
 

@@ -24,8 +24,9 @@ public class Regex {
 	 */
 	public static String[] eval(String subject, String regex){
 		ArrayList<String> res = new ArrayList<String>();
-		Pattern pattern = Pattern.compile(regex);
 		
+		Pattern pattern = Pattern.compile(regex);
+
 		Matcher matcher = pattern.matcher(subject);
 
 		while(matcher.find()){

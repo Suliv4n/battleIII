@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import game.input.InputAction;
 import game.input.TextInput;
+import game.system.Console;
 import map.Chest;
 import map.Map;
 
@@ -99,6 +100,10 @@ public class Launcher extends StateBasedGame
 	
 	public static int getCurrentSave(){
 		return currentSave;
+	}
+	
+	public static Console console(){
+		return Console.console();
 	}
 	
 	public static AppGameContainer getAppGameContainer(){

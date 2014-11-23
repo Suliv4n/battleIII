@@ -47,7 +47,7 @@ import personnage.NonPlayerCharacter;
  * @author Darklev
  *
  */
-public class Exploration extends BasicGameState 
+public class Exploration extends Top 
 {
 
 	//#region -----------PROPRIETES----------------
@@ -108,7 +108,7 @@ public class Exploration extends BasicGameState
 
 	
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
+	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
 			throws SlickException 
 	{
 		if(animation == null){animation = Launcher.getParty().getAnimation();}
@@ -175,12 +175,15 @@ public class Exploration extends BasicGameState
 		//!AFFICHAGE DU DIALOGUE
 		
 		//test.render(50, 50);
+		super.render(container, sbg, g);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException 
 	{	
+		super.update(container, sbg, delta);
+		
 		particles.update(delta);
 		
 		Input in = container.getInput();
