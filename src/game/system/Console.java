@@ -130,7 +130,6 @@ public class Console {
 	 * Affiche la console.
 	 */
 	public void render(){
-		System.out.println("render");
 		renderer.render(this);
 	}
 	
@@ -203,7 +202,7 @@ public class Console {
 				if(eval.length > 0){
 					personnage.Character character = Launcher.getParty().get(Integer.parseInt(eval[0]));
 					character.kill();
-					System.out.println(character.getName() + "has been killed");
+					print(character.getName() + " has been killed");
 				}
 			}
 		}

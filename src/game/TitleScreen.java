@@ -32,13 +32,7 @@ public class TitleScreen extends Top{
 	//Selection du menu
 	private int selectionMenu = -1;
 	
-	//Sauvegardes
-	//private int curseurRelatif = 0;
-	//private int curseurAbsolu = 0;
-	
-	//private ArrayList<Equipe> saves;
 	private GUIList<Party> listeSaves;
-	private int time;
 	
 	private StateBasedGame game;
 	
@@ -100,7 +94,7 @@ public class TitleScreen extends Top{
 		}
 		
 		if(selectionMenu == 1){
-			afficherSauvegardes(g);
+			listeSaves.render(390, 50);
 		}
 		
 
@@ -117,31 +111,10 @@ public class TitleScreen extends Top{
 		super.update(container, sbg, delta);
 		
 		Input in = container.getInput();
-		time += delta;
-		if(selectionMenu == -1){ //------------------MENU PRINCIPAL-------------------------
-			if(in.isKeyPressed(Input.KEY_UP) || ControllerInput.isControllerUpPressed(0, in)){
-				curseurMenu = (curseurMenu - 1 + menu.length) % menu.length;
-			}
-			else if(in.isKeyPressed(Input.KEY_DOWN) || ControllerInput.isControllerDownPressed(0, in)){
-				curseurMenu = (curseurMenu + 1) % menu.length;
-			}
-			else if(in.isKeyPressed(Input.KEY_RETURN)){
-				onValidate();
-			}
-		}
-		else if(selectionMenu == 1){//--------------------SAUVEGARDES-----------------------
-			if(in.isKeyPressed(Input.KEY_ESCAPE)){
-				selectionMenu = -1;
-			}
-			else if(in.isKeyPressed(Input.KEY_ENTER)){
-				in.clearKeyPressedRecord();
-				onValidate();
-			}
-			
+		//--------------------SAUVEGARDES-----------------------
+		if(selectionMenu == 1){
 			listeSaves.update(in);
-
 		}
-		
 		in.clearKeyPressedRecord();
 	}
 
@@ -156,15 +129,18 @@ public class TitleScreen extends Top{
 		if(button == ControllerInput.VALIDATE){
 			onValidate();
 		}
-		
 	}
 	
-	private void onValidate(){
+	//-----------------------------------------------------------
+	//-------------------------EVENTS----------------------------
+	//-----------------------------------------------------------
+	
+	@Override
+	public void onValidate(){
 		if(selectionMenu == -1){
 			selectionMenu = curseurMenu;
 			if(curseurMenu == 1){
 				try {
-					//saves = Sauvegarde.getAllSauvegardes();
 					listeSaves.setData(Save.getAllSauvegardes());
 				} catch (FileNotFoundException | SlickXMLException e) {
 					e.printStackTrace();
@@ -172,11 +148,9 @@ public class TitleScreen extends Top{
 			}
 		}
 		else if(selectionMenu == 1){
-			System.out.println("Validate on save"+(listeSaves.getSelectedIndex()+1));
 			if(listeSaves.getObject() != null)
 			{
 				try {
-					System.out.println("Execute load save"+(listeSaves.getSelectedIndex()+1));
 					Save.loadSave("save"+(listeSaves.getSelectedIndex()+1));
 				} catch (SlickException e) {
 					e.printStackTrace();
@@ -186,43 +160,22 @@ public class TitleScreen extends Top{
 		}
 	}
 	
-	private void afficherSauvegardes(Graphics g) {
-		listeSaves.render(390, 50);
-		/*
-		int pas = 90;
-		for(int i = curseurAbsolu - curseurRelatif; 
-				i - curseurAbsolu + curseurRelatif<4 && i<saves.size();
-				i++){
-			
-			int x = i - curseurAbsolu + curseurRelatif;
-			g.drawString("Sauvegarde " + (i+1) , 390,  50 + x * pas );
-			
-			if(saves.get(i) != null)
-			{
-				
-				int j=0;
-				for(Personnage p : saves.get(i))
-				{
-					if(p != null)
-					{
-						g.drawImage(p.getAnimation(Equipe.BAS).getImage(2), 390 + 40 * j, 70 + x*pas);
-						j++;
-					}
-				}
-				g.drawString(saves.get(i).get(0).getNom(), 510, 65 + x*pas);
-				g.drawString("Niv. "+saves.get(i).get(0).getLevel(), 510, 85 + x*pas);
-				g.drawString(saves.get(i).getMap().getNom(), 390, 105 + x*pas);
-			}
-			else
-			{
-				g.drawString("Vide", 500, 85 + x*pas);
-			}
-			
-			g.drawLine(380,130 + x*pas, 630, 130 + x*pas);
-		}
-		
-		g.drawImage(Jeu.getFleche(0), 380, 80 + curseurRelatif * pas);
-		*/
+	@Override
+	public void onBack(){
+		selectionMenu = -1;
 	}
-
+	
+	@Override
+	public void onUp(){
+		if(selectionMenu == -1){
+			curseurMenu = (curseurMenu - 1 + menu.length) % menu.length;
+		}
+	}
+	
+	@Override
+	public void onDown(){
+		if(selectionMenu == -1){
+			curseurMenu = (curseurMenu + 1) % menu.length;
+		}
+	}
 }

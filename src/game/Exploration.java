@@ -57,7 +57,7 @@ public class Exploration extends Top
 	
 	//Vrai si l'Jeu.getEquipe() est en mouvement.
 	//Faux sinon.
-	private boolean enMouvement;
+	private boolean playerMoving;
 	
 	//Animation du personnage qui marche.
 	private Animation animation;
@@ -79,8 +79,8 @@ public class Exploration extends Top
 			throws SlickException 
 	{
 		this.game = sbg;
-
 		
+		/*
 		ArrayList<Line> repliques = new ArrayList<Line>();
 		repliques.add(new Line("Hello world!", "Sul"));
 		repliques.add(new Line("Ceci est un dialogue", "Sul"));
@@ -88,6 +88,7 @@ public class Exploration extends Top
 		repliques.add(new Line("Au revoir"));
 		this.dialogue = new Dialogue(repliques);
 		dialogue.suivant();
+		*/
 		
 		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
 		
@@ -111,7 +112,6 @@ public class Exploration extends Top
 	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
 			throws SlickException 
 	{
-		if(animation == null){animation = Launcher.getParty().getAnimation();}
 		
 		Map map = Launcher.getParty().getMap();
 		
@@ -146,7 +146,7 @@ public class Exploration extends Top
 		
 		map.renderNPC();
 		//afficher Jeu.getEquipe()
-		if(enMouvement)
+		if(playerMoving)
 		{		
 			g.drawAnimation(animation, (int) X, (int) Y);
 		}
@@ -184,6 +184,7 @@ public class Exploration extends Top
 	{	
 		super.update(container, sbg, delta);
 		
+		
 		particles.update(delta);
 		
 		Input in = container.getInput();
@@ -193,120 +194,17 @@ public class Exploration extends Top
 		
 		if(dialogue == null)
 		{		
-			int X = (int) (Launcher.getParty().getAbsoluteX());
-			int Y = (int) (Launcher.getParty().getAbsoluteY());
+
 			EnnemisParty ennemis = null; //Prend une valeur en cas de rencontre si mouvement
 			
+			if(animation == null){animation = Launcher.getParty().getAnimation();}
 			if(!animation.equals(Launcher.getParty().getAnimation())){
 				animation = Launcher.getParty().getAnimation();
 			}
 			
 			//GESTION DES MOUVEMENTS + INTERACTION________________________________________________
-			int d = 0;
-			
-			
-			if(in.isKeyDown(Input.KEY_LEFT) || in.isControllerLeft(0))
-			{
-				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (-Launcher.getParty().speed()), 0);
-				double marge = Launcher.getParty().getMap().scrollX(d);
-				if(marge == 0)
-				{
-					Launcher.getParty().setValRelativeX(Map.WIDTH/2);
-				}
-				else
-				{
-					Launcher.getParty().setRelativeX(marge);
-				}
-				
-				Launcher.getParty().setAbsoluteX(d);
-				Launcher.getParty();
-				if(Launcher.getParty().getDirection() != Party.WEST)
-				{
-					Launcher.getParty();
-					Launcher.getParty().setDirection(Party.WEST);
-					animation = Launcher.getParty().getAnimation();
-				}
-				
-				enMouvement = true;			
-			}		
-			else if(in.isKeyDown(Input.KEY_RIGHT) || in.isControllerRight(0))
-			{
-				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Launcher.getParty().speed()), 0);
-				double marge = Launcher.getParty().getMap().scrollX(d);
-				if(marge == 0)
-				{
-					Launcher.getParty().setValRelativeX(Map.WIDTH/2);
-				}
-				else
-				{
-					Launcher.getParty().setRelativeX(marge);
-				}
-				Launcher.getParty().setAbsoluteX(d);
-				
-				Launcher.getParty();
-				if(Launcher.getParty().getDirection() != Party.EAST)
-				{
-					Launcher.getParty();
-					Launcher.getParty().setDirection(Party.EAST);
-					animation = Launcher.getParty().getAnimation();
-				}
-				enMouvement = true;
-			}
-			
-			else if(in.isKeyDown(Input.KEY_UP) || in.isControllerUp(0))
-			{
-				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Launcher.getParty().speed()));
-				double marge = Launcher.getParty().getMap().scrollY(d);
-				if(marge == 0)
-				{
-					Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
-				}
-				else
-				{
-					Launcher.getParty().setRelativeY(marge);
-				}
-				Launcher.getParty().setAbsoluteY(d);
-				
-				Launcher.getParty();
-				if(Launcher.getParty().getDirection() != Party.NORTH)
-				{
-					Launcher.getParty();
-					Launcher.getParty().setDirection(Party.NORTH);
-					animation = Launcher.getParty().getAnimation();
-				}
-				enMouvement = true;
-			}
-			
-			else if(in.isKeyDown(Input.KEY_DOWN) || in.isControllerDown(0))
-			{
-				d = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Launcher.getParty().speed()));
-				double marge = Launcher.getParty().getMap().scrollY(d);
-	
-				if(marge == 0)
-				{
-					Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
-				}
-				else
-				{
-					Launcher.getParty().setRelativeY(marge);
-				}
-				Launcher.getParty().setAbsoluteY(d);
-		
-				
-				Launcher.getParty();
-				if(Launcher.getParty().getDirection() != Party.SOUTH)
-				{
-					Launcher.getParty();
-					Launcher.getParty().setDirection(Party.SOUTH);
-					animation = Launcher.getParty().getAnimation();
-				}
-				enMouvement = true;
-			}
-			if(d == 0)
-			{
-				enMouvement = false;
-			}
-			else
+
+			if(playerMoving)
 			{
 				//Activer portail -- Detecter portail au pied du personnage (en bas du sprite)
 				Gate portail = Launcher.getParty().getMap().getGate((int) ((Launcher.getParty().getAbsoluteX())/32), (int) ((Launcher.getParty().getAbsoluteY()+16)/32));
@@ -325,7 +223,7 @@ public class Exploration extends Top
 					if(ennemis != null)
 					{
 						in.clearKeyPressedRecord();
-						enMouvement = false;
+						playerMoving = false;
 						//Jeu.entrerCombat(Jeu.getEquipe(), ennemis, sbg);
 						Launcher.launchBattle(ennemis, sbg);
 					}
@@ -505,7 +403,7 @@ public class Exploration extends Top
 		}
 	}
 	
-	private void onValidate(){
+	public void onValidate(){
 		if(dialogue == null){ //Pas de dialogue => interaction avec les éléments du jeu (PNJ, coffre, commande)
 			int intX=0;
 			int intY=0;
@@ -603,5 +501,126 @@ public class Exploration extends Top
 			}
 		}
 	}
+	
+	//----------------------------------------------------------------------------
+	//---------------------------EVENT--------------------------------------------
+	//----------------------------------------------------------------------------
 
+	@Override
+	public void onHoldUp(){
+		int X = (int) (Launcher.getParty().getAbsoluteX());
+		int Y = (int) (Launcher.getParty().getAbsoluteY());
+		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Launcher.getParty().speed()), 0);
+		
+		distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Launcher.getParty().speed()));
+		double marge = Launcher.getParty().getMap().scrollY(distance);
+		if(marge == 0)
+		{
+			Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
+		}
+		else
+		{
+			Launcher.getParty().setRelativeY(marge);
+		}
+		Launcher.getParty().setAbsoluteY(distance);
+		
+		Launcher.getParty();
+		if(Launcher.getParty().getDirection() != Party.NORTH)
+		{
+			Launcher.getParty();
+			Launcher.getParty().setDirection(Party.NORTH);
+			animation = Launcher.getParty().getAnimation();
+		}
+		playerMoving = true;
+	}
+	
+	@Override
+	public void onHoldDown(){
+		int X = (int) (Launcher.getParty().getAbsoluteX());
+		int Y = (int) (Launcher.getParty().getAbsoluteY());
+		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Launcher.getParty().speed()));
+		
+		double marge = Launcher.getParty().getMap().scrollY(distance);
+
+		if(marge == 0)
+		{
+			Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
+		}
+		else
+		{
+			Launcher.getParty().setRelativeY(marge);
+		}
+		Launcher.getParty().setAbsoluteY(distance);
+
+		
+		Launcher.getParty();
+		if(Launcher.getParty().getDirection() != Party.SOUTH)
+		{
+			Launcher.getParty();
+			Launcher.getParty().setDirection(Party.SOUTH);
+			animation = Launcher.getParty().getAnimation();
+		}
+		playerMoving = true;
+	}
+	
+	@Override
+	public void onHoldRight(){
+		int X = (int) (Launcher.getParty().getAbsoluteX());
+		int Y = (int) (Launcher.getParty().getAbsoluteY());
+		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Launcher.getParty().speed()));
+		
+		
+		double marge = Launcher.getParty().getMap().scrollX(distance);
+		if(marge == 0)
+		{
+			Launcher.getParty().setValRelativeX(Map.WIDTH/2);
+		}
+		else
+		{
+			Launcher.getParty().setRelativeX(marge);
+		}
+		Launcher.getParty().setAbsoluteX(distance);
+		
+		Launcher.getParty();
+		if(Launcher.getParty().getDirection() != Party.EAST)
+		{
+			Launcher.getParty();
+			Launcher.getParty().setDirection(Party.EAST);
+			animation = Launcher.getParty().getAnimation();
+		}
+		playerMoving = true;
+	}
+	
+	@Override
+	public void onHoldLeft(){
+		int X = (int) (Launcher.getParty().getAbsoluteX());
+		int Y = (int) (Launcher.getParty().getAbsoluteY());
+		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Launcher.getParty().speed()), 0);
+		
+		double marge = Launcher.getParty().getMap().scrollX(distance);
+		if(marge == 0)
+		{
+			Launcher.getParty().setValRelativeX(Map.WIDTH/2);
+		}
+		else
+		{
+			Launcher.getParty().setRelativeX(marge);
+		}
+		
+		Launcher.getParty().setAbsoluteX(distance);
+		Launcher.getParty();
+		if(Launcher.getParty().getDirection() != Party.WEST)
+		{
+			Launcher.getParty();
+			Launcher.getParty().setDirection(Party.WEST);
+			animation = Launcher.getParty().getAnimation();
+		}
+		
+		playerMoving = true;	
+	}
+	
+	@Override
+	public void onNoDirectionKeyPressedOrDown(){
+		playerMoving = false;
+	}
 }
