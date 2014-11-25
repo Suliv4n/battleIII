@@ -67,6 +67,9 @@ public abstract class Top  extends BasicGameState
 			onRight();
 			directionKeyPressedOrDown = true;
 		}
+		if(in.isKeyPressed(KeyboardControlsConfiguration.START_KEY)){
+			onStart();
+		}
 		//KEY DOWN
 		if(in.isKeyDown(KeyboardControlsConfiguration.DOWN_KEY)){
 			onHoldDown();
@@ -146,4 +149,10 @@ public abstract class Top  extends BasicGameState
 	 * Pas de direction.
 	 */
 	public void onNoDirectionKeyPressedOrDown(){}
+	/**
+	 * Evénement "start"
+	 */
+	public void onStart() {
+		
+	}
 }

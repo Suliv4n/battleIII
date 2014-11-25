@@ -246,12 +246,6 @@ public class Exploration extends Top
 					MusicManager.playLoop(map.getMusic());
 				}
 			}
-			
-			if(in.isKeyPressed(Input.KEY_TAB))
-			{
-				in.clearKeyPressedRecord();
-				onStart();
-			}
 		}
 		
 		//DIALOGUE_____________________________________________________________________
@@ -396,12 +390,7 @@ public class Exploration extends Top
 		}
 	}
 	//#endregion
-	
-	private void onStart(){
-		if(dialogue == null){
-			game.enterState(Config.MENU);
-		}
-	}
+
 	
 	public void onValidate(){
 		if(dialogue == null){ //Pas de dialogue => interaction avec les éléments du jeu (PNJ, coffre, commande)
@@ -622,5 +611,13 @@ public class Exploration extends Top
 	@Override
 	public void onNoDirectionKeyPressedOrDown(){
 		playerMoving = false;
+	}
+	
+	
+	@Override
+	public void onStart(){
+		if(dialogue == null){
+			game.enterState(Config.MENU);
+		}
 	}
 }
