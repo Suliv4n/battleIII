@@ -16,12 +16,17 @@ public class Configurations {
 	/**
 	 * Couleur de fond par défaut.
 	 */
-	public static final Color DEFAULT_BACKGROUND_COLOR = new Color(255,255,255);
+	public static final Color DEFAULT_BACKGROUND_COLOR = new Color(100,0,0);
 	
 	/**
 	 * Couleur de bordure par défaut.
 	 */
-	public static final Color DEFAULT_BORDER_COLOR = new Color(255,255,255);
+	public static final Color DEFAULT_BORDER_COLOR = new Color(150,100,0);
+	
+	/**
+	 * Couleur de la police.
+	 */
+	public static final Color DEFAULT_COLO_FONT = new Color(255,255,255);
 	
 	/**
 	 * Nombre de FPS du jeu.
@@ -33,4 +38,9 @@ public class Configurations {
 	 * Sinon faux. 
 	 */
 	public static final boolean DEBUG = true;
+
+	/**
+	 * Application name.
+	 */
+	public static final String GAME_TITLE = "BATTLE III";
 }

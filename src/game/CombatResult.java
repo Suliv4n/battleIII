@@ -1,5 +1,8 @@
 package game;
 
+import game.launcher.Launcher;
+import game.system.application.Application;
+
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -54,7 +57,7 @@ public class CombatResult extends BasicGameState
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException 
 	{
-		Party equipe = Launcher.getParty();
+		Party equipe = Application.application().getGame().getParty();
 		
 		equipe.updateMoney(po);
 		po=0;
@@ -82,7 +85,7 @@ public class CombatResult extends BasicGameState
 		{
 			if(exp > 0)
 			{
-				Launcher.getParty().updateMoney(po);
+				Application.application().getGame().getParty().updateMoney(po);
 				exp = 0;
 			}
 			else
@@ -113,7 +116,7 @@ public class CombatResult extends BasicGameState
 	
 	private void dessinerEquipe(Graphics g) 
 	{
-		Party equipe = Launcher.getParty();
+		Party equipe = Application.application().getGame().getParty();
 		int delta=100; // pixel entre 2 persos
 		for(int i=0;i<equipe.numberOfCharacters();i++)
 		{

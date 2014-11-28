@@ -1,11 +1,17 @@
 package game.dialogue;
 
-import game.Launcher;
+import game.Configuration;
+import game.launcher.Launcher;
+import game.settings.Settings;
+import game.system.Configurations;
+import game.system.application.Application;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+
 import personnage.Character;
+import ui.Panel;
 import util.Regex;
 
 /**
@@ -33,7 +39,7 @@ public class Dialogue implements Cloneable
 	 * 	Vrai s'il y a une réplique suivante ou faux s'il n'y en a pas ou une notification
 	 * end a été rencotrée.
 	 */
-	public boolean suivant()
+	public boolean next()
 	{
 		index++;
 		if(index >= dialogue.size())
@@ -99,16 +105,16 @@ public class Dialogue implements Cloneable
 		Character character1 = null;
 		for(String m : membres){
 			if(m.matches("^equipe(\\d+)$")){
-				character0 = Launcher.getParty().get(Integer.parseInt(Regex.eval(m, "^equipe(\\d+)$")[1]));
+				character0 = Application.application().getGame().getParty().get(Integer.parseInt(Regex.eval(m, "^equipe(\\d+)$")[1]));
 			}
 			else if(m.equalsIgnoreCase("mage")){
-				character1 = Launcher.getParty().getMage();
+				character1 = Application.application().getGame().getParty().getMage();
 			}
 			else if(m.equalsIgnoreCase("rodeur")){
-				character1 = Launcher.getParty().getRanger();
+				character1 = Application.application().getGame().getParty().getRanger();
 			}
 			else if(m.equals("guerrier")){
-				character1 = Launcher.getParty().getWarrior();
+				character1 = Application.application().getGame().getParty().getWarrior();
 			}
 		}
 		
@@ -228,5 +234,13 @@ public class Dialogue implements Cloneable
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * Affiche le dialogue.
+	 */
+	public void render(){
+		Panel dialoguePanel = new Panel(Configurations.SCREEN_WIDTH, 200, 2, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR);
+		
 	}
 }

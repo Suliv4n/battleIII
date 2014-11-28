@@ -3,6 +3,7 @@ package game;
 import game.dialogue.Dialogue;
 import game.dialogue.Line;
 import game.dialogue.Select;
+import game.system.application.Application;
 
 
 import java.io.File;
@@ -113,31 +114,31 @@ public class Exploration extends Top
 			throws SlickException 
 	{
 		
-		Map map = Launcher.getParty().getMap();
+		Map map = Application.application().getGame().getParty().getMap();
 		
 		map.afficherLayer(0);
 		map.afficherLayer(1);
 		
-		double X = Launcher.getParty().getRelativeX();
-		double Y = Launcher.getParty().getRelativeY();
+		double X = Application.application().getGame().getParty().getRelativeX();
+		double Y = Application.application().getGame().getParty().getRelativeY();
 		
 
 		
-		if(Launcher.getParty().getRelativeX()<Map.WIDTH/2)
+		if(Application.application().getGame().getParty().getRelativeX()<Map.WIDTH/2)
 		{
-			X = Launcher.getParty().getAbsoluteX();
+			X = Application.application().getGame().getParty().getAbsoluteX();
 		}
-		else if(Launcher.getParty().getRelativeX()>Map.WIDTH/2)
+		else if(Application.application().getGame().getParty().getRelativeX()>Map.WIDTH/2)
 		{
-			X = Map.WIDTH-Launcher.getParty().getMap().getTiledMap().getWidth()*32+Launcher.getParty().getAbsoluteX();
+			X = Map.WIDTH-Application.application().getGame().getParty().getMap().getTiledMap().getWidth()*32+Application.application().getGame().getParty().getAbsoluteX();
 		}
-		if(Launcher.getParty().getRelativeY()<Map.HEIGHT/2)
+		if(Application.application().getGame().getParty().getRelativeY()<Map.HEIGHT/2)
 		{
-			Y = Launcher.getParty().getAbsoluteY();
+			Y = Application.application().getGame().getParty().getAbsoluteY();
 		}
-		else if(Launcher.getParty().getRelativeY()>Map.HEIGHT/2)
+		else if(Application.application().getGame().getParty().getRelativeY()>Map.HEIGHT/2)
 		{
-			Y = Map.HEIGHT - Launcher.getParty().getMap().getTiledMap().getHeight()*32+ Launcher.getParty().getAbsoluteY();
+			Y = Map.HEIGHT - Application.application().getGame().getParty().getMap().getTiledMap().getHeight()*32+ Application.application().getGame().getParty().getAbsoluteY();
 		}
 			
 		X -= animation.getWidth()/2;
@@ -197,9 +198,9 @@ public class Exploration extends Top
 
 			EnnemisParty ennemis = null; //Prend une valeur en cas de rencontre si mouvement
 			
-			if(animation == null){animation = Launcher.getParty().getAnimation();}
-			if(!animation.equals(Launcher.getParty().getAnimation())){
-				animation = Launcher.getParty().getAnimation();
+			if(animation == null){animation = Application.application().getGame().getParty().getAnimation();}
+			if(!animation.equals(Application.application().getGame().getParty().getAnimation())){
+				animation = Application.application().getGame().getParty().getAnimation();
 			}
 			
 			//GESTION DES MOUVEMENTS + INTERACTION________________________________________________
@@ -207,31 +208,31 @@ public class Exploration extends Top
 			if(playerMoving)
 			{
 				//Activer portail -- Detecter portail au pied du personnage (en bas du sprite)
-				Gate portail = Launcher.getParty().getMap().getGate((int) ((Launcher.getParty().getAbsoluteX())/32), (int) ((Launcher.getParty().getAbsoluteY()+16)/32));
+				Gate portail = Application.application().getGame().getParty().getMap().getGate((int) ((Application.application().getGame().getParty().getAbsoluteX())/32), (int) ((Application.application().getGame().getParty().getAbsoluteY()+16)/32));
 				if(portail != null)
 				{
-					Launcher.getParty().setMap(DataManager.loadMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
+					Application.application().getGame().getParty().setMap(DataManager.loadMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
 					System.out.println("new coords : " + (int) (portail.getXT()*32 - Config.LONGUEUR/2)+ "  -  " + ((int) portail.getYT()*32 - Config.LARGEUR/2));
-					Launcher.getParty().setValAbsoluteX(portail.getXT() * 32 +16);
-					Launcher.getParty().setValAbsoluteY(portail.getYT() * 32 +16);
+					Application.application().getGame().getParty().setValAbsoluteX(portail.getXT() * 32 +16);
+					Application.application().getGame().getParty().setValAbsoluteY(portail.getYT() * 32 +16);
 					
 				}
 				else
 				{
 					//_-_-_-GENERER COMBAT-_-_-_
-					ennemis = Launcher.getParty().getMap().generateEnnemis();
+					ennemis = Application.application().getGame().getParty().getMap().generateEnnemis();
 					if(ennemis != null)
 					{
 						in.clearKeyPressedRecord();
 						playerMoving = false;
 						//Jeu.entrerCombat(Jeu.getEquipe(), ennemis, sbg);
-						Launcher.launchBattle(ennemis, sbg);
+						Application.application().getGame().launchBattle(ennemis);
 					}
 				}
 			}		
 			//FIN GESTION MOUVEMENT___________________________________________________		
 			
-			Map map = Launcher.getParty().getMap();
+			Map map = Application.application().getGame().getParty().getMap();
 			
 			//GESTION MUSIQUE---NE PAS JOUER MUSIQUE SI Jeu.getEquipe()ENNEMIS
 			//JouerEnBoucle() ne fait rien si la musique est déjà en train de jouer.
@@ -260,7 +261,7 @@ public class Exploration extends Top
 			{
 				if(in.isKeyPressed(Input.KEY_RETURN))
 				{
-					 if(!dialogue.suivant())
+					 if(!dialogue.next())
 					 {
 						 dialogue = null;
 						 in.clearKeyPressedRecord();
@@ -279,7 +280,7 @@ public class Exploration extends Top
 			onValidate();
 		}
 		
-		Launcher.getParty().getMap().updateAnimatedTile();
+		Application.application().getGame().getParty().getMap().updateAnimatedTile();
 		
 		in.clearKeyPressedRecord();
 	}
@@ -336,7 +337,7 @@ public class Exploration extends Top
 		g.setColor(Config.couleur1);
 		g.fillRect(1, 401, 639, 79);
 		g.setColor(Color.white);
-		g.setFont(Launcher.getFont());
+		//g.setFont(Application.application().getGame().getFont());
 		//Jeu.getFont().drawString(10,405, Formatage.multiLignes(dialogue.get().getFormatStandard(),70));
 		g.drawString(Format.multiLines(dialogue.get().getFormatStandard(),70),10,405);
 		if(selectionneur != null)
@@ -348,7 +349,7 @@ public class Exploration extends Top
 			g.setColor(Config.couleur1);
 			g.fillRect(1, 401 - h, l-1 , h - 1);
 			g.setColor(Color.white);
-			g.drawImage(Launcher.getArrow(0), 2, (406 - h) + 20 * curseurSelect);
+			g.drawImage(Application.application().getGame().getArrow(0), 2, (406 - h) + 20 * curseurSelect);
 			
 			int i = 0;
 			for(String c : selectionneur.getChoix())
@@ -396,42 +397,42 @@ public class Exploration extends Top
 		if(dialogue == null){ //Pas de dialogue => interaction avec les éléments du jeu (PNJ, coffre, commande)
 			int intX=0;
 			int intY=0;
-			Launcher.getParty();
-			if(Launcher.getParty().getDirection() == Party.NORTH)
+			Application.application().getGame().getParty();
+			if(Application.application().getGame().getParty().getDirection() == Party.NORTH)
 			{
-				intX = (int) ((Launcher.getParty().getAbsoluteX())/32);
-				intY = (int) ((Launcher.getParty().getAbsoluteY()-16)/32);
+				intX = (int) ((Application.application().getGame().getParty().getAbsoluteX())/32);
+				intY = (int) ((Application.application().getGame().getParty().getAbsoluteY()-16)/32);
 			} else {
-				Launcher.getParty();
-				if(Launcher.getParty().getDirection() == Party.SOUTH)
+				Application.application().getGame().getParty();
+				if(Application.application().getGame().getParty().getDirection() == Party.SOUTH)
 				{
-					intX = (int) ((Launcher.getParty().getAbsoluteX())/32);
-					intY = (int) ((Launcher.getParty().getAbsoluteY()+16)/32);
+					intX = (int) ((Application.application().getGame().getParty().getAbsoluteX())/32);
+					intY = (int) ((Application.application().getGame().getParty().getAbsoluteY()+16)/32);
 				} else {
-					Launcher.getParty();
-					if(Launcher.getParty().getDirection() == Party.WEST)
+					Application.application().getGame().getParty();
+					if(Application.application().getGame().getParty().getDirection() == Party.WEST)
 					{
-						intX = (int) ((Launcher.getParty().getAbsoluteX()-16)/32);
-						intY = (int) ((Launcher.getParty().getAbsoluteY())/32);
+						intX = (int) ((Application.application().getGame().getParty().getAbsoluteX()-16)/32);
+						intY = (int) ((Application.application().getGame().getParty().getAbsoluteY())/32);
 					} else {
-						Launcher.getParty();
-						if(Launcher.getParty().getDirection() == Party.EAST)
+						Application.application().getGame().getParty();
+						if(Application.application().getGame().getParty().getDirection() == Party.EAST)
 						{
-							intX = (int) ((Launcher.getParty().getAbsoluteX()+16)/32);
-							intY = (int) ((Launcher.getParty().getAbsoluteY())/32);
+							intX = (int) ((Application.application().getGame().getParty().getAbsoluteX()+16)/32);
+							intY = (int) ((Application.application().getGame().getParty().getAbsoluteY())/32);
 						}
 					}
 				}
 			}			
 			
-			Launcher.getParty();
-			if(Launcher.getParty().getDirection() == Party.NORTH)
+			Application.application().getGame().getParty();
+			if(Application.application().getGame().getParty().getDirection() == Party.NORTH)
 			{
 				
-				Chest coffre = Launcher.getParty().getMap().getChest(intX, intY);
+				Chest coffre = Application.application().getGame().getParty().getMap().getChest(intX, intY);
 				if(coffre != null)
 				{
-					if(!Launcher.estCoffreOuvert(coffre))
+					if(!Application.application().getGame().isChestOpened(coffre))
 					{
 						ArrayList<Line> rep = new ArrayList<Line>();
 						if(coffre.getContenu() != null)
@@ -440,32 +441,32 @@ public class Exploration extends Top
 						}
 						else if(coffre.getMoney() > 0)
 						{
-							Launcher.getParty().updateMoney(coffre.getMoney());
+							Application.application().getGame().getParty().updateMoney(coffre.getMoney());
 							rep.add(new Line("Vous trouvez : " + coffre.getMoney() + " pièces d'or.")); 
 						}
 						else
 						{
 							rep.add(new Line("Le coffre est vide."));
 						}
-						coffre.gainContent(Launcher.getParty());
-						Launcher.getParty().getMap().updateChestSprite(coffre.getX(), coffre.getY());
+						coffre.gainContent(Application.application().getGame().getParty());
+						Application.application().getGame().getParty().getMap().updateChestSprite(coffre.getX(), coffre.getY());
 						dialogue = new Dialogue(rep);
-						dialogue.suivant();
+						dialogue.next();
 					}
 				}
 			}
 			
-			Command commande = Launcher.getParty().getMap().getCommande(intX,intY);
+			Command commande = Application.application().getGame().getParty().getMap().getCommande(intX,intY);
 			if(commande != null){
-				commande.run(Launcher.getParty().getMap());
+				commande.run(Application.application().getGame().getParty().getMap());
 			}
 			
 			//-------------------PNJ-----------------------------
-			NonPlayerCharacter pnj = Launcher.getParty().getMap().getNPC(intX, intY);
+			NonPlayerCharacter pnj = Application.application().getGame().getParty().getMap().getNPC(intX, intY);
 			if(pnj != null)
 			{
 				dialogue = pnj.getDialogue();
-				if (!dialogue.suivant()) {dialogue = null;}
+				if (!dialogue.next()) {dialogue = null;}
 			}
 		}
 		else{ //Gestion dialogue
@@ -475,7 +476,7 @@ public class Exploration extends Top
 			}
 			
 			if(selectionneur == null){ //S'il n'y a pas de sélectionneur
-				 if(!dialogue.suivant()){
+				 if(!dialogue.next()){
 					 dialogue = null;
 					 game.getContainer().getInput().clearKeyPressedRecord();
 				 }
@@ -497,112 +498,112 @@ public class Exploration extends Top
 
 	@Override
 	public void onHoldUp(){
-		int X = (int) (Launcher.getParty().getAbsoluteX());
-		int Y = (int) (Launcher.getParty().getAbsoluteY());
-		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Launcher.getParty().speed()), 0);
+		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Application.application().getGame().getParty().speed()), 0);
 		
-		distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Launcher.getParty().speed()));
-		double marge = Launcher.getParty().getMap().scrollY(distance);
+		distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Application.application().getGame().getParty().speed()));
+		double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
 		if(marge == 0)
 		{
-			Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
+			Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
 		}
 		else
 		{
-			Launcher.getParty().setRelativeY(marge);
+			Application.application().getGame().getParty().setRelativeY(marge);
 		}
-		Launcher.getParty().setAbsoluteY(distance);
+		Application.application().getGame().getParty().setAbsoluteY(distance);
 		
-		Launcher.getParty();
-		if(Launcher.getParty().getDirection() != Party.NORTH)
+		Application.application().getGame().getParty();
+		if(Application.application().getGame().getParty().getDirection() != Party.NORTH)
 		{
-			Launcher.getParty();
-			Launcher.getParty().setDirection(Party.NORTH);
-			animation = Launcher.getParty().getAnimation();
+			Application.application().getGame().getParty();
+			Application.application().getGame().getParty().setDirection(Party.NORTH);
+			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldDown(){
-		int X = (int) (Launcher.getParty().getAbsoluteX());
-		int Y = (int) (Launcher.getParty().getAbsoluteY());
-		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Launcher.getParty().speed()));
+		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
 		
-		double marge = Launcher.getParty().getMap().scrollY(distance);
+		double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
 
 		if(marge == 0)
 		{
-			Launcher.getParty().setValRelativeY(Map.HEIGHT/2);
+			Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
 		}
 		else
 		{
-			Launcher.getParty().setRelativeY(marge);
+			Application.application().getGame().getParty().setRelativeY(marge);
 		}
-		Launcher.getParty().setAbsoluteY(distance);
+		Application.application().getGame().getParty().setAbsoluteY(distance);
 
 		
-		Launcher.getParty();
-		if(Launcher.getParty().getDirection() != Party.SOUTH)
+		Application.application().getGame().getParty();
+		if(Application.application().getGame().getParty().getDirection() != Party.SOUTH)
 		{
-			Launcher.getParty();
-			Launcher.getParty().setDirection(Party.SOUTH);
-			animation = Launcher.getParty().getAnimation();
+			Application.application().getGame().getParty();
+			Application.application().getGame().getParty().setDirection(Party.SOUTH);
+			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldRight(){
-		int X = (int) (Launcher.getParty().getAbsoluteX());
-		int Y = (int) (Launcher.getParty().getAbsoluteY());
-		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Launcher.getParty().speed()));
+		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
 		
 		
-		double marge = Launcher.getParty().getMap().scrollX(distance);
+		double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
 		if(marge == 0)
 		{
-			Launcher.getParty().setValRelativeX(Map.WIDTH/2);
+			Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
 		}
 		else
 		{
-			Launcher.getParty().setRelativeX(marge);
+			Application.application().getGame().getParty().setRelativeX(marge);
 		}
-		Launcher.getParty().setAbsoluteX(distance);
+		Application.application().getGame().getParty().setAbsoluteX(distance);
 		
-		Launcher.getParty();
-		if(Launcher.getParty().getDirection() != Party.EAST)
+		Application.application().getGame().getParty();
+		if(Application.application().getGame().getParty().getDirection() != Party.EAST)
 		{
-			Launcher.getParty();
-			Launcher.getParty().setDirection(Party.EAST);
-			animation = Launcher.getParty().getAnimation();
+			Application.application().getGame().getParty();
+			Application.application().getGame().getParty().setDirection(Party.EAST);
+			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldLeft(){
-		int X = (int) (Launcher.getParty().getAbsoluteX());
-		int Y = (int) (Launcher.getParty().getAbsoluteY());
-		double distance = Launcher.getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Launcher.getParty().speed()), 0);
+		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Application.application().getGame().getParty().speed()), 0);
 		
-		double marge = Launcher.getParty().getMap().scrollX(distance);
+		double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
 		if(marge == 0)
 		{
-			Launcher.getParty().setValRelativeX(Map.WIDTH/2);
+			Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
 		}
 		else
 		{
-			Launcher.getParty().setRelativeX(marge);
+			Application.application().getGame().getParty().setRelativeX(marge);
 		}
 		
-		Launcher.getParty().setAbsoluteX(distance);
-		Launcher.getParty();
-		if(Launcher.getParty().getDirection() != Party.WEST)
+		Application.application().getGame().getParty().setAbsoluteX(distance);
+		Application.application().getGame().getParty();
+		if(Application.application().getGame().getParty().getDirection() != Party.WEST)
 		{
-			Launcher.getParty();
-			Launcher.getParty().setDirection(Party.WEST);
-			animation = Launcher.getParty().getAnimation();
+			Application.application().getGame().getParty();
+			Application.application().getGame().getParty().setDirection(Party.WEST);
+			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		
 		playerMoving = true;	

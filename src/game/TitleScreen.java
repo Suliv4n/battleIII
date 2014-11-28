@@ -1,6 +1,9 @@
 package game;
 
 
+import game.launcher.Launcher;
+import game.system.application.Application;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -14,6 +17,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.xml.SlickXMLException;
+
 
 import data.Save;
 
@@ -52,7 +56,7 @@ public class TitleScreen extends Top{
 			@Override
 			public void render(int x, int y, Object element, int index) {
 				Party save = (Party) element;
-				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				Graphics g = Application.application().getGraphics();
 				g.setColor(new Color(132,105,55));
 				g.drawString("Sauvegarde " + (index+1) , x, y );
 					
@@ -98,7 +102,7 @@ public class TitleScreen extends Top{
 		}
 		
 
-		g.drawImage(Launcher.getArrow(0), 30, 205+20*curseurMenu);
+		g.drawImage(Application.application().getGame().getArrow(0), 30, 205+20*curseurMenu);
 		
 		super.render(container, sbg, g);
 	}

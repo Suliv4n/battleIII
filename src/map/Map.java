@@ -1,7 +1,9 @@
 package map;
 
 
-import game.Launcher;
+
+import game.launcher.Launcher;
+import game.system.application.Application;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +153,7 @@ public class Map
 						int tileID=map.getTileId((int) axeX,(int) axeY, i);
 						if("true".equals(map.getTileProperty(tileID, "coffre", "false")))
 						{
-							if(Launcher.estCoffreOuvert(new Chest(id, axeX, axeY)))
+							if(Application.application().getGame().isChestOpened(new Chest(id, axeX, axeY)))
 							{
 								map.setTileId((int) axeX,(int) axeY, i, tileID+1);  //coffre ouvert
 							}

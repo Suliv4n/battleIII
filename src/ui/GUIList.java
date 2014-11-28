@@ -1,7 +1,8 @@
 package ui;
 
 import game.ControllerInput;
-import game.Launcher;
+import game.launcher.Launcher;
+import game.system.application.Application;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import javax.xml.crypto.Data;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+
 
 import personnage.Character;
 
@@ -58,7 +60,7 @@ public class GUIList<T> {
 		elementRenderer = new ElementRenderer() {
 			@Override
 			public void render(int x, int y, Object element, int index){
-				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				Graphics g = Application.application().getGraphics();
 				g.drawString(element == null ? "null" : element.toString(), x + 15, y );
 			}
 		};
@@ -66,8 +68,8 @@ public class GUIList<T> {
 		cursorRenderer = new CursorRenderer() {
 			@Override
 			public void render(int x, int y) {
-				Graphics g = Launcher.getAppGameContainer().getGraphics();
-				Launcher.getArrow(0).drawCentered(x + 6, y + 12);
+				Graphics g = Application.application().getGraphics();
+				Application.application().getGame().getArrow(0).drawCentered(x + 6, y + 12);
 			}
 		};
 		
@@ -85,7 +87,7 @@ public class GUIList<T> {
 	
 
 	public void render(int x, int y){
-		Graphics g = Launcher.getAppGameContainer().getGraphics();
+		Graphics g = Application.application().getGraphics();
 		if(drawGUI){
 			g.setColor(undergroundColor);
 			g.fillRect(x, y, width, height);

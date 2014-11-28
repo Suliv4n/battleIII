@@ -1,9 +1,12 @@
 package ui;
 
-import game.Launcher;
+
+import game.launcher.Launcher;
+import game.system.application.Application;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+
 
 /**
  * Représente une zone.
@@ -50,7 +53,7 @@ public class Panel {
 	 * 		Ordonnées d'affichage.
 	 */
 	public void render(int x, int y){
-		Graphics g = Launcher.getAppGameContainer().getGraphics();
+		Graphics g = Application.application().getGraphics();
 		
 		g.setColor(color);
 		g.fillRect(x, y, width, height);

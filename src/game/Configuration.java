@@ -1,5 +1,8 @@
 package game;
 
+import game.launcher.Launcher;
+import game.system.application.Application;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -35,7 +38,7 @@ public class Configuration extends BasicGameState
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		fleche = Launcher.getArrow(0);
+		fleche = Application.application().getGame().getArrow(0);
 	}
 
 	@Override
@@ -105,7 +108,7 @@ public class Configuration extends BasicGameState
 
 		
 		g.setColor(Color.white);
-		if(Launcher.estPleinEcran())
+		if(Application.application().isFullScreen())
 		{
 			g.drawString("Mode fenêtre", 40, 300);
 		}
@@ -228,7 +231,7 @@ public class Configuration extends BasicGameState
 			}
 			else if(curseur == 8)
 			{
-				Launcher.switchModeAffichage();
+				Application.application().toggleFullScreen();
 			}
 			else if(curseur == 11)
 			{

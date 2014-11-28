@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import game.Config;
-import game.Launcher;
+import game.launcher.Launcher;
+import game.system.application.Application;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -14,6 +15,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 import data.Format;
 
@@ -192,7 +194,7 @@ public class TextInput extends BasicGameState
 	{
 		if(cursorY>=8)
 		{
-			g.drawImage(Launcher.getArrow(0), 10 + cursorX*135, 435);
+			g.drawImage(Application.application().getGame().getArrow(0), 10 + cursorX*135, 435);
 		}
 		else
 		{

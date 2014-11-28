@@ -1,6 +1,8 @@
 package game;
 
 
+import game.system.application.Application;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,6 +14,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 import personnage.Party;
 import personnage.Character;
@@ -65,20 +68,20 @@ public class GestionEquipe extends BasicGameState
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		fleche = Launcher.getArrow(0);
+		fleche = Application.application().getGame().getArrow(0);
 		listesSkill = new HashMap<Character,GUIList<Skill>>();
 		ElementRenderer renderer = new ElementRenderer() {
 			
 			@Override
 			public void render(int x, int y, Object element, int index) {
-				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				Graphics g = Application.application().getGraphics();
 				g.setColor(Color.white);
 				Skill skill = (Skill) element;
 				g.drawString(skill.getName(), x+20, y);
 			}
 		};
 		
-		for(Character p : Launcher.getParty()){
+		for(Character p : Application.application().getGame().getParty()){
 			GUIList<Skill> liste = new GUIList<>(204, 440, 20, Config.couleur1, Config.couleur2, true);
 			liste.setData(p.getSkills());
 			liste.setElementRenderer(renderer);
@@ -90,9 +93,9 @@ public class GestionEquipe extends BasicGameState
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException 
 	{
-		Launcher.getParty().renderTeamList(g,curseur);
-		Launcher.getParty().get(curseur).drawStatistiques(g);
-		Launcher.getParty().get(curseur).drawStuff(g);
+		Application.application().getGame().getParty().renderTeamList(g,curseur);
+		Application.application().getGame().getParty().get(curseur).drawStatistiques(g);
+		Application.application().getGame().getParty().get(curseur).drawStuff(g);
 		afficherCurseur(g);
 		if(selection != null)
 		{
@@ -125,11 +128,11 @@ public class GestionEquipe extends BasicGameState
 		{		
 			if(in.isKeyPressed(Input.KEY_DOWN))
 			{
-				curseur = (curseur + 1)%Launcher.getParty().numberOfCharacters();
+				curseur = (curseur + 1)%Application.application().getGame().getParty().numberOfCharacters();
 			}
 			else if(in.isKeyPressed(Input.KEY_UP))
 			{
-				curseur = (curseur + Launcher.getParty().numberOfCharacters() - 1)%Launcher.getParty().numberOfCharacters();
+				curseur = (curseur + Application.application().getGame().getParty().numberOfCharacters() - 1)%Application.application().getGame().getParty().numberOfCharacters();
 			}
 			
 			if (in.isKeyPressed(Input.KEY_ESCAPE))
@@ -140,7 +143,7 @@ public class GestionEquipe extends BasicGameState
 			
 			if(in.isKeyPressed(Input.KEY_RETURN))
 			{
-				selection = Launcher.getParty().get(curseur);
+				selection = Application.application().getGame().getParty().get(curseur);
 			}
 		}
 		else
@@ -151,29 +154,29 @@ public class GestionEquipe extends BasicGameState
 			case(ORDRE):
 				if(curseur == curseur_ordre)
 				{
-					curseur_ordre = (curseur_ordre + 1)%Launcher.getParty().numberOfCharacters();
+					curseur_ordre = (curseur_ordre + 1)%Application.application().getGame().getParty().numberOfCharacters();
 				}
 				
 				if(in.isKeyPressed(Input.KEY_DOWN))
 				{
-					if((curseur_ordre + 1)%Launcher.getParty().numberOfCharacters() != curseur)
+					if((curseur_ordre + 1)%Application.application().getGame().getParty().numberOfCharacters() != curseur)
 					{
-						curseur_ordre = (curseur_ordre + 1)%Launcher.getParty().numberOfCharacters();
+						curseur_ordre = (curseur_ordre + 1)%Application.application().getGame().getParty().numberOfCharacters();
 					}
 					else
 					{
-						curseur_ordre = (curseur_ordre + 2)%Launcher.getParty().numberOfCharacters();
+						curseur_ordre = (curseur_ordre + 2)%Application.application().getGame().getParty().numberOfCharacters();
 					}
 				}
 				else if(in.isKeyPressed(Input.KEY_UP))
 				{
-					if((curseur_ordre - 1)%Launcher.getParty().numberOfCharacters() != curseur)
+					if((curseur_ordre - 1)%Application.application().getGame().getParty().numberOfCharacters() != curseur)
 					{
-						curseur_ordre = (curseur_ordre - 1 + Launcher.getParty().numberOfCharacters())%Launcher.getParty().numberOfCharacters();
+						curseur_ordre = (curseur_ordre - 1 + Application.application().getGame().getParty().numberOfCharacters())%Application.application().getGame().getParty().numberOfCharacters();
 					}
 					else
 					{
-						curseur_ordre = (curseur_ordre - 2 + Launcher.getParty().numberOfCharacters())%Launcher.getParty().numberOfCharacters();
+						curseur_ordre = (curseur_ordre - 2 + Application.application().getGame().getParty().numberOfCharacters())%Application.application().getGame().getParty().numberOfCharacters();
 					}
 					
 				}
@@ -186,7 +189,7 @@ public class GestionEquipe extends BasicGameState
 				
 				if(in.isKeyPressed(Input.KEY_RETURN))
 				{
-					Launcher.getParty().swap(curseur, curseur_ordre);
+					Application.application().getGame().getParty().swap(curseur, curseur_ordre);
 					curseur = curseur_ordre;
 					action = -1;
 				}
@@ -267,7 +270,7 @@ public class GestionEquipe extends BasicGameState
 	//#region ------AFFICHAGE-----------------
 	private void afficherCurseurOrdre(Graphics g) 
 	{
-		g.drawImage(Launcher.getArrow(1),5,75+curseur_ordre*160);
+		g.drawImage(Application.application().getGame().getArrow(1),5,75+curseur_ordre*160);
 	}
 	
 	private void afficherCurseurCompetences(Graphics g) 

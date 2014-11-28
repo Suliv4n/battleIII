@@ -1,7 +1,8 @@
 package game.system;
 
 import game.Config;
-import game.Launcher;
+import game.launcher.Launcher;
+import game.system.application.Application;
 
 import org.newdawn.slick.AppletGameContainer.Container;
 import org.newdawn.slick.Color;
@@ -9,6 +10,7 @@ import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
+
 
 import util.Regex;
 
@@ -40,7 +42,7 @@ public class Console {
 		public ConsoleRenderer(Color background, Color textColor ) {
 			this.background = background;
 			this.defaultTextColor = textColor;
-			textField = new TextField(Launcher.getAppGameContainer(), Launcher.getAppGameContainer().getDefaultFont(), 0, Config.LARGEUR - 25, Config.LONGUEUR, 20);
+			textField = new TextField(Application.application().getContainer(), Application.application().getContainer().getDefaultFont(), 0, Config.LARGEUR - 25, Config.LONGUEUR, 20);
 			textField.setBackgroundColor(null);
 			textField.setBorderColor(null);
 		}
@@ -52,12 +54,12 @@ public class Console {
 		 * 		La console à afficher.
 		 */
 		public void render(Console console){
-			Graphics g = Launcher.getAppGameContainer().getGraphics();
+			Graphics g = Application.application().getGraphics();
 			Color current = g.getColor();
 			g.setColor(background);
 			g.fillRect(0, 0, Config.LONGUEUR, Config.LARGEUR);
 			g.setColor(defaultTextColor);
-			GUIContext context = Launcher.getAppGameContainer();
+			GUIContext context = Application.application().getContainer();
 			int lines = console.out().split("\n").length;
 			g.drawString(console.out(), 3, Config.LARGEUR - 20 - 20 * lines);
 			textField.render(context, g);
@@ -200,7 +202,7 @@ public class Console {
 			else{
 				String[] eval = Regex.eval(args[0], "^([0-9])$"); 
 				if(eval.length > 0){
-					personnage.Character character = Launcher.getParty().get(Integer.parseInt(eval[0]));
+					personnage.Character character = Application.application().getGame().getParty().get(Integer.parseInt(eval[0]));
 					character.kill();
 					print(character.getName() + " has been killed");
 				}

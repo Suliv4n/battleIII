@@ -1,7 +1,7 @@
 package data;
 
 import game.Config;
-import game.Launcher;
+import game.system.application.Application;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.xml.SlickXMLException;
@@ -26,6 +26,7 @@ import org.jdom2.Element;
 import org.jdom2.output.*;
 
 
+
 public class Save 
 {
 	/**
@@ -37,7 +38,7 @@ public class Save
 	 */
 	public static boolean sauvegarder(String save)
 	{	
-		Party party = Launcher.getParty();
+		Party party = Application.application().getGame().getParty();
 		
 		Element root = new Element("equipe");
 		org.jdom2.Document document = new org.jdom2.Document(root); 
@@ -162,7 +163,7 @@ public class Save
 		party.setValAbsoluteY(y);
 		party.setMap(map);
 		party.setDirection(direction);
-		Launcher.setEquipe(party);
+		Application.application().getGame().setParty(party);
 	}
 	
 	/**
@@ -220,7 +221,7 @@ public class Save
 		party.setMap(map);
 		party.setDirection(direction);
 		System.out.println(party.get(0));
-		Launcher.setEquipe(party);
+		Application.application().getGame().setParty(party);
 			
 		return party;
 	}

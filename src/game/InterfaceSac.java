@@ -1,5 +1,7 @@
 package game;
 
+import game.system.application.Application;
+
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -8,7 +10,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import bag.Bag;
@@ -101,7 +102,7 @@ public class InterfaceSac extends Top
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException 
 	{
-		equipe = Launcher.getParty();
+		equipe = Application.application().getGame().getParty();
 		sac = equipe.getBag();
 	
 		categorieValidee = false;
@@ -124,7 +125,7 @@ public class InterfaceSac extends Top
 		if(!categorieValidee)
 		{
 			//Affichage curseur catégorie
-			g.drawImage(Launcher.getArrow(0), 37 + curseurCategorie*160, 55);
+			g.drawImage(Application.application().getGame().getArrow(0), 37 + curseurCategorie*160, 55);
 			if(getCategorie().size() != 0)
 			{
 				afficherListeObjets(g);
@@ -337,7 +338,7 @@ public class InterfaceSac extends Top
 		g.drawString("Combat", 370, 50);
 		g.drawString("Rares", 530, 50);
 		
-		g.drawString(Launcher.getParty().getMoney() + " PO" , 450, 10);
+		g.drawString(Application.application().getGame().getParty().getMoney() + " PO" , 450, 10);
 		
 		
 		
@@ -354,7 +355,7 @@ public class InterfaceSac extends Top
 	private void afficherCurseurObjets(Graphics g) 
 	{
 		int index = curseursRelatifs.get(curseurCategorie);
-		g.drawImage(Launcher.getArrow(0), 5, 93 + index * 25);
+		g.drawImage(Application.application().getGame().getArrow(0), 5, 93 + index * 25);
 	}
 	
 	/**
@@ -379,7 +380,7 @@ public class InterfaceSac extends Top
 		}
 		
 		//affichage du curseur :
-		g.drawImage(Launcher.getArrow(0), 5, 400 + curseurAction * 20);
+		g.drawImage(Application.application().getGame().getArrow(0), 5, 400 + curseurAction * 20);
 	}
 	
 	/**
@@ -422,7 +423,7 @@ public class InterfaceSac extends Top
 		g.drawString("Oui", 180, 415);
 		
 		//desinerCurseur
-		g.drawImage(Launcher.getArrow(0), 87 + 80 * curseurConfirmation, 418);
+		g.drawImage(Application.application().getGame().getArrow(0), 87 + 80 * curseurConfirmation, 418);
 		
 	}
 	
@@ -461,7 +462,7 @@ public class InterfaceSac extends Top
 			i++;
 		}
 		
-		Image fleche = Launcher.getArrow(0);
+		Image fleche = Application.application().getGame().getArrow(0);
 		g.drawImage(fleche, 130, 80 + curseurPersonnage*160);
 		
 	}

@@ -1,6 +1,8 @@
 package game;
 
 
+import game.system.application.Application;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -538,15 +540,15 @@ public class Combat extends BasicGameState
 	{
 		if(curseur>=6)
 		{
-			g.drawImage(Launcher.getArrow(0),430+(curseur-6) *20,175+(curseur-6) *50);
+			g.drawImage(Application.application().getGame().getArrow(0),430+(curseur-6) *20,175+(curseur-6) *50);
 		}
 		else if(curseur%2==0)
 		{
-			g.drawImage(Launcher.getArrow(0),50+5*curseur,200+50*((int)(curseur/2)));
+			g.drawImage(Application.application().getGame().getArrow(0),50+5*curseur,200+50*((int)(curseur/2)));
 		}
 		else 
 		{
-			g.drawImage(Launcher.getArrow(0),150+5*curseur,200+50*((int)(curseur/2)));
+			g.drawImage(Application.application().getGame().getArrow(0),150+5*curseur,200+50*((int)(curseur/2)));
 		}
 	}
 	
@@ -683,7 +685,7 @@ public class Combat extends BasicGameState
 		{
 			curseurAction.put(selectionPersonnage, 0);
 		}
-		g.drawImage(Launcher.getArrow(0), 15, 390 + curseurAction.get(selectionPersonnage) * 20);
+		g.drawImage(Application.application().getGame().getArrow(0), 15, 390 + curseurAction.get(selectionPersonnage) * 20);
 	}
 	
 	
@@ -696,15 +698,15 @@ public class Combat extends BasicGameState
 		{
 			if(curseurCible>=6)
 			{
-				g.drawImage(Launcher.getArrow(0),430+(curseurCible-6) * 20,175+(curseurCible-6) * 50);
+				g.drawImage(Application.application().getGame().getArrow(0),430+(curseurCible-6) * 20,175+(curseurCible-6) * 50);
 			}
 			else if(curseurCible%2==0)
 			{
-				g.drawImage(Launcher.getArrow(0),50+5*curseurCible,200+50*((int)(curseurCible/2)));
+				g.drawImage(Application.application().getGame().getArrow(0),50+5*curseurCible,200+50*((int)(curseurCible/2)));
 			}
 			else 
 			{
-				g.drawImage(Launcher.getArrow(0),150+5*curseurCible,200+50*((int)(curseurCible/2)));
+				g.drawImage(Application.application().getGame().getArrow(0),150+5*curseurCible,200+50*((int)(curseurCible/2)));
 			}
 			
 
@@ -717,15 +719,15 @@ public class Combat extends BasicGameState
 				{
 					if(e>=6)
 					{
-						g.drawImage(Launcher.getArrow(0),430+(e-6) * 20,175+(e-6) * 50);
+						g.drawImage(Application.application().getGame().getArrow(0),430+(e-6) * 20,175+(e-6) * 50);
 					}
 					else if(e%2==0)
 					{
-						g.drawImage(Launcher.getArrow(0),50+5*e,200+50*((int)(e/2)));
+						g.drawImage(Application.application().getGame().getArrow(0),50+5*e,200+50*((int)(e/2)));
 					}
 					else 
 					{
-						g.drawImage(Launcher.getArrow(0),150+5*e,200+50*((int)(e/2)));
+						g.drawImage(Application.application().getGame().getArrow(0),150+5*e,200+50*((int)(e/2)));
 					}
 				}
 			}
@@ -736,7 +738,7 @@ public class Combat extends BasicGameState
 			{
 				if(equipe.get(i).isAlive())
 				{
-					g.drawImage(Launcher.getArrow(0),430+(i) *20,175+(i) *50);
+					g.drawImage(Application.application().getGame().getArrow(0),430+(i) *20,175+(i) *50);
 				}
 			}
 		}
@@ -786,7 +788,7 @@ public class Combat extends BasicGameState
 		}
 		
 		//affichage du curseur :
-		g.drawImage(Launcher.getArrow(0), 12, 115 + 20 * curseursRelatifsSkills.get(selectionPersonnage));
+		g.drawImage(Application.application().getGame().getArrow(0), 12, 115 + 20 * curseursRelatifsSkills.get(selectionPersonnage));
 	}
 	
 	public void afficherTexte(Graphics g, String texte)

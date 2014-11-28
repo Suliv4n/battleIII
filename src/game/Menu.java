@@ -1,5 +1,8 @@
 package game;
 
+import game.launcher.Launcher;
+import game.system.application.Application;
+
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -10,6 +13,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 import data.Save;
 
@@ -48,7 +52,7 @@ public class Menu extends Top
 		menu.add("Sauvegarder");
 		menu.add("Quitter");
 		
-		fleche = Launcher.getArrow(0);
+		fleche = Application.application().getGame().getArrow(0);
 	}
 
 	@Override

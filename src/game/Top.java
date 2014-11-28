@@ -1,7 +1,9 @@
 package game;
 
+import game.launcher.Launcher;
 import game.system.Configurations;
 import game.system.KeyboardControlsConfiguration;
+import game.system.application.Application;
 
 
 import org.newdawn.slick.GameContainer;
@@ -10,6 +12,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 
 
@@ -24,7 +27,7 @@ public abstract class Top  extends BasicGameState
 			throws SlickException 
 	{
 		if(console){
-			Launcher.console().render();
+			Application.application().console().render();
 		}
 	}
 
@@ -38,9 +41,9 @@ public abstract class Top  extends BasicGameState
 			toggleConsole();
 		}
 		if(console && Configurations.DEBUG){
-			Launcher.console().setFocus(true);
+			Application.application().console().setFocus(true);
 			if(in.isKeyPressed(Input.KEY_ENTER)){
-				Launcher.console().validate();
+				Application.application().console().validate();
 			}
 			in.clearKeyPressedRecord();
 		}
@@ -97,7 +100,7 @@ public abstract class Top  extends BasicGameState
 	 */
 	private void toggleConsole(){
 		console = !console;
-		Launcher.console().setFocus(console);
+		Application.application().console().setFocus(console);
 	}
 
 	//----------------------------------------------------------------
@@ -152,7 +155,5 @@ public abstract class Top  extends BasicGameState
 	/**
 	 * Evénement "start"
 	 */
-	public void onStart() {
-		
-	}
+	public void onStart() {}
 }

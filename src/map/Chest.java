@@ -1,7 +1,8 @@
 package map;
 
+import game.launcher.Launcher;
+import game.system.application.Application;
 import bag.IItems;
-import game.Launcher;
 import personnage.Party;
 
 /**
@@ -110,7 +111,7 @@ public class Chest
 			party.updateMoney(money);
 		}
 		
-		Launcher.ajouterCoffreOuvert(this);
+		Application.application().getGame().addOpenedChest(this);
 	}
 	
 	/*

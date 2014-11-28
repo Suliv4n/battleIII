@@ -1,6 +1,7 @@
 package game.dialogue;
 
-import game.Launcher;
+import game.launcher.Launcher;
+import game.system.application.Application;
 
 public class Line 
 {
@@ -43,10 +44,10 @@ public class Line
 	{
 		if(enonciateur != null)
 		{
-		return (enonciateur + " :\n" + replique)	.replaceAll("\\$mage", Launcher.getParty().getMage().getName())
-													.replaceAll("\\$rodeur", Launcher.getParty().getRanger().getName())
-													.replaceAll("\\$guerrier", Launcher.getParty().getWarrior().getName())
-													.replaceAll("\\$argent", String.valueOf(Launcher.getParty().getMoney()))
+		return (enonciateur + " :\n" + replique)	.replaceAll("\\$mage", Application.application().getGame().getParty().getMage().getName())
+													.replaceAll("\\$rodeur", Application.application().getGame().getParty().getRanger().getName())
+													.replaceAll("\\$guerrier", Application.application().getGame().getParty().getWarrior().getName())
+													.replaceAll("\\$argent", String.valueOf(Application.application().getGame().getParty().getMoney()))
 													.replaceAll("\\$select\\[.*\\]", "")
 													.replaceAll("\\$end", "")
 													.replaceAll("\\$goto[0-9]+", "")
@@ -56,10 +57,10 @@ public class Line
 		}
 		else
 		{
-			return (replique)	.replaceAll("\\$mage", Launcher.getParty().getMage().getName())
-								.replaceAll("\\$rodeur", Launcher.getParty().getRanger().getName())
-								.replaceAll("\\$guerrier", Launcher.getParty().getWarrior().getName())
-								.replaceAll("\\$argent", String.valueOf(Launcher.getParty().getMoney()))
+			return (replique)	.replaceAll("\\$mage", Application.application().getGame().getParty().getMage().getName())
+								.replaceAll("\\$rodeur", Application.application().getGame().getParty().getRanger().getName())
+								.replaceAll("\\$guerrier", Application.application().getGame().getParty().getWarrior().getName())
+								.replaceAll("\\$argent", String.valueOf(Application.application().getGame().getParty().getMoney()))
 								.replaceAll("\\$select\\[.*\\]", "")
 								.replaceAll("\\$end", "")
 								.replaceAll("\\$goto[0-9]+", "")

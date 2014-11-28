@@ -1,5 +1,7 @@
 package game;
 
+import game.system.application.Application;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +15,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 import personnage.Party;
 import personnage.EnnemisParty;
@@ -54,7 +57,7 @@ public class BattleWithATB extends BasicGameState
 			@Override
 			public void render(int x, int y, Object element, int index) {
 				Character p = (Character) element;
-				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				Graphics g = Application.application().getGraphics();
 				BarUI pv = new BarUI(Config.couleurPV, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
 				BarUI energie = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
 				BarUI atb = new BarUI(p.getActiveTimeBattleManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getActiveTimeBattleManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
@@ -72,7 +75,7 @@ public class BattleWithATB extends BasicGameState
 		equipeList.setCursorRenderer( new CursorRenderer() {
 			@Override
 			public void render(int x, int y) {
-				Graphics g = Launcher.getAppGameContainer().getGraphics();
+				Graphics g = Application.application().getGraphics();
 				g.setColor(Config.couleur2);
 				g.drawRect(x, y, 580, 25);
 			}
@@ -89,15 +92,15 @@ public class BattleWithATB extends BasicGameState
 	 * 		Equipe d'ennemis du Battle en cours
 	 */
 	public void launch(EnnemisParty ennemis){
-		this.background = Launcher.getParty().getMap().getBackgroundBattle();
+		this.background = Application.application().getGame().getParty().getMap().getBackgroundBattle();
 		this.ennemis = ennemis;
 		
-		equipeList.setData(Launcher.getParty().getCharacters());
+		equipeList.setData(Application.application().getGame().getParty().getCharacters());
 		
 		coords = new HashMap<IBattle, Point>();
-		if(Launcher.getParty().getIfExists(0) != null){coords.put(Launcher.getParty().get(0), new Point(450,150));}
-		if(Launcher.getParty().getIfExists(1) != null){coords.put(Launcher.getParty().get(1), new Point(470,220));}
-		if(Launcher.getParty().getIfExists(2) != null){coords.put(Launcher.getParty().get(2), new Point(490,290));}
+		if(Application.application().getGame().getParty().getIfExists(0) != null){coords.put(Application.application().getGame().getParty().get(0), new Point(450,150));}
+		if(Application.application().getGame().getParty().getIfExists(1) != null){coords.put(Application.application().getGame().getParty().get(1), new Point(470,220));}
+		if(Application.application().getGame().getParty().getIfExists(2) != null){coords.put(Application.application().getGame().getParty().get(2), new Point(490,290));}
 	
 		//Positionne les ennemis en fonction de la taille de leur image.
 		for(int i : this.ennemis.getEnnemis().keySet())
@@ -121,7 +124,7 @@ public class BattleWithATB extends BasicGameState
 		
 		
 		actions = new HashMap<Character,GUIList<String>>();
-		for(Character p : Launcher.getParty()){
+		for(Character p : Application.application().getGame().getParty()){
 			p.getActiveTimeBattleManager().launch();
 			GUIList<String> a = new GUIList<String>(100, 98, 3, Config.couleur1, Config.couleur2, true);
 			a.setData(new String[]{"Attaquer","Compétences"});
@@ -153,7 +156,7 @@ public class BattleWithATB extends BasicGameState
 			throws SlickException 
 	{
 		Input in = container.getInput();
-		for(Character p : Launcher.getParty()){
+		for(Character p : Application.application().getGame().getParty()){
 			//ATB à 100% le personnage est ajouté à la queue
 			if(p.getActiveTimeBattleManager().getCurrent() == 100 && !queueATB.contains(p)){
 				queueATB.add(p);
