@@ -509,112 +509,118 @@ public class Exploration extends Top
 
 	@Override
 	public void onHoldUp(){
-		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Application.application().getGame().getParty().speed()), 0);
-		
-		distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Application.application().getGame().getParty().speed()));
-		double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
-		if(marge == 0)
-		{
-			Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
-		}
-		else
-		{
-			Application.application().getGame().getParty().setRelativeY(marge);
-		}
-		Application.application().getGame().getParty().setAbsoluteY(distance);
-		
-		Application.application().getGame().getParty();
-		if(Application.application().getGame().getParty().getDirection() != Party.NORTH)
-		{
+		if(dialogue == null){
+			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Application.application().getGame().getParty().speed()), 0);
+			
+			distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Application.application().getGame().getParty().speed()));
+			double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
+			if(marge == 0)
+			{
+				Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
+			}
+			else
+			{
+				Application.application().getGame().getParty().setRelativeY(marge);
+			}
+			Application.application().getGame().getParty().setAbsoluteY(distance);
+			
 			Application.application().getGame().getParty();
-			Application.application().getGame().getParty().setDirection(Party.NORTH);
+			if(Application.application().getGame().getParty().getDirection() != Party.NORTH)
+			{
+				Application.application().getGame().getParty();
+				Application.application().getGame().getParty().setDirection(Party.NORTH);
+			}
+			playerMoving = true;
 		}
-		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldDown(){
-		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
-		
-		double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
-
-		if(marge == 0)
-		{
-			Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
-		}
-		else
-		{
-			Application.application().getGame().getParty().setRelativeY(marge);
-		}
-		Application.application().getGame().getParty().setAbsoluteY(distance);
-
-		
-		Application.application().getGame().getParty();
-		if(Application.application().getGame().getParty().getDirection() != Party.SOUTH)
-		{
+		if(dialogue == null){
+			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
+			
+			double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
+	
+			if(marge == 0)
+			{
+				Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
+			}
+			else
+			{
+				Application.application().getGame().getParty().setRelativeY(marge);
+			}
+			Application.application().getGame().getParty().setAbsoluteY(distance);
+	
+			
 			Application.application().getGame().getParty();
-			Application.application().getGame().getParty().setDirection(Party.SOUTH);
+			if(Application.application().getGame().getParty().getDirection() != Party.SOUTH)
+			{
+				Application.application().getGame().getParty();
+				Application.application().getGame().getParty().setDirection(Party.SOUTH);
+			}
+			playerMoving = true;
 		}
-		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldRight(){
-		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
-		
-		
-		double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
-		if(marge == 0)
-		{
-			Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
-		}
-		else
-		{
-			Application.application().getGame().getParty().setRelativeX(marge);
-		}
-		Application.application().getGame().getParty().setAbsoluteX(distance);
-		
-		Application.application().getGame().getParty();
-		if(Application.application().getGame().getParty().getDirection() != Party.EAST)
-		{
+		if(dialogue == null){
+			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
+			
+			double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
+			if(marge == 0)
+			{
+				Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
+			}
+			else
+			{
+				Application.application().getGame().getParty().setRelativeX(marge);
+			}
+			Application.application().getGame().getParty().setAbsoluteX(distance);
+			
 			Application.application().getGame().getParty();
-			Application.application().getGame().getParty().setDirection(Party.EAST);
+			if(Application.application().getGame().getParty().getDirection() != Party.EAST)
+			{
+				Application.application().getGame().getParty();
+				Application.application().getGame().getParty().setDirection(Party.EAST);
+			}
+			playerMoving = true;
 		}
-		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldLeft(){
-		
-		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Application.application().getGame().getParty().speed()), 0);
-		
-		double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
-		if(marge == 0)
-		{
-			Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
-		}
-		else
-		{
-			Application.application().getGame().getParty().setRelativeX(marge);
-		}
-		
-		Application.application().getGame().getParty().setAbsoluteX(distance);
-		Application.application().getGame().getParty();
-		if(Application.application().getGame().getParty().getDirection() != Party.WEST)
-		{
+		if(dialogue == null){
+			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
+			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Application.application().getGame().getParty().speed()), 0);
+			
+			double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
+			if(marge == 0)
+			{
+				Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
+			}
+			else
+			{
+				Application.application().getGame().getParty().setRelativeX(marge);
+			}
+			
+			Application.application().getGame().getParty().setAbsoluteX(distance);
 			Application.application().getGame().getParty();
-			Application.application().getGame().getParty().setDirection(Party.WEST);
+			if(Application.application().getGame().getParty().getDirection() != Party.WEST)
+			{
+				Application.application().getGame().getParty();
+				Application.application().getGame().getParty().setDirection(Party.WEST);
+			}
+			
+			playerMoving = true;
 		}
-		
-		playerMoving = true;	
 	}
 	
 	@Override
