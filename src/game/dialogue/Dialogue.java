@@ -1,13 +1,12 @@
 package game.dialogue;
 
-import game.Configuration;
-import game.launcher.Launcher;
 import game.settings.Settings;
 import game.system.Configurations;
+import game.system.KeyboardControlsConfigurations;
 import game.system.application.Application;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
+import org.newdawn.slick.Input;
 
 
 import personnage.Character;
@@ -27,6 +26,8 @@ public class Dialogue implements Cloneable
 	private Select select;
 	private boolean notificationEnd = false; //vaut true si $end est rencontré dans la réplique en cours.
 	
+	private int time = 0;
+	
 	public Dialogue(ArrayList<Line> dialogue)
 	{
 		this.dialogue = dialogue;
@@ -41,6 +42,7 @@ public class Dialogue implements Cloneable
 	 */
 	public boolean next()
 	{
+		time = 0;
 		index++;
 		if(index >= dialogue.size())
 		{
@@ -136,7 +138,7 @@ public class Dialogue implements Cloneable
 	 */
 	public Line get()
 	{
-		if(dialogue.get(index).getLine().matches(".*\\$select\\[.*\\].*"))
+		if(dialogue.get(index).getLine().matches(".*\\$select\\[.*\\].*")) //création du select.
 		{
 			String rep = dialogue.get(index).getLine();
 			select = createSelect(rep.substring(rep.indexOf("[",rep.indexOf("$select"))+1, rep.indexOf("]", rep.indexOf("$select"))));
@@ -240,7 +242,33 @@ public class Dialogue implements Cloneable
 	 * Affiche le dialogue.
 	 */
 	public void render(){
-		Panel dialoguePanel = new Panel(Configurations.SCREEN_WIDTH, 200, 2, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR);
+		int width = Configurations.SCREEN_WIDTH;
+		int height = 90;
+		int x = 0;
+		int y = Configurations.SCREEN_HEIGHT - height;
 		
+		Panel dialoguePanel = new Panel(width, height, 2, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR);
+		dialoguePanel.render(x, y);
+		Application.application().drawString((get().getSpeaker() == null ? "" :  get().getSpeaker()+":\n") + get().getLine().substring(0,(int)((float)time/30f)+1), x + 10, y + 5);
+	}
+	
+	/**
+	 * Met à jour le dialogue.
+	 * 
+	 * @param delta
+	 * 		Temps depuis la dernière mise à jour en millisecondes.
+	 */
+	public void update(int delta){
+		int maxTime = (get().getLine().length()-1)*30;
+		time = Math.min(time + delta, maxTime);
+		Input in = Application.application().getContainer().getInput();
+		if(in.isKeyPressed(KeyboardControlsConfigurations.VALIDATE_KEY)){
+			if(time == maxTime){
+				next();
+			}
+			else{
+				time = maxTime;
+			}
+		}
 	}
 }

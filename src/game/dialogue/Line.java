@@ -6,12 +6,12 @@ import game.system.application.Application;
 public class Line 
 {
 	private String replique;
-	private String enonciateur;
+	private String speaker;
 	
 	public Line(String replique, String enonciateur)
 	{
 		this.replique = replique;
-		this.enonciateur = enonciateur;
+		this.speaker = enonciateur;
 	}
 	
 	public Line(String replique)
@@ -42,9 +42,9 @@ public class Line
 	 */
 	public String getFormatStandard()
 	{
-		if(enonciateur != null)
+		if(speaker != null)
 		{
-		return (enonciateur + " :\n" + replique)	.replaceAll("\\$mage", Application.application().getGame().getParty().getMage().getName())
+		return (speaker + " :\n" + replique)	.replaceAll("\\$mage", Application.application().getGame().getParty().getMage().getName())
 													.replaceAll("\\$rodeur", Application.application().getGame().getParty().getRanger().getName())
 													.replaceAll("\\$guerrier", Application.application().getGame().getParty().getWarrior().getName())
 													.replaceAll("\\$argent", String.valueOf(Application.application().getGame().getParty().getMoney()))
@@ -72,5 +72,9 @@ public class Line
 	public String getLine()
 	{
 		return replique;
+	}
+
+	public String getSpeaker() {
+		return speaker;
 	}
 }

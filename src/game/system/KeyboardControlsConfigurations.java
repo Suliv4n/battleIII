@@ -2,7 +2,7 @@ package game.system;
 
 import org.newdawn.slick.Input;
 
-public class KeyboardControlsConfiguration {
+public class KeyboardControlsConfigurations {
 	public static final int VALIDATE_KEY = Input.KEY_RETURN;
 	public static final int BACK_KEY = Input.KEY_ESCAPE;
 	

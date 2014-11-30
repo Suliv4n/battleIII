@@ -628,7 +628,7 @@ public class DataManager
 					return new Dialogue(dialogueLines); 
 				}
 			}
-			return new Dialogue(new ArrayList<Line>());
+			return null;
 		}
 		catch (SlickException e)
 		{

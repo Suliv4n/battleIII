@@ -3,6 +3,12 @@ package game.system;
 import org.newdawn.slick.Color;
 
 public class Configurations {
+	
+	/**
+	 * Application name.
+	 */
+	public static final String GAME_TITLE = "BATTLE III";
+	
 	/**
 	 * Longueur de la fenêtre de jeu.
 	 */
@@ -38,9 +44,5 @@ public class Configurations {
 	 * Sinon faux. 
 	 */
 	public static final boolean DEBUG = true;
-
-	/**
-	 * Application name.
-	 */
-	public static final String GAME_TITLE = "BATTLE III";
+	
 }

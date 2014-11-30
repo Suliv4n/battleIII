@@ -27,12 +27,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import audio.MusicManager;
 
-import data.Format;
 import data.DataManager;
 
 
@@ -81,15 +79,14 @@ public class Exploration extends Top
 	{
 		this.game = sbg;
 		
-		/*
+
 		ArrayList<Line> repliques = new ArrayList<Line>();
 		repliques.add(new Line("Hello world!", "Sul"));
 		repliques.add(new Line("Ceci est un dialogue", "Sul"));
-		repliques.add(new Line("Doit je répéter? $select[Oui{0};Non;Quitter{end}]", "Sul"));
-		repliques.add(new Line("Au revoir"));
+		//repliques.add(new Line("Doit je répéter? $select[Oui{0};Non;Quitter{end}]", "Sul"));
+		repliques.add(new Line("Au revoir", "Sul"));
 		this.dialogue = new Dialogue(repliques);
-		dialogue.suivant();
-		*/
+		dialogue.next();
 		
 		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
 		
@@ -121,8 +118,6 @@ public class Exploration extends Top
 		
 		double X = Application.application().getGame().getParty().getRelativeX();
 		double Y = Application.application().getGame().getParty().getRelativeY();
-		
-
 		
 		if(Application.application().getGame().getParty().getRelativeX()<Map.WIDTH/2)
 		{
@@ -171,7 +166,7 @@ public class Exploration extends Top
 		//AFFICHAGE DU DIALOGUE
 		if(dialogue != null)
 		{
-			afficherDialogue(g);
+			dialogue.render();
 		}
 		//!AFFICHAGE DU DIALOGUE
 		
@@ -185,6 +180,7 @@ public class Exploration extends Top
 	{	
 		super.update(container, sbg, delta);
 		
+		animation = Application.application().getGame().getParty().getAnimation();
 		
 		particles.update(delta);
 		
@@ -194,11 +190,10 @@ public class Exploration extends Top
 		
 		
 		if(dialogue == null)
-		{		
+		{	
 
 			EnnemisParty ennemis = null; //Prend une valeur en cas de rencontre si mouvement
 			
-			if(animation == null){animation = Application.application().getGame().getParty().getAnimation();}
 			if(!animation.equals(Application.application().getGame().getParty().getAnimation())){
 				animation = Application.application().getGame().getParty().getAnimation();
 			}
@@ -252,6 +247,8 @@ public class Exploration extends Top
 		//DIALOGUE_____________________________________________________________________
 		else
 		{
+			dialogue.update(delta);
+			/*
 			if(selectionneur == null && dialogue.getSelect() != null)
 			{
 				selectionneur = dialogue.getSelect();
@@ -272,6 +269,7 @@ public class Exploration extends Top
 			{
 				gererSelectionneur(container.getInput());
 			}
+			*/
 		}
 		
 		//INTERACTION_____________________________________________
@@ -330,6 +328,7 @@ public class Exploration extends Top
 		g.fillRect(0, 0, Map.WIDTH, Map.HEIGHT);
 	}
 
+	/*
 	private void afficherDialogue(Graphics g)
 	{
 		g.setColor(Config.couleur2);
@@ -360,6 +359,7 @@ public class Exploration extends Top
 		}
 
 	}
+	*/
 	
 	public void controllerButtonPressed(int controller, int button){
 		System.out.println(controller + " " + button);
@@ -492,6 +492,17 @@ public class Exploration extends Top
 		}
 	}
 	
+	/**
+	 * Change le dialogue.
+	 * 
+	 * @param dialogue
+	 * 		Nouveu dialogue.
+	 */
+	public void setDialogue(Dialogue dialogue) {
+		this.dialogue = dialogue;
+		this.dialogue.next();
+	}
+	
 	//----------------------------------------------------------------------------
 	//---------------------------EVENT--------------------------------------------
 	//----------------------------------------------------------------------------
@@ -519,7 +530,6 @@ public class Exploration extends Top
 		{
 			Application.application().getGame().getParty();
 			Application.application().getGame().getParty().setDirection(Party.NORTH);
-			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		playerMoving = true;
 	}
@@ -548,7 +558,6 @@ public class Exploration extends Top
 		{
 			Application.application().getGame().getParty();
 			Application.application().getGame().getParty().setDirection(Party.SOUTH);
-			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		playerMoving = true;
 	}
@@ -576,13 +585,13 @@ public class Exploration extends Top
 		{
 			Application.application().getGame().getParty();
 			Application.application().getGame().getParty().setDirection(Party.EAST);
-			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		playerMoving = true;
 	}
 	
 	@Override
 	public void onHoldLeft(){
+		
 		int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
 		int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
 		double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Application.application().getGame().getParty().speed()), 0);
@@ -603,7 +612,6 @@ public class Exploration extends Top
 		{
 			Application.application().getGame().getParty();
 			Application.application().getGame().getParty().setDirection(Party.WEST);
-			animation = Application.application().getGame().getParty().getAnimation();
 		}
 		
 		playerMoving = true;	
@@ -621,4 +629,6 @@ public class Exploration extends Top
 			game.enterState(Config.MENU);
 		}
 	}
+
+
 }

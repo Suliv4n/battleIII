@@ -2,7 +2,7 @@ package game;
 
 import game.launcher.Launcher;
 import game.system.Configurations;
-import game.system.KeyboardControlsConfiguration;
+import game.system.KeyboardControlsConfigurations;
 import game.system.application.Application;
 
 
@@ -47,46 +47,46 @@ public abstract class Top  extends BasicGameState
 			}
 			in.clearKeyPressedRecord();
 		}
-		if(in.isKeyPressed(KeyboardControlsConfiguration.VALIDATE_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.VALIDATE_KEY)){
 			onValidate();
 		}
-		if(in.isKeyPressed(KeyboardControlsConfiguration.BACK_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.BACK_KEY)){
 			onBack();
 		}
 		//KEY PRESSED
-		if(in.isKeyPressed(KeyboardControlsConfiguration.DOWN_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.DOWN_KEY)){
 			onDown();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfiguration.UP_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.UP_KEY)){
 			onUp();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfiguration.LEFT_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.LEFT_KEY)){
 			onLeft();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfiguration.RIGHT_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.RIGHT_KEY)){
 			onRight();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfiguration.START_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.START_KEY)){
 			onStart();
 		}
 		//KEY DOWN
-		if(in.isKeyDown(KeyboardControlsConfiguration.DOWN_KEY)){
+		if(in.isKeyDown(KeyboardControlsConfigurations.DOWN_KEY) && !console){
 			onHoldDown();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyDown(KeyboardControlsConfiguration.UP_KEY)){
+		if(in.isKeyDown(KeyboardControlsConfigurations.UP_KEY) && !console){
 			onHoldUp();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyDown(KeyboardControlsConfiguration.LEFT_KEY)){
+		if(in.isKeyDown(KeyboardControlsConfigurations.LEFT_KEY) && !console){
 			onHoldLeft();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyDown(KeyboardControlsConfiguration.RIGHT_KEY)){
+		if(in.isKeyDown(KeyboardControlsConfigurations.RIGHT_KEY) && !console){
 			onHoldRight();
 			directionKeyPressedOrDown = true;
 		}

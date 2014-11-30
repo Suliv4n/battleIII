@@ -140,30 +140,12 @@ public class Console {
 	 */
 	public void validate(){
 		//print(renderer.clearTextField());
-		String[] commande = parse(renderer.clearTextField());
-	
-		if(commande.length > 0){
-			if(commande.length > 1){
-				String[] arguments = new String[commande.length - 1];
-				for(int i=1; i<commande.length; i++){
-					arguments[i-1] = commande[i];
-				}
-				try{
-					execute(commande[0], arguments);
-				}
-				catch (ArrayIndexOutOfBoundsException e) {
-					print(e.getMessage());
-				}
-			}
-			else{
-				try{
-					execute(commande[0], null);
-				}
-				catch (Exception e) {
-					print(e.getMessage());
-				}
-			}
+		try {
+			print(new Command(renderer.clearTextField()).execute());
+		} catch (CommandParseException e) {
+			print(e.getMessage());
 		}
+		
 	}
 
 	/**
