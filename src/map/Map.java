@@ -52,6 +52,7 @@ public class Map
 	private boolean outDoor;
 	
 	private boolean[][] collisions;
+	private int[][][] originalTilesId;
 	
 	private ArrayList<String> ennemis;
 	
@@ -99,28 +100,32 @@ public class Map
 			
 			//Propriétés des tiles:
 			collisions = new boolean[map.getWidth()][map.getHeight()];
+			originalTilesId = new int[map.getWidth()][map.getHeight()][map.getLayerCount()];
 			for(int axeX=0; axeX<map.getWidth();axeX++)
 			{
 				for(int axeY=0; axeY<map.getHeight();axeY++)
 				{
 					collisions[axeX][axeY]=false;
-					for(int i=0;i<3;i++) //uniquement les 3 premières couches
+					for(int i=0;i<map.getLayerCount();i++)
 					{
-						//current tile
-						int tileID=map.getTileId((int) axeX,(int) axeY, i);
-						
-						/* Test collision */
-						boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
+						int tileID = map.getTileId((int) axeX,(int) axeY, i);
+						originalTilesId[axeX][axeY][i] = tileID;
 						boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
-						if(portail)
-						{
-							collisions[axeX][axeY] = false;
-							break;
+						if(i<3){
+						/* Test collision */
+							boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
+							if(portail)
+							{
+								collisions[axeX][axeY] = false;
+								break;
+							}
+							else if(collision)
+							{
+								collisions[axeX][axeY] = true;
+							}
 						}
-						else if(collision)
-						{
-							collisions[axeX][axeY] = true;
-						}
+						
+
 						
 						/* Test animation de tiles */
 						if(!animatedTiles.containsKey(tileID))
@@ -803,5 +808,61 @@ public class Map
 				}
 			}
 		}	
+	}
+	
+	/**
+	 * Supprime ou réaffiche une tile dont les coordonnées sont passées
+	 * en paramètre.
+	 * 
+	 * @param x
+	 * 		Abscisse de la tile cible.
+	 * @param y
+	 * 		Ordonnées de la tile cible.
+	 * @param z
+	 * 		Couche de la tile cible.
+	 */
+	public void toggleTile(int x, int y, int z){
+		if(map.getTileId(x, y, z) == 0){
+			map.setTileId(x, y, z, originalTilesId[x][y][z]);
+		}
+		else{
+			map.setTileId(x, y, z, 0);
+		}
+		reloadCollisions();
+	}
+	
+	/**
+	 * Retourne l'id de la tile dont les coordonnées sont passées en 
+	 * pramètres.
+	 * 
+	 * @param x
+	 * 		Abscisse de la tile cible.
+	 * @param y
+	 * 		Ordonnées de la tile cible.
+	 * @param z
+	 * 		Couche de la tile cible.
+	 * 
+	 * @return l'id de la tile dont les coordonnées sont passées en paramètres.
+	 */
+	public int getCurrentTileId(int x, int y, int z){
+		return map.getTileId(x, y, z);
+	}
+	
+	/**
+	 * Retourne l'id de la tile de base (avant les modifications 
+	 * comme "toggle" ...) dont les coordonnées sont passées en 
+	 * pramètres.
+	 * 
+	 * @param x
+	 * 		Abscisse de la tile cible.
+	 * @param y
+	 * 		Ordonnées de la tile cible.
+	 * @param z
+	 * 		Couche de la tile cible.
+	 * 
+	 * @return l'id de la tile de base dont les coordonnées sont passées en paramètres.
+	 */
+	public int getOriginalTileId(int x, int y, int z){
+		return originalTilesId[x][y][z];
 	}
 }

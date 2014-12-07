@@ -87,8 +87,14 @@ public class Command {
 	 * Execute la commande
 	 */
 	public String execute(){
-		if(command.equals("dialogue")){
+		if(command.equalsIgnoreCase("dialogue")){
 			return createDialogue();
+		}
+		else if(command.equalsIgnoreCase("toggletile")){
+			return toggleTile();
+		}
+		else if(command.equalsIgnoreCase("tileid")){
+			return tileId();
 		}
 		return "Command does not exist";
 	}
@@ -108,6 +114,58 @@ public class Command {
 				else{
 					((Exploration)Application.application().getGame().getState(Config.EXPLORATION)).setDialogue(dialogue);
 					return "Dialogue is loaded.";
+				}
+			}
+			else{
+				return "State should be exploration.";
+			}
+		}
+	}
+	
+	
+	private String toggleTile(){
+		if(parameters.length != 3){
+			return "toggletile <x> <y> <z>";
+		}
+		else{
+			if(Application.application().getGame().getCurrentStateID() == Config.EXPLORATION){
+				if(!parameters[0].matches("^[0-9]*$") || !parameters[1].matches("^[0-9]*$") || !parameters[2].matches("^[0-9]*$")){
+					return "Parameters should be integer.";
+				}
+				else{
+					int x = Integer.parseInt(parameters[0]);
+					int y = Integer.parseInt(parameters[1]);
+					int z = Integer.parseInt(parameters[2]);
+					
+					Application.application().getGame().getParty().getMap().toggleTile(x, y, z);
+					
+					return "Tile has been toggled";
+				}
+			}
+			else{
+				return "State should be exploration.";
+			}
+		}
+	}
+	
+	private String tileId(){
+		if(parameters.length != 3){
+			return "toggletile <x> <y> <z>";
+		}
+		else{
+			if(Application.application().getGame().getCurrentStateID() == Config.EXPLORATION){
+				if(!parameters[0].matches("^[0-9]*$") || !parameters[1].matches("^[0-9]*$") || !parameters[2].matches("^[0-9]*$")){
+					return "Parameters should be integer.";
+				}
+				else{
+					int x = Integer.parseInt(parameters[0]);
+					int y = Integer.parseInt(parameters[1]);
+					int z = Integer.parseInt(parameters[2]);
+					
+					int currentTileId = Application.application().getGame().getParty().getMap().getCurrentTileId(x, y, z);
+					int originalTileId = Application.application().getGame().getParty().getMap().getOriginalTileId(x, y, z);
+					
+					return "current:"+currentTileId+" orginal:"+originalTileId;
 				}
 			}
 			else{
