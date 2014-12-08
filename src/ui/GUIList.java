@@ -16,9 +16,9 @@ import org.newdawn.slick.Input;
 
 import personnage.Character;
 
-import ui.ListRenderer.CursorRenderer;
-import ui.ListRenderer.ElementRenderer;
 import ui.listController.ListController;
+import ui.listRenderer.CursorRenderer;
+import ui.listRenderer.ElementRenderer;
 
 public class GUIList<T> {
 	private int relativeIndex = 0; //Index où le curseur doit s'afficher
@@ -68,7 +68,6 @@ public class GUIList<T> {
 		cursorRenderer = new CursorRenderer() {
 			@Override
 			public void render(int x, int y) {
-				Graphics g = Application.application().getGraphics();
 				Application.application().getGame().getArrow(0).drawCentered(x + 6, y + 12);
 			}
 		};
@@ -95,6 +94,7 @@ public class GUIList<T> {
 			for(int i=0; i<frame; i++){
 				g.drawRect(x+i, y+i, width - 2*i, height - 2*i);
 			}
+			new Panel(width, height, frame, undergroundColor, frameColor);
 		}
 		g.setColor(Color.white);
 		int n = 0;

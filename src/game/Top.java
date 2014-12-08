@@ -1,8 +1,10 @@
 package game;
 
-import game.launcher.Launcher;
+import java.util.ArrayList;
+
 import game.system.Configurations;
 import game.system.KeyboardControlsConfigurations;
+import game.system.SystemInformations;
 import game.system.application.Application;
 
 
@@ -20,25 +22,37 @@ import org.newdawn.slick.state.StateBasedGame;
 public abstract class Top  extends BasicGameState
 {
 	private boolean console = false;
+	private static boolean showSystemInfo = false;
 	private boolean directionKeyPressedOrDown = false;
 	
 	@Override
 	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
 			throws SlickException 
 	{
+		if(showSystemInfo){
+			SystemInformations.getInstance().render();
+		}
 		if(console){
 			Application.application().console().render();
 		}
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame arg1, int arg2)
+	public void update(GameContainer container, StateBasedGame arg1, int delta)
 			throws SlickException 
 	{
 		Input in = container.getInput();
 		directionKeyPressedOrDown = false;
-		if(in.isKeyPressed(Input.KEY_0)){
+		
+		if(Configurations.DEBUG){
+			SystemInformations.getInstance().log(delta);
+		}
+		
+		if(in.isKeyPressed(Input.KEY_0) && Configurations.DEBUG){
 			toggleConsole();
+		}
+		if(in.isKeyPressed(Input.KEY_9) && Configurations.DEBUG){
+			showSystemInfo = !showSystemInfo;
 		}
 		if(console && Configurations.DEBUG){
 			Application.application().console().setFocus(true);
@@ -52,6 +66,12 @@ public abstract class Top  extends BasicGameState
 		}
 		if(in.isKeyPressed(KeyboardControlsConfigurations.BACK_KEY)){
 			onBack();
+		}
+		if(in.isKeyPressed(KeyboardControlsConfigurations.R_KEY)){
+			onR();
+		}
+		if(in.isKeyPressed(KeyboardControlsConfigurations.L_KEY)){
+			onL();
 		}
 		//KEY PRESSED
 		if(in.isKeyPressed(KeyboardControlsConfigurations.DOWN_KEY)){
@@ -156,4 +176,12 @@ public abstract class Top  extends BasicGameState
 	 * Evénement "start"
 	 */
 	public void onStart() {}
+	/**
+	 * Evénement "R"
+	 */
+	public void onR() {}
+	/**
+	 * Evénement "L"
+	 */
+	public void onL() {}
 }

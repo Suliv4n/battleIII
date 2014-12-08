@@ -24,7 +24,7 @@ import data.Save;
 import personnage.Party;
 import personnage.Character;
 import ui.GUIList;
-import ui.ListRenderer.ElementRenderer;
+import ui.listRenderer.ElementRenderer;
 
 
 public class TitleScreen extends Top{

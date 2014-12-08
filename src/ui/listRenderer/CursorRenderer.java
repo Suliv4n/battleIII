@@ -1,4 +1,4 @@
-package ui.ListRenderer;
+package ui.listRenderer;
 
 
 public interface CursorRenderer {

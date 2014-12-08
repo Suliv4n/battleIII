@@ -1,12 +1,9 @@
 package game.system;
 
 import game.Config;
-import game.launcher.Launcher;
 import game.system.application.Application;
 
-import org.newdawn.slick.AppletGameContainer.Container;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
@@ -145,7 +142,6 @@ public class Console {
 		} catch (CommandParseException e) {
 			print(e.getMessage());
 		}
-		
 	}
 
 	/**
@@ -157,39 +153,6 @@ public class Console {
 	 */
 	public void setFocus(boolean focus) {
 		renderer.setFocus(focus);
-	}
-	
-	/**
-	 * Analyse la commande saisie.
-	 * 
-	 * @return
-	 *  	Un tableau dont le premier élément est la commande.
-	 *  Les éléments suivants saont les paramètres.
-	 */
-	private String[] parse(String commande){
-		return commande.split(" ");
-	}
-	
-	/**
-	 * Execute la commande
-	 */
-	private void execute(String commande, String[] args){
-		if(commande.equalsIgnoreCase("kill")){
-			if(args == null || args.length == 0){
-				print("Not enough arguments.");
-			}
-			else if(args.length > 1){
-				print("Too many arguments.");
-			}
-			else{
-				String[] eval = Regex.eval(args[0], "^([0-9])$"); 
-				if(eval.length > 0){
-					personnage.Character character = Application.application().getGame().getParty().get(Integer.parseInt(eval[0]));
-					character.kill();
-					print(character.getName() + " has been killed");
-				}
-			}
-		}
 	}
 
 }

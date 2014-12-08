@@ -30,9 +30,7 @@ public class Launcher
 	/*
 	 * To do list : 
 	 * TODO : supprimer fichier Config.java et mettre les données dans 
-	 * Settings.java/Configurations.java les id des states dans un autre fichier.
-	 * TODO : Méthodes render et update dans la classe dialogue. 
-	 * TODO : Classe ConsoleLine et mise à jour de Consle.java.
+	 * Settings.java/Configurations.java les id des states dans un autre fichier. 
 	 * TODO : Graphics sur la mémoire pour le débuggage.
 	 * TODO : Classe Logger pour gérer les logs.
 	 * TODO : Hitbox pour les personnages et amélioration du systèmde collision

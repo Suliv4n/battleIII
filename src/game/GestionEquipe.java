@@ -20,7 +20,7 @@ import personnage.Party;
 import personnage.Character;
 import skill.Skill;
 import ui.GUIList;
-import ui.ListRenderer.ElementRenderer;
+import ui.listRenderer.ElementRenderer;
 
 import data.Format;
 

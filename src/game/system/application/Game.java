@@ -23,7 +23,10 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
+
+import audio.MusicManager;
 
 
 import personnage.EnnemisParty;
@@ -125,18 +128,6 @@ public class Game extends StateBasedGame{
 	 */
 	public boolean isChestOpened(Chest chest)
 	{
-		/*
-		for(Coffre c : coffresOuverts)
-		{
-			if(c.equals(coffre))
-			{
-				System.out.print("true");
-				return true;
-			}
-		}
-		System.out.print("false");
-		return false;
-		*/
 		return openedChests.contains(chest);
 	}
 	
@@ -148,6 +139,7 @@ public class Game extends StateBasedGame{
 	 */
 	public void launchBattle(EnnemisParty ennemis) {
 		battleWithATB.launch(ennemis);
+		MusicManager.playLoop(ennemis.getMusic());
 		Application.application().getGame().enterState(Config.BATTLE_ATB);
 	}
 	

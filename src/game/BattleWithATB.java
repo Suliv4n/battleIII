@@ -25,12 +25,12 @@ import ui.BarUI;
 import ui.GUIList;
 import ui.Panel;
 import ui.TypeBarre;
-import ui.ListRenderer.CursorRenderer;
-import ui.ListRenderer.ElementRenderer;
+import ui.listRenderer.CursorRenderer;
+import ui.listRenderer.ElementRenderer;
 
 
 
-public class BattleWithATB extends BasicGameState
+public class BattleWithATB extends Top
 {
 
 	private Image background;
@@ -150,6 +150,7 @@ public class BattleWithATB extends BasicGameState
 			actions.get(queueATB.get(0)).render(0, 0);
 		}
 	}
+	
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
@@ -168,30 +169,6 @@ public class BattleWithATB extends BasicGameState
 			equipeList.select(queueATB.get(0));
 			equipeList.setRenderCursor(true);
 		}
-		//equipeList.update(in);
-		if(in.isKeyPressed(Input.KEY_A)){
-			onPressL();
-		}
-		else if(in.isKeyPressed(Input.KEY_Z)){
-			onPressR();
-		}
-	}
-
-	private void onPressR() {
-		if(queueATB.size() >= 2){
-			Character first = queueATB.get(0);
-			queueATB.remove(0);
-			queueATB.add(queueATB.size(),first);
-		}
-	}
-
-	private void onPressL() {
-		if(queueATB.size() >= 2){
-			Character last = queueATB.get(queueATB.size() - 1);
-			queueATB.remove(queueATB.size() - 1);
-			queueATB.add(0,last);
-		}
-		
 	}
 
 	@Override
@@ -200,6 +177,22 @@ public class BattleWithATB extends BasicGameState
 		return Config.BATTLE_ATB;
 	}
 	
+	@Override
+	public void onR() {
+		if(queueATB.size() >= 2){
+			Character first = queueATB.get(0);
+			queueATB.remove(0);
+			queueATB.add(queueATB.size(),first);
+		}
+	}
 	
-	
+	@Override
+	public void onL() {
+		if(queueATB.size() >= 2){
+			Character last = queueATB.get(queueATB.size() - 1);
+			queueATB.remove(queueATB.size() - 1);
+			queueATB.add(0,last);
+		}
+		
+	}	
 }

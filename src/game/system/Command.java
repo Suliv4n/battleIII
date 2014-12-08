@@ -8,6 +8,8 @@ import game.system.application.Application;
 import java.awt.Dialog;
 import java.util.ArrayList;
 
+import personnage.EnnemisParty;
+
 import data.DataManager;
 
 import util.Regex;
@@ -96,6 +98,9 @@ public class Command {
 		else if(command.equalsIgnoreCase("tileid")){
 			return tileId();
 		}
+		else if(command.equalsIgnoreCase("battle")){
+			return battle();
+		}
 		return "Command does not exist";
 	}
 	
@@ -167,6 +172,26 @@ public class Command {
 					
 					return "current:"+currentTileId+" orginal:"+originalTileId;
 				}
+			}
+			else{
+				return "State should be exploration.";
+			}
+		}
+	}
+	
+	private String battle(){
+		if(parameters.length != 1){
+			return "battle <id>";
+		}
+		else{
+			if(Application.application().getGame().getCurrentStateID() == Config.EXPLORATION){
+				String id = parameters[0];
+				EnnemisParty ennemis = DataManager.loadEnnemisParty(id);
+				if(ennemis  == null){
+					return "Ennemis party not found (wrong id)";
+				}
+				Application.application().getGame().launchBattle(ennemis);
+				return "Battle launched !";
 			}
 			else{
 				return "State should be exploration.";
