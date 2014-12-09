@@ -137,6 +137,46 @@ public class Application{
 		return container.getGraphics();
 	}
 	
+	
+	/**
+	 * Dessine la chaine de caractères passé en paramètre
+	 * avec la police par défaut de slick. 
+	 * 
+	 * @param string
+	 * 		Chaine de caractères à afficher.
+	 * @param x
+	 * 		Abscisse où afficher la chaîne.
+	 * @param y
+	 * 		Ordonnée où afficher la chaîne.
+	 */
+	public void drawStringWithoutGameFont(String string, int x, int y)
+	{
+		getGraphics().drawString(string, y, x);
+	}
+	
+	/**
+	 * Dessine la chaine de caractères passé en paramètre
+	 * avec la police par défaut de slick. 
+	 * 
+	 * @param string
+	 * 		Chaine de caractères à afficher.
+	 * @param x
+	 * 		Abscisse où afficher la chaîne.
+	 * @param y
+	 * 		Ordonnée où afficher la chaîne.
+	 * @param color
+	 * 		Couleur à utiliser.
+	 */
+	public void drawStringWithoutGameFont(String string, int x, int y, Color color)
+	{
+		Color temp = getGraphics().getColor();
+		getGraphics().setColor(color);
+		
+		getGraphics().drawString(string, x, y);
+		
+		getGraphics().setColor(temp);
+	}
+	
 	/**
 	 * Dessine la chaine de caractères passé en paramètre
 	 * avec la police par défaut. 
@@ -150,7 +190,7 @@ public class Application{
 	 */
 	public void drawString(String string, int x, int y)
 	{
-		container.getDefaultFont().drawString(x, y, string);
+		game.getGameFont().drawString(x, y, string);
 	}
 	
 	/**
@@ -168,7 +208,7 @@ public class Application{
 	 */
 	public void drawString(String string, int x, int y, Color color)
 	{
-		container.getDefaultFont().drawString(x, y, string, color);
+		game.getGameFont().drawString(x, y, string, color);
 	}
 	
 	/**

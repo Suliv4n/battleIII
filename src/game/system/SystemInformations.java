@@ -31,7 +31,7 @@ public class SystemInformations {
 	
 	private static final int MAX_LOG = (int) (AXE_X_WIDTH / AXE_X_SCALE_PX_PER_LOG);
 	
-	private static final int LOG_EVERY = 2000;
+	private static final int LOG_EVERY = 1000;
 	
 	private int lastLog = 0;
 	
@@ -109,7 +109,7 @@ public class SystemInformations {
 		.append(" MB)");
 		String res = buffer.toString();
 		
-		Application.application().drawString(res, 10, 10);
+		Application.application().drawStringWithoutGameFont(res, 10, 10);
 		renderMemoryUsageGraph(10, 50);
 	}
 	

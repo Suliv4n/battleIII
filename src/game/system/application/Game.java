@@ -14,6 +14,10 @@ import game.TitleScreen;
 import game.input.InputAction;
 import game.input.TextInput;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +28,10 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.ResourceLoader;
 
 import audio.MusicManager;
 
@@ -54,6 +61,7 @@ public class Game extends StateBasedGame{
 	private Party party;
 	private int currentSave = -1;
 	private Image arrows;
+	private UnicodeFont font;
 	
 	public Game(String name) throws SlickException {
 		super(name);
@@ -63,6 +71,20 @@ public class Game extends StateBasedGame{
 		party = new Party(0);
 		arrows = new Image("ressources/images/fleches.png",new Color(255,0,255));
 		openedChests = new ArrayList<Chest>();
+		
+		InputStream inputStream	= ResourceLoader.getResourceAsStream("ressources/fonts/8bitoperator.ttf");
+		Font font;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			font.deriveFont(24);
+			this.font = new UnicodeFont(font, 15, false, false);
+			this.font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+			this.font.addAsciiGlyphs();
+			this.font.loadGlyphs();
+		} catch (FontFormatException | IOException e){
+			throw new SlickException(e.getMessage());
+		}
+		
 	}
 	
 	@Override
@@ -95,6 +117,17 @@ public class Game extends StateBasedGame{
 		addState(battleWithATB);
 		addState(gameOver);
 		addState(combatResult);
+	}
+	
+	/**
+	 * Retourne la police du jeu.
+	 * 
+	 * @return
+	 * 		La police du jeu.
+	 */
+	public UnicodeFont getGameFont()
+	{
+		return font;
 	}
 	
 	/**

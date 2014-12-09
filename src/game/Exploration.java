@@ -188,7 +188,6 @@ public class Exploration extends Top
 		
 		in.disableKeyRepeat();
 		
-		
 		if(dialogue == null)
 		{	
 
