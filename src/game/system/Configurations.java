@@ -30,9 +30,14 @@ public class Configurations {
 	public static final Color DEFAULT_BORDER_COLOR = new Color(150,100,0);
 	
 	/**
+	 * Couleur de barre pv
+	 */
+	public static final Color HEALTH_BAR_COLOR = new Color(50,200,50);
+	
+	/**
 	 * Couleur de la police.
 	 */
-	public static final Color DEFAULT_COLO_FONT = new Color(255,255,255);
+	public static final Color DEFAULT_FONT_COLOR = new Color(255,255,255);
 	
 	/**
 	 * Nombre de FPS du jeu.

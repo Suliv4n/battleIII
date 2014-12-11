@@ -1,12 +1,9 @@
 package game;
 
 
-import game.launcher.Launcher;
 import game.system.application.Application;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -14,7 +11,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.xml.SlickXMLException;
 
@@ -36,7 +32,7 @@ public class TitleScreen extends Top{
 	//Selection du menu
 	private int selectionMenu = -1;
 	
-	private GUIList<Party> listeSaves;
+	private GUIList<Party> listSaves;
 	
 	private StateBasedGame game;
 	
@@ -48,10 +44,14 @@ public class TitleScreen extends Top{
 							"Charger"};
 		this.game = game;
 		
-		this.listeSaves = new GUIList<Party>(250, 390, 4, null, null, false);
-		listeSaves.setStep(70);
-		listeSaves.setCursorMarges(-15, 30);
-		listeSaves.setElementRenderer(new ElementRenderer() {
+		this.listSaves = new GUIList<Party>(4, null, null, false);
+		listSaves.setWidth(250);
+		listSaves.setHeight(390);
+		listSaves.setAutomaticWidth(false);
+		//listSaves
+		listSaves.setStep(70);
+		listSaves.setCursorMarges(-15, 30);
+		listSaves.setElementRenderer(new ElementRenderer() {
 			
 			@Override
 			public void render(int x, int y, Object element, int index) {
@@ -98,7 +98,7 @@ public class TitleScreen extends Top{
 		}
 		
 		if(selectionMenu == 1){
-			listeSaves.render(390, 50);
+			listSaves.render(390, 50);
 		}
 		
 
@@ -112,14 +112,13 @@ public class TitleScreen extends Top{
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
-		super.update(container, sbg, delta);
 		
-		Input in = container.getInput();
 		//--------------------SAUVEGARDES-----------------------
 		if(selectionMenu == 1){
-			listeSaves.update(in);
+			listSaves.update(container.getInput());
 		}
-		in.clearKeyPressedRecord();
+		
+		super.update(container, sbg, delta);
 	}
 
 	@Override
@@ -145,17 +144,17 @@ public class TitleScreen extends Top{
 			selectionMenu = curseurMenu;
 			if(curseurMenu == 1){
 				try {
-					listeSaves.setData(Save.getAllSauvegardes());
+					listSaves.setData(Save.getAllSauvegardes());
 				} catch (FileNotFoundException | SlickXMLException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		else if(selectionMenu == 1){
-			if(listeSaves.getObject() != null)
+			if(listSaves.getObject() != null)
 			{
 				try {
-					Save.loadSave("save"+(listeSaves.getSelectedIndex()+1));
+					Save.loadSave("save"+(listSaves.getSelectedIndex()+1));
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}

@@ -42,6 +42,7 @@ public abstract class Top  extends BasicGameState
 			throws SlickException 
 	{
 		Input in = container.getInput();
+		
 		directionKeyPressedOrDown = false;
 		
 		if(Configurations.DEBUG){

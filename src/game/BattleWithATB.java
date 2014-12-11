@@ -1,5 +1,7 @@
 package game;
 
+import game.settings.Settings;
+import game.system.Configurations;
 import game.system.application.Application;
 
 import java.util.ArrayList;
@@ -28,8 +30,6 @@ import ui.TypeBarre;
 import ui.listRenderer.CursorRenderer;
 import ui.listRenderer.ElementRenderer;
 
-
-
 public class BattleWithATB extends Top
 {
 
@@ -38,8 +38,8 @@ public class BattleWithATB extends Top
 	private ArrayList<Character> queueATB;
 	
 	private GUIList<Character> equipeList;
-	private Panel barreHaut;
-	private Panel barreBas;
+	private Panel topPanel;
+	private Panel bottomPanel;
 	
 	private HashMap<IBattle, Point> coords;
 	
@@ -52,22 +52,25 @@ public class BattleWithATB extends Top
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
-		equipeList = new GUIList<Character>(640, 100, 3, Config.couleur1, Config.couleur2, false);
+		equipeList = new GUIList<Character>(3, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, false);
+		equipeList.setWidth(640);
+		equipeList.setHeight(100);
+		equipeList.setAutomaticWidth(false);
 		equipeList.setElementRenderer(new ElementRenderer() {
 			@Override
 			public void render(int x, int y, Object element, int index) {
 				Character p = (Character) element;
 				Graphics g = Application.application().getGraphics();
-				BarUI pv = new BarUI(Config.couleurPV, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				BarUI energie = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				BarUI hvBar = new BarUI(Configurations.HEALTH_BAR_COLOR, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				BarUI energyBar = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
 				BarUI atb = new BarUI(p.getActiveTimeBattleManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getActiveTimeBattleManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				pv.render(g, x, y+10);
-				energie.render(g, x+170, y+10);
-				atb.render(g,x+500,y+5);
-				g.setColor(Color.white);
-				g.drawString("PV:"+p.getHealtPoints() + "/" + p.getMaximumHealthPoints(), x, y-5);
-				g.drawString(p.getEnergyLabel()+":"+p.getEnergy() + "/" + p.getMaximumEnergy(), x+170, y-5);
-				g.drawString(p.getName(), x + 330, y+2);
+				hvBar.render(g, x, y+13);
+				energyBar.render(g, x+170, y+13);
+				atb.render(g,x+500,y+3);
+				
+				Application.application().drawString("PV:"+p.getHealtPoints() + "/" + p.getMaximumHealthPoints(), x, y-9, Configurations.DEFAULT_FONT_COLOR);
+				Application.application().drawString(p.getEnergyLabel()+":"+p.getEnergy() + "/" + p.getMaximumEnergy(), x+170, y-9, Configurations.DEFAULT_FONT_COLOR);
+				Application.application().drawString(p.getName(), x + 330, y-5, Configurations.DEFAULT_FONT_COLOR);
 			}
 		});
 		equipeList.setStep(30);
@@ -81,8 +84,8 @@ public class BattleWithATB extends Top
 			}
 		} );
 		equipeList.setCursorMarges(-1, 0);
-		barreHaut = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
-		barreBas = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
+		topPanel = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
+		bottomPanel = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
 		queueATB = new ArrayList<Character>();
 	}
 	
@@ -126,29 +129,28 @@ public class BattleWithATB extends Top
 		actions = new HashMap<Character,GUIList<String>>();
 		for(Character p : Application.application().getGame().getParty()){
 			p.getActiveTimeBattleManager().launch();
-			GUIList<String> a = new GUIList<String>(100, 98, 3, Config.couleur1, Config.couleur2, true);
-			a.setData(new String[]{"Attaquer","Compétences"});
+			GUIList<String> a = new GUIList<String>(3, Config.couleur1, Config.couleur2, true);
+			a.setHeight(99);
+			a.setData(new String[]{"Attaquer","Compétences","nrgreon"});
 			actions.put(p,a);
 		}
-		
-		
-
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException 
 	{
-		barreHaut.render(0, 0);
-		background.drawCentered(Config.LONGUEUR/2, Config.LARGEUR/2);
+		topPanel.render(0, 0);
+		background.drawCentered(Configurations.SCREEN_WIDTH/2, Configurations.SCREEN_HEIGHT/2);
 		for(IBattle entity : coords.keySet()){
 			entity.getImageForBattle().drawCentered(coords.get(entity).getX(), coords.get(entity).getY());
 		}
-		barreBas.render(0, 380);
+		bottomPanel.render(0, 380);
 		equipeList.render(5, 385);
 		if(queueATB.size() != 0){
 			actions.get(queueATB.get(0)).render(0, 0);
 		}
+		super.render(container, game, g);
 	}
 	
 
@@ -169,6 +171,8 @@ public class BattleWithATB extends Top
 			equipeList.select(queueATB.get(0));
 			equipeList.setRenderCursor(true);
 		}
+		
+		super.update(container, game, delta);
 	}
 
 	@Override
@@ -192,7 +196,6 @@ public class BattleWithATB extends Top
 			Character last = queueATB.get(queueATB.size() - 1);
 			queueATB.remove(queueATB.size() - 1);
 			queueATB.add(0,last);
-		}
-		
-	}	
+		}	
+	}
 }

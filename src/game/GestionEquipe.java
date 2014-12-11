@@ -82,7 +82,10 @@ public class GestionEquipe extends BasicGameState
 		};
 		
 		for(Character p : Application.application().getGame().getParty()){
-			GUIList<Skill> liste = new GUIList<>(204, 440, 20, Config.couleur1, Config.couleur2, true);
+			GUIList<Skill> liste = new GUIList<>(20, Config.couleur1, Config.couleur2, true);
+			liste.setWidth(204);
+			liste.setHeight(440);
+			liste.setAutomaticWidth(false);
 			liste.setData(p.getSkills());
 			liste.setElementRenderer(renderer);
 			listesSkill.put(p, liste);

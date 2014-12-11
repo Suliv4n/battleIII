@@ -109,7 +109,7 @@ public class SystemInformations {
 		.append(" MB)");
 		String res = buffer.toString();
 		
-		Application.application().drawStringWithoutGameFont(res, 10, 10);
+		Application.application().drawStringWithoutGameFont(res, 10, 10, Color.white);
 		renderMemoryUsageGraph(10, 50);
 	}
 	
