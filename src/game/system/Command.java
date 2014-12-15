@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
 
-import personnage.EnnemisParty;
+import characters.EnnemisParty;
 import data.DataManager;
 import util.Regex;
 

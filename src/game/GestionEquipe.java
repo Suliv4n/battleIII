@@ -15,8 +15,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import personnage.Party;
-import personnage.Character;
+import characters.Character;
+import characters.Party;
 import skill.Skill;
 import ui.GUIList;
 import ui.listRenderer.ElementRenderer;

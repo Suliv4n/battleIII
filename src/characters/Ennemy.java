@@ -1,6 +1,8 @@
-package personnage;
+package characters;
 
 import game.Combat;
+import game.battle.IBattle;
+import game.battle.atb.ActiveTimeBattleManager;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;

@@ -10,20 +10,19 @@ import org.newdawn.slick.util.xml.XMLElementList;
 import org.newdawn.slick.util.xml.XMLParser;
 
 import map.Map;
-import personnage.Party;
-import personnage.Warrior;
-import personnage.Mage;
-import personnage.Character;
-import personnage.Ranger;
 import skill.Skill;
-
 
 import java.io.*;
 import java.util.ArrayList;
 
-
 import org.jdom2.Element;
 import org.jdom2.output.*;
+
+import characters.Character;
+import characters.Mage;
+import characters.Party;
+import characters.Ranger;
+import characters.Warrior;
 
 
 

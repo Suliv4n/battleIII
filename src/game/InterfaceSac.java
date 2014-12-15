@@ -12,14 +12,14 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import characters.Character;
+import characters.Party;
 import bag.Bag;
 import bag.Category;
 import bag.IItems;
 import bag.item.stuff.Weapon;
 import bag.item.stuff.Armor;
 import bag.item.stuff.Stuff;
-import personnage.Party;
-import personnage.Character;
 import util.Format;
 
 

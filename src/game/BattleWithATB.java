@@ -1,11 +1,15 @@
 package game;
 
+import game.battle.IBattle;
 import game.settings.Settings;
 import game.system.Configurations;
 import game.system.application.Application;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+
+
 
 
 import org.newdawn.slick.Color;
@@ -19,10 +23,13 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-import personnage.Party;
-import personnage.EnnemisParty;
-import personnage.IBattle;
-import personnage.Character;
+
+
+
+import characters.Character;
+import characters.EnnemisParty;
+import characters.Party;
+import skill.Skill;
 import ui.BarUI;
 import ui.GUIList;
 import ui.Panel;
@@ -37,6 +44,7 @@ public class BattleWithATB extends Top
 	private Image background;
 	private EnnemisParty ennemis;
 	private ArrayList<Character> queueATB;
+	private boolean showSkill = false;
 	
 	private GUIList<Character> equipeList;
 	private Panel topPanel;
@@ -47,7 +55,9 @@ public class BattleWithATB extends Top
 	/**
 	 * Liste des actions
 	 */
-	private HashMap<Character,GUIList<String>>actions;
+	private HashMap<Character,GUIList<String>> actions;
+	
+	private HashMap<Character,GUIList<Skill>> skillsLists;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -128,12 +138,17 @@ public class BattleWithATB extends Top
 		
 		
 		actions = new HashMap<Character,GUIList<String>>();
+		skillsLists = new HashMap<Character,GUIList<Skill>>();
 		for(Character p : Application.application().getGame().getParty()){
 			p.getActiveTimeBattleManager().launch(Random.randInt(20, 60));
-			GUIList<String> a = new GUIList<String>(3, Config.couleur1, Config.couleur2, true);
+			GUIList<String> a = new GUIList<String>(4, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
 			a.setHeight(99);
 			a.setData(new String[]{"Attaquer","Compétences"});
-			actions.put(p,a);
+			GUIList<Skill> s = new GUIList<Skill>(4, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
+			s.setHeight(99);
+			s.setData(p.getSkills());
+			actions.put(p, a);
+			skillsLists.put(p, s);
 		}
 	}
 
@@ -148,8 +163,11 @@ public class BattleWithATB extends Top
 		}
 		bottomPanel.render(0, 380);
 		equipeList.render(5, 385);
-		if(queueATB.size() != 0){
+		if(queueATB.size() != 0 && !showSkill){
 			actions.get(queueATB.get(0)).render(0, 0);
+		}
+		else if(showSkill){
+			skillsLists.get(queueATB.get(0)).render(0, 0);
 		}
 		super.render(container, game, g);
 	}
@@ -162,15 +180,18 @@ public class BattleWithATB extends Top
 		Input in = container.getInput();
 		for(Character p : Application.application().getGame().getParty()){
 			//ATB à 100% le personnage est ajouté à la queue
-			if(p.getActiveTimeBattleManager().getCurrent() == 100 && !queueATB.contains(p)){
+			if(p.getActiveTimeBattleManager().getCurrent() == 100 && !queueATB.contains(p) && p instanceof Character){
 				queueATB.add(p);
 			}
 		}
 		//File d'attente ATB
-		if(queueATB.size() != 0){
+		if(queueATB.size() != 0 && !showSkill){
 			actions.get(queueATB.get(0)).update(in);
 			equipeList.select(queueATB.get(0));
 			equipeList.setRenderCursor(true);
+		}
+		else if(showSkill){
+			skillsLists.get(queueATB.get(0)).update(in);
 		}
 		
 		super.update(container, game, delta);
@@ -202,8 +223,10 @@ public class BattleWithATB extends Top
 	
 	@Override
 	public void onValidate(){
-		if(queueATB.size() > 0 && queueATB.get(0) instanceof Character){
-			
+		if(queueATB.size() > 0){
+			if(actions.get(queueATB.get(0)).getSelectedIndex() == 1){
+				showSkill = true;
+			}
 		}
 	}
 	

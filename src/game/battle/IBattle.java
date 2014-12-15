@@ -1,6 +1,7 @@
-package personnage;
+package game.battle;
 
 import game.Combat;
+import game.battle.atb.ActiveTimeBattleManager;
 
 import java.util.ArrayList;
 

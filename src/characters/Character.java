@@ -2,14 +2,15 @@
  * @author Darklev
  */
 
-package personnage;
+package characters;
 
 import game.Combat;
 import game.Config;
+import game.battle.IBattle;
+import game.battle.atb.ActiveTimeBattleManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -19,8 +20,6 @@ import org.newdawn.slick.SpriteSheet;
 
 import bag.IItems;
 import bag.item.stuff.*;
-
-
 import skill.Skill;
 import ui.BarUI;
 import ui.TypeBarre;

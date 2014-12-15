@@ -14,11 +14,11 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
+import characters.EnnemisParty;
+import characters.Ennemy;
+import characters.NonPlayerCharacter;
+import characters.Party;
 import data.DataManager;
-import personnage.Ennemy;
-import personnage.Party;
-import personnage.EnnemisParty;
-import personnage.NonPlayerCharacter;
 import audio.MusicManager;
 
 

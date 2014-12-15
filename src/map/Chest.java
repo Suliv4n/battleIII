@@ -1,9 +1,9 @@
 package map;
 
+import characters.Party;
 import game.launcher.Launcher;
 import game.system.application.Application;
 import bag.IItems;
-import personnage.Party;
 
 /**
  * Coffre pouvant se trouver sur une map.

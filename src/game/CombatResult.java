@@ -13,12 +13,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import characters.Character;
+import characters.Party;
 import bag.IItems;
-
 import audio.MusicManager;
-
-import personnage.Party;
-import personnage.Character;
 
 
 public class CombatResult extends BasicGameState

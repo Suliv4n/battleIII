@@ -1,4 +1,4 @@
-package personnage;
+package characters;
 
 
 import game.Config;

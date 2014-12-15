@@ -5,13 +5,11 @@ import game.dialogue.Line;
 import game.dialogue.Select;
 import game.system.application.Application;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 
 import map.Chest;
 import map.Command;
@@ -29,14 +27,11 @@ import org.newdawn.slick.particles.ParticleIO;
 import org.newdawn.slick.particles.ParticleSystem;
 import org.newdawn.slick.state.StateBasedGame;
 
+import characters.EnnemisParty;
+import characters.NonPlayerCharacter;
+import characters.Party;
 import audio.MusicManager;
-
 import data.DataManager;
-
-
-import personnage.Party;
-import personnage.EnnemisParty;
-import personnage.NonPlayerCharacter;
 
 
 /**

@@ -6,10 +6,10 @@ import game.system.KeyboardControlsConfigurations;
 import game.system.application.Application;
 
 import java.util.ArrayList;
+
 import org.newdawn.slick.Input;
 
-
-import personnage.Character;
+import characters.Character;
 import ui.Panel;
 import util.Regex;
 

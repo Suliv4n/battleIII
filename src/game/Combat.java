@@ -1,6 +1,7 @@
 package game;
 
 
+import game.battle.IBattle;
 import game.system.application.Application;
 
 import java.awt.Point;
@@ -16,13 +17,13 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import characters.*;
+import characters.Character;
 import bag.IItems;
 import animation.AnimationFactory;
 import animation.BattleAnimation;
 import animation.EffectsDisplayer;
 import audio.MusicManager;
-import personnage.*;
-import personnage.Character;
 import skill.Skill;
 import util.Format;
 

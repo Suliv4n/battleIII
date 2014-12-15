@@ -22,13 +22,13 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.xml.*;
 
+import characters.EnnemisParty;
+import characters.Ennemy;
+import characters.NonPlayerCharacter;
 import bag.IItems;
 import bag.item.Item;
 import bag.item.stuff.Weapon;
 import audio.MusicManager;
-import personnage.Ennemy;
-import personnage.EnnemisParty;
-import personnage.NonPlayerCharacter;
 import skill.Skill;
 
 
@@ -355,7 +355,7 @@ public class DataManager
 	 */
 	private static Ennemy loadEnnemy(String id) throws SlickException
 	{
-		ArrayList<XMLElement> collectionEnnemis = getChildrenFromXML("maps.xml", "map");
+		ArrayList<XMLElement> collectionEnnemis = getChildrenFromXML("ennemis.xml", "ennemi");
 
 		for(XMLElement element : collectionEnnemis)
 		{

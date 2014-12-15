@@ -33,11 +33,11 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
+import characters.EnnemisParty;
+import characters.Party;
 import audio.MusicManager;
 
 
-import personnage.EnnemisParty;
-import personnage.Party;
 
 public class Game extends StateBasedGame{
 	

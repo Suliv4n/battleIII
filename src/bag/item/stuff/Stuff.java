@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import personnage.Character;
-import personnage.Party;
-
+import characters.Character;
+import characters.Party;
 import bag.IItems;
 
 /**

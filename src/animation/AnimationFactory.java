@@ -1,6 +1,7 @@
 package animation;
 
 import game.Combat;
+import game.battle.IBattle;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -11,12 +12,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Triangulator;
 
+import characters.Character;
 import bag.item.stuff.Weapon;
-
 import data.DataManager;
-
-import personnage.IBattle;
-import personnage.Character;
 
 
 

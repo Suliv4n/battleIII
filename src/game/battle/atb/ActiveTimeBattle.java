@@ -1,4 +1,4 @@
-package personnage;
+package game.battle.atb;
 
 import java.util.TimerTask;
 

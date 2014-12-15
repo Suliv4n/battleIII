@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import personnage.Party;
-import personnage.Character;
+import characters.Character;
+import characters.Party;
 
 /**
  * Représente une pièce d'armure.

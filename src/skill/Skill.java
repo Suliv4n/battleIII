@@ -4,7 +4,7 @@ import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Random;
 
-import personnage.Character;
+import characters.Character;
 
 /**
  * Cette classe représente une compétence.

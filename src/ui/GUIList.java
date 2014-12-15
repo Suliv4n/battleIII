@@ -15,8 +15,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
 
-import personnage.Character;
 
+import characters.Character;
 import ui.listController.ListController;
 import ui.listRenderer.CursorRenderer;
 import ui.listRenderer.ElementRenderer;

@@ -4,21 +4,21 @@ package game;
 import game.system.application.Application;
 
 import java.io.FileNotFoundException;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.xml.SlickXMLException;
 
 
-import data.Save;
 
-import personnage.Party;
-import personnage.Character;
+import characters.Character;
+import characters.Party;
+import data.Save;
 import ui.GUIList;
 import ui.listRenderer.ElementRenderer;
 
