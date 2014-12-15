@@ -15,14 +15,12 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-
 import personnage.Party;
 import personnage.Character;
 import skill.Skill;
 import ui.GUIList;
 import ui.listRenderer.ElementRenderer;
-
-import data.Format;
+import util.Format;
 
 
 

@@ -18,11 +18,9 @@ import bag.IItems;
 import bag.item.stuff.Weapon;
 import bag.item.stuff.Armor;
 import bag.item.stuff.Stuff;
-
-import data.Format;
-
 import personnage.Party;
 import personnage.Character;
+import util.Format;
 
 
 /**

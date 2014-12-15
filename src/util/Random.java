@@ -1,6 +1,7 @@
 package util;
 
 public class Random {
+	
 	/**
 	 * Génère un entier aléatoire entre les bornes incluses
 	 * passées en paramètre.

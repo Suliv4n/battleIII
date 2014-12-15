@@ -17,17 +17,14 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import bag.IItems;
-
-import data.Format;
-
 import animation.AnimationFactory;
 import animation.BattleAnimation;
 import animation.EffectsDisplayer;
 import audio.MusicManager;
-
 import personnage.*;
 import personnage.Character;
 import skill.Skill;
+import util.Format;
 
 
 
