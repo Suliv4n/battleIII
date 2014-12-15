@@ -145,7 +145,7 @@ public class TitleScreen extends Top{
 			if(curseurMenu == 1){
 				try {
 					listSaves.setData(Save.getAllSauvegardes());
-				} catch (FileNotFoundException | SlickXMLException e) {
+				} catch (FileNotFoundException | SlickException e) {
 					e.printStackTrace();
 				}
 			}

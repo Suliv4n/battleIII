@@ -625,8 +625,9 @@ public class Map
 	 * 
 	 * @return
 	 * 		Groupe d'ennemis générés ou null.
+	 * @throws SlickException 
 	 */
-	public EnnemisParty generateEnnemis()
+	public EnnemisParty generateEnnemis() throws SlickException
 	{
 		if(ennemis.size()>0)
 		{

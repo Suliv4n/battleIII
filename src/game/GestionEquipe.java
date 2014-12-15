@@ -58,7 +58,7 @@ public class GestionEquipe extends BasicGameState
 	private int action = -1;
 	
 	//Liste des skills;
-	private HashMap<Character,GUIList<Skill>> listesSkill;
+	private HashMap<Character,GUIList<Skill>> listSkills;
 	
 	//#endregion
 	
@@ -69,7 +69,7 @@ public class GestionEquipe extends BasicGameState
 			throws SlickException 
 	{
 		fleche = Application.application().getGame().getArrow(0);
-		listesSkill = new HashMap<Character,GUIList<Skill>>();
+		listSkills = new HashMap<Character,GUIList<Skill>>();
 		ElementRenderer renderer = new ElementRenderer() {
 			
 			@Override
@@ -88,7 +88,7 @@ public class GestionEquipe extends BasicGameState
 			liste.setAutomaticWidth(false);
 			liste.setData(p.getSkills());
 			liste.setElementRenderer(renderer);
-			listesSkill.put(p, liste);
+			listSkills.put(p, liste);
 		}
 	}
 
@@ -198,7 +198,7 @@ public class GestionEquipe extends BasicGameState
 				}
 				break;
 			case(COMPETENCES):
-				listesSkill.get(selection).update(in);
+				listSkills.get(selection).update(in);
 			
 				if (in.isKeyPressed(Input.KEY_ESCAPE))
 				{
@@ -323,13 +323,13 @@ public class GestionEquipe extends BasicGameState
 		g.drawImage(personnage.getAnimation(Party.SOUTH).getImage(2), 5,5);
 		
 		
-		listesSkill.get(selection).render(0, 40);
+		listSkills.get(selection).render(0, 40);
 
 		
 		//Eviter le nullPointerException
-		if(listesSkill.get(selection).size() !=0)
+		if(listSkills.get(selection).size() !=0)
 		{
-			Skill skill = listesSkill.get(selection).getObject();
+			Skill skill = listSkills.get(selection).getObject();
 			g.drawString("Nom : "+skill.getName(),205,50);
 			g.drawString("Description :\n"+Format.multiLines(skill.getDescription(),46),205,100);
 			g.drawString("Puissance : "+skill.getPower(), 205, 200);

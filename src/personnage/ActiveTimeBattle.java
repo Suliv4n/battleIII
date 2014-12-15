@@ -49,4 +49,14 @@ public class ActiveTimeBattle  extends TimerTask{
 	public int getCurrent(){
 		return current;
 	}
+	
+	/**
+	 * Met à jour l'avancement de l'ATB.
+	 * 
+	 * @param value 
+	 * 		Nouvel avancement (entre 0 et 100).
+	 */
+	public void setCurrent(int value){
+		current = value > 100 ? 100 : value < 0 ? 0 : value;
+	}
 }

@@ -4,10 +4,10 @@ package data;
 
 import game.dialogue.Dialogue;
 import game.dialogue.Line;
+import game.system.Configurations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 import map.Chest;
 import map.Command;
@@ -25,9 +25,7 @@ import org.newdawn.slick.util.xml.*;
 import bag.IItems;
 import bag.item.Item;
 import bag.item.stuff.Weapon;
-
 import audio.MusicManager;
-
 import personnage.Ennemy;
 import personnage.EnnemisParty;
 import personnage.NonPlayerCharacter;
@@ -47,6 +45,18 @@ public class DataManager
 	//Classe non instanciable
 	private DataManager(){}
 
+	private final static String DATA_FILE = Configurations.RESOURCES_FILE + "donnees/";
+	
+	private static ArrayList<XMLElement> getChildrenFromXML(String fileName, String children) throws SlickException{
+		XMLParser parser = new XMLParser();
+		XMLElement file = parser.parse(DATA_FILE+fileName);
+		XMLElementList list = file.getChildrenByName(children);
+		ArrayList<XMLElement> collection = new ArrayList<XMLElement>();
+		list.addAllTo(collection);
+		
+		return collection;
+	}
+	
 	/**
 	 * Retourne le skill dont l'id est passé en paramètre à partir
 	 * du fichier xml ressources/donnees/skills.xml
@@ -57,46 +67,33 @@ public class DataManager
 	 * 		L'id du skill à retourner
 	 * @return
 	 * 		Le skill dont l'id est passé en paramètre
+	 * @throws SlickException 
 	 */	
-	public static Skill loadSkill(String idSkill)
+	public static Skill loadSkill(String idSkill) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
-		{
-			XMLElement file = parser.parse("ressources/donnees/skills.xml");
-			XMLElementList listSkills = file.getChildrenByName("skill");
-			ArrayList<XMLElement> collectionSkills = new ArrayList<XMLElement>();
-			listSkills.addAllTo(collectionSkills);
+		ArrayList<XMLElement> collection = getChildrenFromXML("skills.xml", "skill");
 
-			for(XMLElement e : collectionSkills)
+		for(XMLElement e : collection)
+		{
+			if(e.getAttribute("id").equals(idSkill))
 			{
+				String name = e.getAttribute("nom","#ERR NO NAME");
+				String description = e.getAttribute("description","#ERR NO DESCRIPTION");
+				String target = e.getAttribute("cible","ennemi");
+				int power = e.getIntAttribute("puissance",0);
+				int precision = e.getIntAttribute("precision",0);
+				int consommation = e.getIntAttribute("consommation",0);
+				int levelMax = e.getIntAttribute("max",10);
+				int up = e.getIntAttribute("up",0);
+				String effects = e.getAttribute("effets","");
+				int type = e.getIntAttribute("type",0);
 
-				if(e.getAttribute("id").equals(idSkill))
-				{
-					String name = e.getAttribute("nom","#ERR NO NAME");
-					String description = e.getAttribute("description","#ERR NO DESCRIPTION");
-					String target = e.getAttribute("cible","ennemi");
-					int power = e.getIntAttribute("puissance",0);
-					int precision = e.getIntAttribute("precision",0);
-					int consommation = e.getIntAttribute("consommation",0);
-					int levelMax = e.getIntAttribute("max",10);
-					int up = e.getIntAttribute("up",0);
-					String effects = e.getAttribute("effets","");
-					int type = e.getIntAttribute("type",0);
+				Skill skill = new Skill(idSkill, name, description, power, precision, consommation, up, levelMax, effects, Skill.getCodeCible(target),type);
+				return skill;
 
-					Skill skill = new Skill(idSkill, name, description, power, precision, consommation, up, levelMax, effects, Skill.getCodeCible(target),type);
-					return skill;
-
-				}
 			}
-			return null;
 		}
-		catch (SlickException e)
-		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -113,64 +110,51 @@ public class DataManager
 	 * 		Vrai si la tiledMap doit être chargé, faux sinon.
 	 * @return
 	 * 		La map dont l'id est passé en paramètre.
+	 * @throws SlickException 
 	 */
-	public static Map loadMap(String idMap, double x, double y, boolean load)
+	public static Map loadMap(String idMap, double x, double y, boolean load) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
+		ArrayList<XMLElement> collectionMaps = getChildrenFromXML("maps.xml", "map");
+		for(XMLElement e : collectionMaps)
 		{
-			XMLElement file = parser.parse("ressources/donnees/maps.xml");
-			XMLElementList listMaps = file.getChildrenByName("map");
-			ArrayList<XMLElement> collectionMaps = new ArrayList<XMLElement>();
-			listMaps.addAllTo(collectionMaps);
-			
-			for(XMLElement e : collectionMaps)
-			{
-				if(e.getAttribute("id").equals(idMap))
-				{					
-					String battleBackground = e.getAttribute("terrain","default");
-					String music = e.getAttribute("musique",null);
-					String map = e.getAttribute("map");
-					String name = e.getAttribute("nom", "Inconnu");
-					boolean outDoor = e.getBooleanAttribute("exterieur", true);
-					ArrayList<String> ennemis = loadEnnemisParty(e.getChildrenByName("ennemis"));
-					ArrayList<Gate> gate = loadMapGates(e.getChildrenByName("portails"));
-					ArrayList<Chest> chests = loadChestsOfMap(e.getChildrenByName("coffres"), idMap);
-					ArrayList<Command> commands = loadMapCommands(e.getChildrenByName("commandes"));
+			if(e.getAttribute("id").equals(idMap))
+			{					
+				String battleBackground = e.getAttribute("terrain","default");
+				String music = e.getAttribute("musique",null);
+				String map = e.getAttribute("map");
+				String name = e.getAttribute("nom", "Inconnu");
+				boolean outDoor = e.getBooleanAttribute("exterieur", true);
+				ArrayList<String> ennemis = loadEnnemisParty(e.getChildrenByName("ennemis"));
+				ArrayList<Gate> gate = loadMapGates(e.getChildrenByName("portails"));
+				ArrayList<Chest> chests = loadChestsOfMap(e.getChildrenByName("coffres"), idMap);
+				ArrayList<Command> commands = loadMapCommands(e.getChildrenByName("commandes"));
+				
+				ArrayList<NonPlayerCharacter> NPCList = new ArrayList<NonPlayerCharacter>();
+				
+				if(e.getChildrenByName("pnjs").size()>0)
+				{
+					XMLElementList xmlNPC = e.getChildrenByName("pnjs").get(0).getChildrenByName("pnj");
 					
-					ArrayList<NonPlayerCharacter> NPCList = new ArrayList<NonPlayerCharacter>();
-					
-					if(e.getChildrenByName("pnjs").size()>0)
+					for(int i=0; i<xmlNPC.size(); i++)
 					{
-						XMLElementList xmlNPC = e.getChildrenByName("pnjs").get(0).getChildrenByName("pnj");
+						NonPlayerCharacter npc = loadNPC(xmlNPC.get(i).getAttribute("id"));
 						
-						for(int i=0; i<xmlNPC.size(); i++)
-						{
-							NonPlayerCharacter npc = loadNPC(xmlNPC.get(i).getAttribute("id"));
-							
-							int xNPC = xmlNPC.get(i).getIntAttribute("x",0);
-							int yNPC = xmlNPC.get(i).getIntAttribute("x",0);
-							int position = xmlNPC.get(i).getIntAttribute("position",0);
-							
-							
-							Dialogue dialogue = loadDialogue(xmlNPC.get(i).getAttribute("dialogue"));
-							
-							NPCList.add(npc.setX(xNPC).setY(yNPC).setPosition(position).setDialogue(dialogue));
-							
-						}
+						int xNPC = xmlNPC.get(i).getIntAttribute("x",0);
+						int yNPC = xmlNPC.get(i).getIntAttribute("x",0);
+						int position = xmlNPC.get(i).getIntAttribute("position",0);
+						
+						
+						Dialogue dialogue = loadDialogue(xmlNPC.get(i).getAttribute("dialogue"));
+						
+						NPCList.add(npc.setX(xNPC).setY(yNPC).setPosition(position).setDialogue(dialogue));
+						
 					}
-					
-					return new Map(idMap, name, map, battleBackground, x, y, music, outDoor, ennemis, gate, chests, NPCList, commands, load); 
 				}
+				
+				return new Map(idMap, name, map, battleBackground, x, y, music, outDoor, ennemis, gate, chests, NPCList, commands, load); 
 			}
-			return null;
 		}
-		catch (SlickException e)
-		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -225,10 +209,10 @@ public class DataManager
 	 * 		ID de la map dont les croffres appartiennent.
 	 * @return
 	 * 		Les coffres de la map.
-	 * @throws SlickXMLException
+	 * @throws SlickException 
 	 */
 	private static ArrayList<Chest> loadChestsOfMap(
-			XMLElementList chests, String idMap) throws SlickXMLException 
+			XMLElementList chests, String idMap) throws SlickException 
 	{
 		ArrayList<Chest> res = new ArrayList<Chest>();
 		
@@ -367,52 +351,41 @@ public class DataManager
 	 * @param id
 	 * 		Id de l'ennemi à charger.
 	 * @return
+	 * @throws SlickException 
 	 */
-	private static Ennemy loadEnnemy(String id)
+	private static Ennemy loadEnnemy(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		XMLElement file;
-		try 
-		{
-			file = parser.parse("ressources/donnees/ennemis.xml");		
-			XMLElementList listeEnnemis = file.getChildrenByName("ennemi");
-			ArrayList<XMLElement> collecEnnemis = new ArrayList<XMLElement>();
-			listeEnnemis.addAllTo(collecEnnemis);
-			
-			for(XMLElement element : collecEnnemis)
-			{
+		ArrayList<XMLElement> collectionEnnemis = getChildrenFromXML("maps.xml", "map");
 
-				if(element.getAttribute("id").equals(id))
-				{
-					String name = element.getAttribute("nom","noname");
-					String description = element.getAttribute("description","[no description]");
-					
-					int physicAttaque = element.getIntAttribute("atqphy",1);
-					int magicAttaque = element.getIntAttribute("atqmag",1);
-					int physicDefense = element.getIntAttribute("defphy",1);
-					int magicDefense = element.getIntAttribute("defmag",1);
-					int agility = element.getIntAttribute("dext",1);
-					int heal = element.getIntAttribute("soin",1);
-					int health = element.getIntAttribute("pv",1);
-					int experience = element.getIntAttribute("xp",1);
-					int money = element.getIntAttribute("argent",0);
-					
-					String imageValue = element.getAttribute("image");
-					
-					String[] dataImage = imageValue.split(";");
-					
-					System.out.println(dataImage[0]);
-					
-					Image image = new Image(dataImage[0], new Color(255,0,255)).getSubImage(Integer.parseInt(dataImage[1]), Integer.parseInt(dataImage[2]), Integer.parseInt(dataImage[3]), Integer.parseInt(dataImage[4]));
-					
-					Ennemy ennemy = new Ennemy(id, name,description,physicAttaque,magicAttaque,physicDefense,magicDefense,agility,heal,health,experience,money,image);
-					return ennemy;
-				}
-			}
-		} 
-		catch (SlickException e) 
+		for(XMLElement element : collectionEnnemis)
 		{
-			e.printStackTrace();
+
+			if(element.getAttribute("id").equals(id))
+			{
+				String name = element.getAttribute("nom","noname");
+				String description = element.getAttribute("description","[no description]");
+				
+				int physicAttaque = element.getIntAttribute("atqphy",1);
+				int magicAttaque = element.getIntAttribute("atqmag",1);
+				int physicDefense = element.getIntAttribute("defphy",1);
+				int magicDefense = element.getIntAttribute("defmag",1);
+				int agility = element.getIntAttribute("dext",1);
+				int heal = element.getIntAttribute("soin",1);
+				int health = element.getIntAttribute("pv",1);
+				int experience = element.getIntAttribute("xp",1);
+				int money = element.getIntAttribute("argent",0);
+				
+				String imageValue = element.getAttribute("image");
+				
+				String[] dataImage = imageValue.split(";");
+				
+				System.out.println(dataImage[0]);
+				
+				Image image = new Image(dataImage[0], new Color(255,0,255)).getSubImage(Integer.parseInt(dataImage[1]), Integer.parseInt(dataImage[2]), Integer.parseInt(dataImage[3]), Integer.parseInt(dataImage[4]));
+				
+				Ennemy ennemy = new Ennemy(id, name,description,physicAttaque,magicAttaque,physicDefense,magicDefense,agility,heal,health,experience,money,image);
+				return ennemy;
+			}
 		}
 		return null;
 	}
@@ -424,59 +397,45 @@ public class DataManager
 	 * 		Id de l'item à charger.
 	 * @return
 	 * 		L'item
+	 * @throws SlickException 
 	 */
-	public static Item loadItem(String id)
+	public static Item loadItem(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		XMLElement file;
+		ArrayList<XMLElement> collectionItems = getChildrenFromXML("objets.xml", "objet");
 		
-		try 
+		Item item = null;
+		
+		for(XMLElement element : collectionItems)
 		{
-			file = parser.parse("ressources/donnees/objets.xml");		
-			XMLElementList listItems = file.getChildrenByName("objet");
-			ArrayList<XMLElement> collectionItems = new ArrayList<XMLElement>();
-			listItems.addAllTo(collectionItems);
-			
-			Item item = null;
-			
-			for(XMLElement element : collectionItems)
-			{
 
-				if(element.getAttribute("id").equals(id))
+			if(element.getAttribute("id").equals(id))
+			{
+				String name = element.getAttribute("nom","noname");
+				String description = element.getAttribute("description","[no description]");
+				int idImage = element.getIntAttribute("icone",0);
+				boolean rarity = element.getBooleanAttribute("rare", false);
+				boolean battle = element.getBooleanAttribute("combat", false);
+				
+				ArrayList<String> effects = new ArrayList<String>();
+				
+				if(element.getChildrenByName("effets").size() > 0)
 				{
-					String name = element.getAttribute("nom","noname");
-					String description = element.getAttribute("description","[no description]");
-					int idImage = element.getIntAttribute("icone",0);
-					boolean rarity = element.getBooleanAttribute("rare", false);
-					boolean battle = element.getBooleanAttribute("combat", false);
+					XMLElementList effectLists = element.getChildrenByName("effets").get(0).getChildrenByName("effet");
+					ArrayList<XMLElement> collectionEffects = new ArrayList<XMLElement>();
+					effectLists.addAllTo(collectionEffects);
 					
-					ArrayList<String> effects = new ArrayList<String>();
-					
-					if(element.getChildrenByName("effets").size() > 0)
+					for(XMLElement e : collectionEffects)
 					{
-						XMLElementList effectLists = element.getChildrenByName("effets").get(0).getChildrenByName("effet");
-						ArrayList<XMLElement> collectionEffects = new ArrayList<XMLElement>();
-						effectLists.addAllTo(collectionEffects);
-						
-						for(XMLElement e : collectionEffects)
-						{
-							effects.add(e.getAttribute("item"));
-						}
+						effects.add(e.getAttribute("item"));
 					}
-					
-					
-					Image icon = getIcone( idImage, "ressources/images/objets.png");
-					item = new Item(id, icon, description, name, battle, rarity, effects);
 				}
+				
+				
+				Image icon = getIcone( idImage, "ressources/images/objets.png");
+				item = new Item(id, icon, description, name, battle, rarity, effects);
 			}
-			
-			return item;
-		} 
-		catch (SlickException e) 
-		{
-			e.printStackTrace();
 		}
-		return null;
+		return item;
 	}
 	
 	/**
@@ -485,37 +444,25 @@ public class DataManager
 	 * @param id
 	 * 		Id de l'équipe à charger.
 	 * @return
+	 * @throws SlickException 
 	 */
-	public static EnnemisParty loadEnnemisParty(String id)
+	public static EnnemisParty loadEnnemisParty(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
-		{
-			XMLElement file = parser.parse("ressources/donnees/groupes.xml");
-			XMLElementList listParties = file.getChildrenByName("groupe");
-			ArrayList<XMLElement> collectionParties = new ArrayList<XMLElement>();
-			listParties.addAllTo(collectionParties);
+		ArrayList<XMLElement> collectionParties = getChildrenFromXML("groupes.xml", "groupe");
 			
-			for(XMLElement e : collectionParties)
-			{
-				if(e.getAttribute("id").equals(id))
-				{					
-					int rarity = e.getIntAttribute("rarete",1);
-					String music = e.getAttribute("musique",null);
-
-					HashMap<Integer, Ennemy> ennemis = loadEnnemisFromParty(e.getChildrenByName("ennemi"));
-					
-					return new EnnemisParty(rarity, music, ennemis); 
-				}
-			}
-			return null;
-		}
-		catch (SlickException e)
+		for(XMLElement e : collectionParties)
 		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
+			if(e.getAttribute("id").equals(id))
+			{					
+				int rarity = e.getIntAttribute("rarete",1);
+				String music = e.getAttribute("musique",null);
+
+				HashMap<Integer, Ennemy> ennemis = loadEnnemisFromParty(e.getChildrenByName("ennemi"));
+				
+				return new EnnemisParty(rarity, music, ennemis); 
+			}
 		}
+		return null;
 	}
 
 	/**
@@ -524,10 +471,10 @@ public class DataManager
 	 * 		Noeud XML qui comporte les infos sur les ennemis.
 	 * @return
 	 * 		Une ArrayList d'ennemis.
-	 * @throws SlickXMLException
+	 * @throws SlickException 
 	 */
 	private static HashMap<Integer, Ennemy> loadEnnemisFromParty(
-			XMLElementList ennemis) throws SlickXMLException 
+			XMLElementList ennemis) throws SlickException 
 	{
 		HashMap<Integer, Ennemy> res = new HashMap<Integer, Ennemy>();
 		
@@ -556,42 +503,30 @@ public class DataManager
 	 * 		L'id du NPC à charger.
 	 * @return
 	 * 		Le NPC.
+	 * @throws SlickException 
 	 */
-	public static NonPlayerCharacter loadNPC(String id)
+	public static NonPlayerCharacter loadNPC(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
+		ArrayList<XMLElement> collectionNPC = getChildrenFromXML("pnj.xml", "pnj");
+		
+		for(XMLElement e : collectionNPC)
 		{
-			XMLElement file = parser.parse("ressources/donnees/pnj.xml");
-			XMLElementList listNPC = file.getChildrenByName("pnj");
-			ArrayList<XMLElement> collectionNPC = new ArrayList<XMLElement>();
-			listNPC.addAllTo(collectionNPC);
-			
-			for(XMLElement e : collectionNPC)
-			{
-				if(e.getAttribute("id").equals(id))
-				{					
-					String name = e.getAttribute("nom", "???");
-					String pathSpriteSheet = "ressources/spritesheet/"+e.getAttribute("spritesheet");
-					
-					SpriteSheet sprites = new SpriteSheet(pathSpriteSheet, 32,32,new Color(255,0,255));
-					Animation[] animations = new Animation[4];
-					for(int i = 0; i<4; i++)
-					{
-						animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
-					}
-					
-					return new NonPlayerCharacter(id, name, animations); 
+			if(e.getAttribute("id").equals(id))
+			{					
+				String name = e.getAttribute("nom", "???");
+				String pathSpriteSheet = "ressources/spritesheet/"+e.getAttribute("spritesheet");
+				
+				SpriteSheet sprites = new SpriteSheet(pathSpriteSheet, 32,32,new Color(255,0,255));
+				Animation[] animations = new Animation[4];
+				for(int i = 0; i<4; i++)
+				{
+					animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
 				}
+				
+				return new NonPlayerCharacter(id, name, animations); 
 			}
-			return null;
 		}
-		catch (SlickException e)
-		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 	
 	/**
@@ -601,41 +536,28 @@ public class DataManager
 	 * 		L'id du dialogue à charger.
 	 * @return
 	 * 		Le dialogue.
+	 * @throws SlickException 
 	 */
-	public static Dialogue loadDialogue(String id)
+	public static Dialogue loadDialogue(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
+		ArrayList<XMLElement> collectionDialogues = getChildrenFromXML("dialogues.xml", "dialogue");
+	
+		for(XMLElement e : collectionDialogues)
 		{
-			XMLElement file = parser.parse("ressources/donnees/dialogues.xml");
-			XMLElementList listDialogues = file.getChildrenByName("dialogue");
-			ArrayList<XMLElement> collectionDialogues = new ArrayList<XMLElement>();
-			listDialogues.addAllTo(collectionDialogues);
-			
-			
-			for(XMLElement e : collectionDialogues)
-			{
-				if(e.getAttribute("id").equals(id))
-				{					
-					ArrayList<Line> dialogueLines = new ArrayList<Line>();
-					XMLElementList xmlRep = e.getChildrenByName("replique");
-					for(int i=0; i<xmlRep.size(); i++)
-					{
-						String speaker = xmlRep.get(i).getAttribute("enonciateur", "???");
-						String line = xmlRep.get(i).getAttribute("replique");
-						dialogueLines.add(new Line(line, speaker));
-					}
-					return new Dialogue(dialogueLines); 
+			if(e.getAttribute("id").equals(id))
+			{					
+				ArrayList<Line> dialogueLines = new ArrayList<Line>();
+				XMLElementList xmlRep = e.getChildrenByName("replique");
+				for(int i=0; i<xmlRep.size(); i++)
+				{
+					String speaker = xmlRep.get(i).getAttribute("enonciateur", "???");
+					String line = xmlRep.get(i).getAttribute("replique");
+					dialogueLines.add(new Line(line, speaker));
 				}
+				return new Dialogue(dialogueLines); 
 			}
-			return null;
 		}
-		catch (SlickException e)
-		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 	
 	/**
@@ -644,49 +566,36 @@ public class DataManager
 	 * @param id
 	 * 		Id de l'arme à charger.
 	 * @return
-	 * 	L'arme
+	 * 	L'arme dont l'id est passé en paramètre.
+	 * @throws SlickException 
 	 */
-	public static Weapon loadWeapon(String id)
+	public static Weapon loadWeapon(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
+		ArrayList<XMLElement> collectionWeapons = getChildrenFromXML("armes.xml", "arme");
+					
+		for(XMLElement e : collectionWeapons)
 		{
-			XMLElement file = parser.parse("ressources/donnees/equipables.xml");
-			XMLElementList listWeapons = file.getChildrenByName("armes").get(0).getChildrenByName("arme");
-			ArrayList<XMLElement> collectionWeapons = new ArrayList<XMLElement>();
-			listWeapons.addAllTo(collectionWeapons);
-			
-			
-			for(XMLElement e : collectionWeapons)
-			{
-				if(e.getAttribute("id").equals(id))
-				{	
-					String name = e.getAttribute("nom", "no name");
-					int physicDamage = e.getIntAttribute("atqphy",0);
-					int magicDamage = e.getIntAttribute("atqmag",0);
-					int physicDefense = e.getIntAttribute("defphy",0);
-					int magicDefense = e.getIntAttribute("defmag",0);
-					int type = Weapon.codeWeapon(e.getAttribute("type","epee"));
-					
-					String pathImage = e.getAttribute("image", "ressources/images/equipables.png");
-					int idImage = e.getIntAttribute("idimg",0);
-				    
-					int x = idImage%15;
-				    int y = (int) (idImage/15);
-				    
-					
-					Image image = getIcone(idImage, pathImage);
-					return new Weapon(id, name, type, physicDamage, magicDamage, physicDefense, magicDefense, image);
-				}
+			if(e.getAttribute("id").equals(id))
+			{	
+				String name = e.getAttribute("nom", "no name");
+				int physicDamage = e.getIntAttribute("atqphy",0);
+				int magicDamage = e.getIntAttribute("atqmag",0);
+				int physicDefense = e.getIntAttribute("defphy",0);
+				int magicDefense = e.getIntAttribute("defmag",0);
+				int type = Weapon.codeWeapon(e.getAttribute("type","epee"));
+				
+				String pathImage = e.getAttribute("image", "ressources/images/equipables.png");
+				int idImage = e.getIntAttribute("idimg",0);
+			    
+				int x = idImage%15;
+			    int y = (int) (idImage/15);
+			    
+				
+				Image image = getIcone(idImage, pathImage);
+				return new Weapon(id, name, type, physicDamage, magicDamage, physicDefense, magicDefense, image);
 			}
-			return null;
 		}
-		catch (SlickException e)
-		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 	
 	/**
@@ -696,43 +605,31 @@ public class DataManager
 	 * 		L'id de l'image à charger.
 	 * @return
 	 * 		L'image
+	 * @throws SlickException 
 	 */
-	public static Image loadImage(String id)
+	public static Image loadImage(String id) throws SlickException
 	{
-		XMLParser parser = new XMLParser();
-		try 
+		ArrayList<XMLElement> collectionImages = getChildrenFromXML("images.xml", "image");
+		
+		for(XMLElement e : collectionImages)
 		{
-			XMLElement file = parser.parse("ressources/donnees/images.xml");
-			XMLElementList listImages = file.getChildrenByName("image");
-			ArrayList<XMLElement> collectionImages = new ArrayList<XMLElement>();
-			listImages.addAllTo(collectionImages);
-			
-			for(XMLElement e : collectionImages)
-			{
-				if(e.getAttribute("id").equals(id))
-				{	
-					int x = e.getIntAttribute("x",0);
-					int y = e.getIntAttribute("y",0);
-					String path = e.getAttribute("file", null);
-					if(path == null){
-						return null;
-					}
-					Image image = new Image(path, new Color(255,0,255));
-					int width = e.getIntAttribute("width", image.getWidth());
-					int height = e.getIntAttribute("height", image.getHeight());
-					
-					return image.getSubImage(x, y, width, height);
-					
+			if(e.getAttribute("id").equals(id))
+			{	
+				int x = e.getIntAttribute("x",0);
+				int y = e.getIntAttribute("y",0);
+				String path = e.getAttribute("file", null);
+				if(path == null){
+					return null;
 				}
+				Image image = new Image(path, new Color(255,0,255));
+				int width = e.getIntAttribute("width", image.getWidth());
+				int height = e.getIntAttribute("height", image.getHeight());
+				
+				return image.getSubImage(x, y, width, height);
+				
 			}
-			return null;
 		}
-		catch (SlickException e)
-		{
-			System.out.println("Impossible de charger le fichier xml");
-			e.printStackTrace();
-			return null;
-		}
+		return null;
 	}
 	
 	

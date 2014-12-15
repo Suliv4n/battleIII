@@ -5,8 +5,10 @@ import game.system.application.Application;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.TextField;
+
 
 
 import util.Regex;
@@ -134,8 +136,9 @@ public class Console {
 	
 	/**
 	 * Valide le texte entré dans la console.
+	 * @throws SlickException 
 	 */
-	public void validate(){
+	public void validate() throws SlickException{
 		//print(renderer.clearTextField());
 		try {
 			print(new Command(renderer.clearTextField()).execute());

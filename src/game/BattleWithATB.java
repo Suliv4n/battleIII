@@ -29,6 +29,7 @@ import ui.Panel;
 import ui.TypeBarre;
 import ui.listRenderer.CursorRenderer;
 import ui.listRenderer.ElementRenderer;
+import util.Random;
 
 public class BattleWithATB extends Top
 {
@@ -128,10 +129,10 @@ public class BattleWithATB extends Top
 		
 		actions = new HashMap<Character,GUIList<String>>();
 		for(Character p : Application.application().getGame().getParty()){
-			p.getActiveTimeBattleManager().launch();
+			p.getActiveTimeBattleManager().launch(Random.randInt(20, 60));
 			GUIList<String> a = new GUIList<String>(3, Config.couleur1, Config.couleur2, true);
 			a.setHeight(99);
-			a.setData(new String[]{"Attaquer","Compétences","nrgreon"});
+			a.setData(new String[]{"Attaquer","Compétences"});
 			actions.put(p,a);
 		}
 	}
@@ -196,6 +197,22 @@ public class BattleWithATB extends Top
 			Character last = queueATB.get(queueATB.size() - 1);
 			queueATB.remove(queueATB.size() - 1);
 			queueATB.add(0,last);
-		}	
+		}
+	}
+	
+	@Override
+	public void onValidate(){
+		if(queueATB.size() > 0 && queueATB.get(0) instanceof Character){
+			
+		}
+	}
+	
+	/**
+	 * A la sortie du combat.
+	 */
+	public void onExit(){
+		for(Character c : Application.application().getGame().getParty()){
+			c.resetActiveTimeBattleManager();
+		}
 	}
 }

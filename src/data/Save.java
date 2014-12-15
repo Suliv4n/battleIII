@@ -171,9 +171,9 @@ public class Save
 	 * @param save
 	 * @return
 	 * @throws FileNotFoundException 
-	 * @throws SlickXMLException 
+	 * @throws SlickException 
 	 */
-	private static Party gerPartyFromSave(File save) throws SlickXMLException, FileNotFoundException{
+	private static Party gerPartyFromSave(File save) throws FileNotFoundException, SlickException{
 		
 		XMLParser parser = new XMLParser();
 		XMLElement root = parser.parse("equipe", new FileInputStream(save));
@@ -231,9 +231,9 @@ public class Save
 	 * 
 	 * @return toutes les équipes sauvegardées.
 	 * @throws FileNotFoundException 
-	 * @throws SlickXMLException 
+	 * @throws SlickException 
 	 */
-	public static ArrayList<Party> getAllSauvegardes() throws SlickXMLException, FileNotFoundException{
+	public static ArrayList<Party> getAllSauvegardes() throws FileNotFoundException, SlickException{
 		ArrayList<Party> res = new ArrayList<Party>();
 		
 		for(int i = 1; i<100; i++){

@@ -49,5 +49,9 @@ public class Configurations {
 	 * Sinon faux. 
 	 */
 	public static final boolean DEBUG = true;
+	/**
+	 * Dossier contenant les ressouces du jeu.
+	 */
+	public static final String RESOURCES_FILE = "ressources/";
 	
 }

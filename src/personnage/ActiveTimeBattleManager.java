@@ -45,8 +45,12 @@ public class ActiveTimeBattleManager {
 	
 	/**
 	 * Démarre l'atb.
+	 * 
+	 * @param start
+	 * 		Avancement atb au démarrage.
 	 */
-	public void launch(){
+	public void launch(int start){
+		onTick.setCurrent(start);
 		atb.schedule(onTick,0,this.speed);
 	}
 	

@@ -176,6 +176,13 @@ public class Game extends StateBasedGame{
 		Application.application().getGame().enterState(Config.BATTLE_ATB);
 	}
 	
+	public void exitBattle(){
+		if(getCurrentState() == combat || getCurrentState() == battleWithATB){
+			battleWithATB.onExit();
+			enterState(exploration.getID());
+		}
+	}
+	
 	/**
 	 * Retourne l'équipe de personnages du jeu en cours.
 	 * 
@@ -190,9 +197,11 @@ public class Game extends StateBasedGame{
 	 * 
 	 * @param party
 	 * 		Nouvelle équipe de joueur.
+	 * @throws SlickException 
 	 */
-	public void setParty(Party party) {
+	public void setParty(Party party) throws SlickException {
 		this.party = party;
+		gestionEquipe.init(Application.application().getContainer(), this);
 	}
 	
 	/**

@@ -5,10 +5,12 @@ import game.Config;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import map.Map;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 import bag.Bag;
 import bag.IItems;
@@ -66,8 +68,9 @@ public class Party implements Iterable<Character>
 	 * 
 	 * @param slots
 	 * 		Le nombre de personnages autorisé dans l'équipe
+	 * @throws SlickException 
 	 */
-	public Party(int slots)
+	public Party(int slots) throws SlickException
 	{
 		party = new Character[slots];
 		this.slots = slots;

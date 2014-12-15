@@ -99,7 +99,7 @@ public abstract class Character implements IBattle
 		
 		skills = new ArrayList<Skill>();
 		targets = new ArrayList<IBattle>();
-		activeTimeBattleManager = new ActiveTimeBattleManager(20);
+		activeTimeBattleManager = new ActiveTimeBattleManager(100);
 	}
 	
 
@@ -997,5 +997,13 @@ public abstract class Character implements IBattle
 	 */
 	public void kill() {
 		healthPoints = 0;
+	}
+
+	/**
+	 * Recréé un ATB Manager et annule l'ancien.
+	 */
+	public void resetActiveTimeBattleManager() {
+		activeTimeBattleManager.stop();
+		activeTimeBattleManager = new ActiveTimeBattleManager(100);
 	}
 }

@@ -8,10 +8,10 @@ import game.system.application.Application;
 import java.awt.Dialog;
 import java.util.ArrayList;
 
+import org.newdawn.slick.SlickException;
+
 import personnage.EnnemisParty;
-
 import data.DataManager;
-
 import util.Regex;
 
 public class Command {
@@ -87,8 +87,9 @@ public class Command {
 	
 	/**
 	 * Execute la commande
+	 * @throws SlickException 
 	 */
-	public String execute(){
+	public String execute() throws SlickException{
 		if(command.equalsIgnoreCase("dialogue")){
 			return createDialogue();
 		}
@@ -101,12 +102,15 @@ public class Command {
 		else if(command.equalsIgnoreCase("battle")){
 			return battle();
 		}
+		else if(command.equalsIgnoreCase("exitbattle")){
+			return exitBattle();
+		}
 		return "Command does not exist";
 	}
 	
 	
 	//---------------------------------------------------------
-	private String createDialogue(){
+	private String createDialogue() throws SlickException{
 		if(parameters.length == 0 || parameters.length > 1){
 			return "dialogue <id>";
 		}
@@ -155,7 +159,7 @@ public class Command {
 	
 	private String tileId(){
 		if(parameters.length != 3){
-			return "toggletile <x> <y> <z>";
+			return "tileid <x> <y> <z>";
 		}
 		else{
 			if(Application.application().getGame().getCurrentStateID() == Config.EXPLORATION){
@@ -179,7 +183,7 @@ public class Command {
 		}
 	}
 	
-	private String battle(){
+	private String battle() throws SlickException{
 		if(parameters.length != 1){
 			return "battle <id>";
 		}
@@ -198,4 +202,21 @@ public class Command {
 			}
 		}
 	}
+	
+	private String exitBattle(){
+		if(parameters.length != 0){
+			return "exitbattle (no parameter)";
+		}
+		else{
+			if(Application.application().getGame().getCurrentStateID() == Config.BATTLE_ATB
+					|| Application.application().getGame().getCurrentStateID() == Config.COMBAT){
+				Application.application().getGame().exitBattle();
+				return "Battle exited !";
+			}
+			else{
+				return "State should be combat or battle with ATB.";
+			}
+		}
+	}
+	
 }
