@@ -3,6 +3,8 @@ package game.battle.actions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.newdawn.slick.SlickException;
+
 import animation.AnimationFactory;
 import animation.BattleAnimation;
 import game.battle.IBattle;
@@ -19,11 +21,24 @@ public class SkillAction extends Action{
 
 	@Override
 	public BattleAnimation getBattleAnimation() {
-		return AnimationFactory.createAnimation("bouleDeFeu");
+		if(currentAnimation == null){
+			currentAnimation = AnimationFactory.createAnimation("bouleDeFeu");
+		}
+		return currentAnimation;
 	}
 
 	@Override
 	public HashMap<IBattle, ArrayList<String>> getEffectsAction() {
 		return null;
+	}
+	
+	@Override
+	public boolean render() throws SlickException{
+		return getBattleAnimation().render(caster, targets);
+	}
+
+	@Override
+	public void update() {
+		
 	}
 }

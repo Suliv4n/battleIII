@@ -2,6 +2,7 @@ package characters;
 
 import game.Combat;
 import game.battle.IBattle;
+import game.battle.actions.Action;
 import game.battle.atb.ActiveTimeBattleManager;
 
 import java.lang.management.GarbageCollectorMXBean;
@@ -40,7 +41,7 @@ public class Ennemy implements IBattle
 	private int experience;
 	private int money;
 	
-	private Object action;
+	private Action action;
 	private ArrayList<IBattle> targets;
 	
 	//Objets dropés
@@ -141,7 +142,7 @@ public class Ennemy implements IBattle
 		//TODO : stratégie ennemi
 		Object action = "Attaquer";
 		targets.add((IBattle) combat.getEquipe().getRandomCharacter());
-		setAction(action);
+		setAction(null);
 	}
 	
 	/**
@@ -237,7 +238,7 @@ public class Ennemy implements IBattle
 	 * 
 	 * @return l'action préparée par l'ennemi.
 	 */
-	public Object getAction() 
+	public Action getAction() 
 	{
 		return action;
 	}
@@ -373,7 +374,7 @@ public class Ennemy implements IBattle
 	 * 		L'action préparée.
 	 */
 	@Override
-	public void setAction(Object action) 
+	public void setAction(Action action) 
 	{
 		this.action = action;
 	}

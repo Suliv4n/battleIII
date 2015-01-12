@@ -1,6 +1,7 @@
 package game.battle;
 
 import game.Combat;
+import game.battle.actions.Action;
 import game.battle.atb.ActiveTimeBattleManager;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public interface IBattle
 	public ArrayList<IBattle> getTargets();
 	public void chooseNextTarget(Combat combat);
 	
-	public Object getAction();
-	public void setAction(Object action);
+	public Action getAction();
+	public void setAction(Action action);
 	public void cancelAction();
 }

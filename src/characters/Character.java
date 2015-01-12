@@ -7,10 +7,12 @@ package characters;
 import game.Combat;
 import game.Config;
 import game.battle.IBattle;
+import game.battle.actions.Action;
 import game.battle.atb.ActiveTimeBattleManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -66,7 +68,7 @@ public abstract class Character implements IBattle
 	protected Animation animations[];
 	
 	//Action en cours => state combat
-	private Object action;
+	private Action action;
 	private ArrayList<IBattle> targets;
 	private ActiveTimeBattleManager activeTimeBattleManager;
 	
@@ -623,7 +625,7 @@ public abstract class Character implements IBattle
 	 * Prépare l'action du personnage
 	 * @param action
 	 */
-	public void setAction(Object action)
+	public void setAction(Action action)
 	{
 		this.action = action;
 	}
@@ -656,7 +658,7 @@ public abstract class Character implements IBattle
 	 * @return
 	 * 	Retourne l'action prépapré.
 	 */
-	public Object getAction() 
+	public Action getAction() 
 	{
 		return action;
 	}
@@ -1004,5 +1006,10 @@ public abstract class Character implements IBattle
 	public void resetActiveTimeBattleManager() {
 		activeTimeBattleManager.stop();
 		activeTimeBattleManager = new ActiveTimeBattleManager(100);
+	}
+
+
+	public void launchActiveTime() {
+		activeTimeBattleManager.launch(util.Random.randInt(20,60));
 	}
 }

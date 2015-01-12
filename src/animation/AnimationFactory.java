@@ -1,16 +1,16 @@
 package animation;
 
-import game.Combat;
+import game.BattleWithATB;
 import game.battle.IBattle;
+import game.system.application.Application;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Triangulator;
+import org.newdawn.slick.geom.Point;
 
 import characters.Character;
 import bag.item.stuff.Weapon;
@@ -47,10 +47,11 @@ public class AnimationFactory
 			{
 				
 				@Override
-				public boolean playFrame(Graphics g, Point coordonneesLanceur,
-						ArrayList<Point> coordonneesCibles, IBattle lanceur,
-						ArrayList<IBattle> cibles, Combat combat, int frame) throws SlickException 
+				public boolean render(IBattle caster, ArrayList<IBattle> targets, int frame) throws SlickException 
 				{
+					BattleWithATB battle = Application.application().getGame().getCurrentBattle();
+					ArrayList<Point> targetsCoords = battle.getCoords(targets);
+					
 					if(frame == 0)
 					{
 						ResourcesAnimitationManager.addImage("poing", new Image("ressources/images/skill/skill1.png", new Color(255,0,255)).getSubImage(18, 0, 23, 23));
@@ -58,15 +59,15 @@ public class AnimationFactory
 					}
 					if(frame >= 15)
 					{
-						Point p = coordonneesCibles.get(0);
-						ResourcesAnimitationManager.getImage("poing").drawCentered(p.x, p.y);
+						Point p = targetsCoords.get(0);
+						ResourcesAnimitationManager.getImage("poing").drawCentered(p.getX(), p.getY());
 					}
 					if(frame <= 30)
 					{
 						Weapon arme = null;
-						if(lanceur instanceof Character)
+						if(caster instanceof Character)
 						{
-							arme = ((Character)lanceur).getMainWeapon();
+							arme = ((Character)caster).getMainWeapon();
 						}
 						
 						if(arme != null)
@@ -80,8 +81,8 @@ public class AnimationFactory
 						}
 						else
 						{
-							Point p = coordonneesCibles.get(0);
-							ResourcesAnimitationManager.getImage("etoile").drawCentered(p.x, p.y);
+							Point p = targetsCoords.get(0);
+							ResourcesAnimitationManager.getImage("etoile").drawCentered(p.getX(), p.getY());
 						}
 					}
 					
@@ -100,15 +101,15 @@ public class AnimationFactory
 			renderer = new IAnimation() {
 				
 				@Override
-				public boolean playFrame(Graphics g, Point coordonneesLanceur,
-						ArrayList<Point> coordonneesCibles, IBattle lanceur,
-						ArrayList<IBattle> cibles, Combat combat, int frame)
-						throws SlickException 
-						
+				public boolean render(IBattle caster, ArrayList<IBattle> targets, int frame) throws SlickException		
 				{
+					BattleWithATB battle = Application.application().getGame().getCurrentBattle();
+					ArrayList<Point> targetsCoords = battle.getCoords(targets);
+					Point casterCoords = battle.getCoords(caster);
+					
 					// déplacements totaux.
-					double dx = coordonneesCibles.get(0).x - coordonneesLanceur.x;
-					double dy = coordonneesCibles.get(0).y - coordonneesLanceur.y;
+					double dx = targetsCoords.get(0).getX() - casterCoords.getX();
+					double dy = targetsCoords.get(0).getY() - casterCoords.getY();
 					double angle = Math.toDegrees(Math.atan(dy/dx));
 					if(frame == 0)
 					{
@@ -122,19 +123,19 @@ public class AnimationFactory
 					}
 					if(frame < 10)
 					{
-						ResourcesAnimitationManager.getImage("bouleDeFeu1").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y , 2f);
+						ResourcesAnimitationManager.getImage("bouleDeFeu1").draw((float)(dx/30) * frame + casterCoords.getX(),(float)(dy/30) * frame + casterCoords.getY(), 2f);
 					}
 					else if (frame < 20)
 					{
-						ResourcesAnimitationManager.getImage("bouleDeFeu2").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y, 2f);
+						ResourcesAnimitationManager.getImage("bouleDeFeu2").draw((float)(dx/30) * frame + casterCoords.getX(),(float)(dy/30) * frame + casterCoords.getY(), 2f);
 					}
 					else if(frame < 30)
 					{
-						ResourcesAnimitationManager.getImage("bouleDeFeu3").draw((float)(dx/30) * frame + coordonneesLanceur.x,(float)(dy/30) * frame + coordonneesLanceur.y, 2f);
+						ResourcesAnimitationManager.getImage("bouleDeFeu3").draw((float)(dx/30) * frame + casterCoords.getX(),(float)(dy/30) * frame + casterCoords.getY(), 2f);
 					}
 					else
 					{
-						ResourcesAnimitationManager.getImage("explosion").draw(coordonneesCibles.get(0).x, coordonneesCibles.get(0).y);
+						ResourcesAnimitationManager.getImage("explosion").draw(targetsCoords.get(0).getX(), targetsCoords.get(0).getY());
 					}
 					
 					return frame == 40;
@@ -151,10 +152,11 @@ public class AnimationFactory
 			renderer = new IAnimation() {
 				
 				@Override
-				public boolean playFrame(Graphics g, Point coordonneesLanceur,
-						ArrayList<Point> coordonneesCibles, IBattle lanceur,
-						ArrayList<IBattle> cibles, Combat combat, int frame)
-						throws SlickException {
+				public boolean render(IBattle caster, ArrayList<IBattle> targets, int frame) throws SlickException {
+					BattleWithATB battle = Application.application().getGame().getCurrentBattle();
+					Graphics g = Application.application().getGraphics();
+					Point casterCoords = battle.getCoords(caster);
+					
 					if(frame == 0)
 					{
 						ResourcesAnimitationManager.addImage("livre1", new Image("ressources/images/skill/skill1.png", new Color(255,0,255)).getSubImage(0, 25, 27, 25));
@@ -165,15 +167,15 @@ public class AnimationFactory
 					{
 						if(frame % 30 < 10)
 						{
-							g.drawImage(ResourcesAnimitationManager.getImage("livre1"), (int)coordonneesLanceur.getX(), (int)coordonneesLanceur.getY());
+							g.drawImage(ResourcesAnimitationManager.getImage("livre1"), (int)casterCoords.getX(), (int)casterCoords.getY());
 						}
 						else if(frame%30 < 20)
 						{
-							g.drawImage(ResourcesAnimitationManager.getImage("livre2"), (int)coordonneesLanceur.getX(), (int)coordonneesLanceur.getY());
+							g.drawImage(ResourcesAnimitationManager.getImage("livre2"), (int)casterCoords.getX(), (int)casterCoords.getY());
 						}
 						else
 						{
-							g.drawImage(ResourcesAnimitationManager.getImage("livre3"), (int)coordonneesLanceur.getX(), (int)coordonneesLanceur.getY());
+							g.drawImage(ResourcesAnimitationManager.getImage("livre3"), (int)casterCoords.getX(), (int)casterCoords.getY());
 						}
 					}
 					return frame == 90;
@@ -186,12 +188,14 @@ public class AnimationFactory
 			renderer = new IAnimation() {
 
 				@Override
-				public boolean playFrame(Graphics g, Point coordonneesLanceur,
-						ArrayList<Point> coordonneesCibles, IBattle lanceur,
-						ArrayList<IBattle> cibles, Combat combat, int frame)
-						throws SlickException {
+				public boolean render(IBattle caster, ArrayList<IBattle> targets, int frame) throws SlickException {
 					
-					Point cible = coordonneesCibles.get(0);
+					BattleWithATB battle = Application.application().getGame().getCurrentBattle();
+					Graphics g = Application.application().getGraphics();
+					Point casterCoords = battle.getCoords(caster);
+					ArrayList<Point> targetsCoords = battle.getCoords(targets);
+					
+					Point cible = targetsCoords.get(0);
 					
 					if(frame == 0)
 					{
@@ -205,29 +209,28 @@ public class AnimationFactory
 					}
 					else if(frame < 10)
 					{
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile1"), cible.x - 16, cible.y - 16);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile2"), cible.x - 10, cible.y + 8);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.x + 5, cible.y - 5);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.x + 16, cible.y +16);	
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile1"), cible.getX() - 16, cible.getY() - 16);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile2"), cible.getX() - 10, cible.getY() + 8);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.getX() + 5, cible.getY() - 5);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.getX() + 16, cible.getY() +16);	
 					}
 					else if(frame < 20)
 					{
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile1"), cible.x + 15, cible.y - 4);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile2"), cible.x - 6, cible.y - 9);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.x + 5, cible.y + 15);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.x + 16, cible.y - 8);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile1"), cible.getX() + 15, cible.getY() - 4);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile2"), cible.getX() - 6, cible.getY() - 9);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.getX() + 5, cible.getY() + 15);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.getX() + 16, cible.getY() - 8);
 					}
 					else if(frame < 30)
 					{
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile1"), cible.x  - 10, cible.y + 14);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile2"), cible.x - 6, cible.y + 9);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.x - 5, cible.y - 15);
-						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.x - 16, cible.y + 8);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile1"), cible.getX()  - 10, cible.getY() + 14);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile2"), cible.getX() - 6, cible.getY() + 9);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.getX() - 5, cible.getY() - 15);
+						g.drawImage(ResourcesAnimitationManager.getImage("etoile3"), cible.getX() - 16, cible.getY() + 8);
 					}
 					
 					return frame == 30;
 				}
-				
 			};
 		}
 		

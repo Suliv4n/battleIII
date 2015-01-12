@@ -235,6 +235,15 @@ public class Game extends StateBasedGame{
 	}
 	
 	/**
+	 * Retourne le combat en cours.
+	 * 
+	 * @return le combat en cours.
+	 */
+	public BattleWithATB getCurrentBattle(){
+		return battleWithATB;
+	}
+	
+	/**
 	 * Entre dans la state Input, pour la saisie par 
 	 * le joueur.
 	 * 
@@ -251,7 +260,7 @@ public class Game extends StateBasedGame{
 	 * @param parameters
 	 * 		Paramètres pour les opérations après la saisie.
 	 */
-	public static void input(Image icon,String message, String defaut, int out, InputAction operations, HashMap<String, Object> parameters)
+	public void input(Image icon,String message, String defaut, int out, InputAction operations, HashMap<String, Object> parameters)
 	{
 		TextInput.init(icon, message, defaut, out, operations, parameters);
 		Application.application().getGame().enterState(Config.SAISIE);

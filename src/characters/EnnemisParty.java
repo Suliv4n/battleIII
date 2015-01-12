@@ -1,5 +1,7 @@
 package characters;
 
+import game.battle.IBattle;
+
 import java.util.HashMap;
 
 /**
@@ -112,5 +114,19 @@ public class EnnemisParty
 				total++;
 		}
 		return total;
+	}
+
+	/**
+	 * Retourne le premier ennemi valide pour être ciblé.
+	 * 
+	 * @return le premier ennemi valide.
+	 */
+	public Ennemy getFirstValidTarget() {
+		for(int e : ennemis.keySet()){
+			if(isValidTarget(e)){
+				return ennemis.get(e);
+			}
+		}
+		return null;
 	}
 }

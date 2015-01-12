@@ -370,7 +370,7 @@ public class Combat extends BasicGameState
 			boolean b = false;
 			if(effectsDisplayerEnCours == null)
 			{
-				b = animEnCours.playFrame(g, coordonneesLanceur, coordonneesCibles, lanceur, cibles, this);
+				//b = animEnCours.playFrame(g, coordonneesLanceur, coordonneesCibles, lanceur, cibles, this);
 				if(b)
 				{
 
@@ -924,7 +924,7 @@ public class Combat extends BasicGameState
 		{
 			if(curseurAction.get(selectionPersonnage) == 0)
 			{
-				selectionPersonnage.setAction("Attaquer");
+				//selectionPersonnage.setAction("Attaquer");
 				initCurseurCible();
 			}
 			else if(curseurAction.get(selectionPersonnage) == 1)
@@ -1175,7 +1175,7 @@ public class Combat extends BasicGameState
 				if(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)).getErrorCastMessage(selectionPersonnage) == null)
 				{
 					showSkill = false;
-					selectionPersonnage.setAction(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)));
+					// selectionPersonnage.setAction(selectionPersonnage.getSkills().get(curseursAbsolusSkills.get(selectionPersonnage)));
 					initCurseurCible();
 				}
 				else
@@ -1476,7 +1476,7 @@ public class Combat extends BasicGameState
 		
 		else if(action instanceof Skill)
 		{
-			return ((Skill)action).getCible();
+			return ((Skill)action).getTargets();
 		}
 		
 		return Skill.ENNEMY;

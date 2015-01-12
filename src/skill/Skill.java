@@ -261,7 +261,7 @@ public class Skill
 	 * 
 	 * @return ciblage du Skill.
 	 */
-	public int getCible()
+	public int getTargets()
 	{
 		return targets;
 	}

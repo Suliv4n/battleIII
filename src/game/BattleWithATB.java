@@ -1,16 +1,16 @@
 package game;
 
 import game.battle.IBattle;
+import game.battle.actions.Action;
+import game.battle.actions.SkillAction;
+import game.dialogue.Select;
 import game.settings.Settings;
 import game.system.Configurations;
 import game.system.application.Application;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-
-
-
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -26,6 +26,14 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 
+
+
+
+
+
+
+
+import animation.BattleAnimation;
 import characters.Character;
 import characters.EnnemisParty;
 import characters.Party;
@@ -44,7 +52,10 @@ public class BattleWithATB extends Top
 	private Image background;
 	private EnnemisParty ennemis;
 	private ArrayList<Character> queueATB;
-	private boolean showSkill = false;
+	private boolean showSkills = false;
+	private Action currentAction;
+	private int typeSelectTargets = -1; //Skill.ALL_ENNEMIES, ...
+	private ArrayList<IBattle> cursorsTargets;
 	
 	private GUIList<Character> equipeList;
 	private Panel topPanel;
@@ -63,6 +74,8 @@ public class BattleWithATB extends Top
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException 
 	{
+		cursorsTargets = new ArrayList<IBattle>();
+		
 		equipeList = new GUIList<Character>(3, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, false);
 		equipeList.setWidth(640);
 		equipeList.setHeight(100);
@@ -90,13 +103,13 @@ public class BattleWithATB extends Top
 			@Override
 			public void render(int x, int y) {
 				Graphics g = Application.application().getGraphics();
-				g.setColor(Config.couleur2);
+				g.setColor(Settings.BORDER_COLOR);
 				g.drawRect(x, y, 580, 25);
 			}
 		} );
 		equipeList.setCursorMarges(-1, 0);
-		topPanel = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
-		bottomPanel = new Panel(640, 100, 2, Config.couleur1, Config.couleur2);
+		topPanel = new Panel(640, 100, 2, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR);
+		bottomPanel = new Panel(640, 100, 2, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR);
 		queueATB = new ArrayList<Character>();
 	}
 	
@@ -140,13 +153,21 @@ public class BattleWithATB extends Top
 		actions = new HashMap<Character,GUIList<String>>();
 		skillsLists = new HashMap<Character,GUIList<Skill>>();
 		for(Character p : Application.application().getGame().getParty()){
-			p.getActiveTimeBattleManager().launch(Random.randInt(20, 60));
+			p.launchActiveTime();
 			GUIList<String> a = new GUIList<String>(4, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
 			a.setHeight(99);
 			a.setData(new String[]{"Attaquer","Compétences"});
 			GUIList<Skill> s = new GUIList<Skill>(4, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
 			s.setHeight(99);
 			s.setData(p.getSkills());
+			s.setElementRenderer(new ElementRenderer() {
+				
+				@Override
+				public void render(int x, int y, Object element, int index) {
+					Skill skill = (Skill) element;
+					Application.application().drawString(skill.getName(), x, y);
+				}
+			});
 			actions.put(p, a);
 			skillsLists.put(p, s);
 		}
@@ -163,15 +184,42 @@ public class BattleWithATB extends Top
 		}
 		bottomPanel.render(0, 380);
 		equipeList.render(5, 385);
-		if(queueATB.size() != 0 && !showSkill){
+		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
 			actions.get(queueATB.get(0)).render(0, 0);
 		}
-		else if(showSkill){
+		else if(showSkills){
 			skillsLists.get(queueATB.get(0)).render(0, 0);
+		}
+		else if(typeSelectTargets != -1){
+			if(currentAction == null){
+				drawTargetsCursors();
+			}
+			else{
+				if(currentAction.render()){
+					currentAction = null;
+					queueATB.get(0).resetActiveTimeBattleManager();
+					queueATB.get(0).launchActiveTime();
+					typeSelectTargets = -1;
+					showSkills = false;
+					queueATB.remove(0);
+				}
+			}
 		}
 		super.render(container, game, g);
 	}
 	
+
+	private void drawTargetsCursors() {
+		for(IBattle t : cursorsTargets){
+			if(t.isAlive()){
+				Point p = coords.get(t);
+				Graphics g = Application.application().getGraphics();
+				g.drawImage(Application.application().getGame().getArrow(0), 
+						p.getX() - t.getImageForBattle().getWidth(), 
+						p.getY());
+			}
+		}
+	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
@@ -185,17 +233,21 @@ public class BattleWithATB extends Top
 			}
 		}
 		//File d'attente ATB
-		if(queueATB.size() != 0 && !showSkill){
+		if(queueATB.size() != 0 && !showSkills){
 			actions.get(queueATB.get(0)).update(in);
 			equipeList.select(queueATB.get(0));
 			equipeList.setRenderCursor(true);
 		}
-		else if(showSkill){
+		else if(showSkills){
 			skillsLists.get(queueATB.get(0)).update(in);
+		}
+		else if(typeSelectTargets != -1){
+			
 		}
 		
 		super.update(container, game, delta);
 	}
+
 
 	@Override
 	public int getID() 
@@ -223,11 +275,57 @@ public class BattleWithATB extends Top
 	
 	@Override
 	public void onValidate(){
-		if(queueATB.size() > 0){
+		if(queueATB.size() > 0 && !showSkills && typeSelectTargets == -1){
 			if(actions.get(queueATB.get(0)).getSelectedIndex() == 1){
-				showSkill = true;
+				showSkills = true;
 			}
 		}
+		else if(showSkills && queueATB.get(0).getSkills().size() > 0){
+			showSkills = false;
+			Skill skill = skillsLists.get(queueATB.get(0)).getObject();
+			typeSelectTargets = skill.getTargets();
+			cursorsTargets.clear();
+			if(typeSelectTargets == Skill.ENNEMY){
+				cursorsTargets.add(ennemis.getFirstValidTarget());
+			}
+			queueATB.get(0).setAction(new SkillAction(queueATB.get(0), null, skill));
+		}
+		else{
+			queueATB.get(0).getAction().setTargets(cursorsTargets);
+			currentAction = queueATB.get(0).getAction();
+		}
+	}
+	
+	@Override
+	public void onBack(){
+		if(typeSelectTargets != -1){
+			typeSelectTargets = -1;
+		}
+		else if(showSkills){
+			showSkills = false;
+		}
+	}
+	
+	@Override
+	public void onLeft(){
+		
+	}
+	
+	@Override
+	public void onRight(){
+		
+	}
+	
+	@Override
+	public void onUp(){
+		if(typeSelectTargets == Skill.ENNEMY){
+			
+		}
+	}
+	
+	@Override
+	public void onDown(){
+		
 	}
 	
 	/**
@@ -237,5 +335,37 @@ public class BattleWithATB extends Top
 		for(Character c : Application.application().getGame().getParty()){
 			c.resetActiveTimeBattleManager();
 		}
+	}
+
+	/**
+	 * Retourne les coordonnées des protagonistes (ennemis ou alliés) du combat
+	 * qui sont passés en paramètre.
+	 * 
+	 * @param characters
+	 * 		Membre du combat dont les coordonées sont passées en paramètre.
+	 * @return liste des coordonnées des membres du combat passés en paramètre.
+	 */
+	public ArrayList<Point> getCoords(ArrayList<IBattle> characters) {
+		ArrayList<Point> res = new ArrayList<Point>();
+		
+		for(IBattle ib : coords.keySet()){
+			if(characters.contains(ib)){
+				res.add(getCoords(ib));
+			}
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * Retourne les coordonnées d'un protagoniste (ennemis ou alliés) du combat
+	 * passé en paramètre.
+	 * 
+	 * @param character
+	 * 		Membre du combat dont les coordonées sont passées en paramètre.
+	 * @return liste des coordonnées du membre du combat passés en paramètre.
+	 */
+	public Point getCoords(IBattle character) {
+		return coords.get(character);
 	}
 }

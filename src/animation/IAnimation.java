@@ -11,6 +11,5 @@ import org.newdawn.slick.SlickException;
 
 public interface IAnimation 
 {
-	public boolean playFrame(Graphics g, Point casterPosition, ArrayList<Point> targetsPositions, 
-			IBattle caster, ArrayList<IBattle> targets , Combat battle,  int frame)  throws SlickException ;
+	public boolean render(IBattle caster, ArrayList<IBattle> targets, int frame)  throws SlickException ;
 }

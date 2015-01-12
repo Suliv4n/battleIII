@@ -33,27 +33,19 @@ public class BattleAnimation
 	/**
 	 * Joue la frame (affichage et son) en cours de l'Animation 
 	 * 
-	 * @param g
-	 * 		Grahics à utiliser
-	 * @param casterPosition
-	 * 		Coordonnées du lanceur
-	 * @param targetsPositions
-	 * 		Coordonnées des cibles
 	 * @param caster
 	 * 		Le lanceur
 	 * @param targets
 	 * 		Les cibles
-	 * @param battle
-	 * 		Combat en cours.
+
 	 * @return
 	 * 		Vrai si l'animation est terminée, faux sinon.
 	 * 
 	 * @throws SlickException
 	 */
-	public boolean playFrame(Graphics g, Point casterPosition, ArrayList<Point> targetsPositions, 
-			IBattle caster, ArrayList<IBattle> targets , Combat battle) throws SlickException
+	public boolean render(IBattle caster, ArrayList<IBattle> targets ) throws SlickException
 	{
-		boolean res =  animation.playFrame(g, casterPosition, targetsPositions, caster, targets, battle, frame);
+		boolean res =  animation.render(caster, targets, frame);
 		frame ++;
 		if(res)
 			frame = 0;
