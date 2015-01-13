@@ -129,4 +129,20 @@ public class EnnemisParty
 		}
 		return null;
 	}
+
+	/**
+	 * Retourne l'index d'un ennemi ou -1 si l'ennemi n'est pas trouvé.
+	 * 
+	 * @param ennemy
+	 * 		Ennemy dont l'index est à retourner.
+	 * 	@return l'index de l'ennemi passé en paramètre ou -1 si l'ennemi est introuvable.
+	 */
+	public int indexOf(Ennemy ennemy) {
+		for(int i : ennemis.keySet()){
+			if(ennemy == ennemis.get(i)){
+				return i;
+			}
+		}
+		return -1;
+	}
 }

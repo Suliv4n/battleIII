@@ -26,7 +26,7 @@ public interface IBattle
 	
 	public String getName();
 	
-	public void setCibles(ArrayList<IBattle> cibles);
+	public void setTargets(ArrayList<IBattle> cibles);
 	public ArrayList<IBattle> getTargets();
 	public void chooseNextTarget(Combat combat);
 	

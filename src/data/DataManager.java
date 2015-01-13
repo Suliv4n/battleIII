@@ -45,7 +45,7 @@ public class DataManager
 	//Classe non instanciable
 	private DataManager(){}
 
-	private final static String DATA_FILE = Configurations.RESOURCES_FILE + "donnees/";
+	private final static String DATA_FILE = Configurations.DATA_FOLDER;
 	
 	private static ArrayList<XMLElement> getChildrenFromXML(String fileName, String children) throws SlickException{
 		XMLParser parser = new XMLParser();

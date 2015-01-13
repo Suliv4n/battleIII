@@ -669,7 +669,7 @@ public abstract class Character implements IBattle
 	 * @param targets
 	 * 		Nouvelles cibles.
 	 */
-	public void setCibles(ArrayList<IBattle> targets)
+	public void setTargets(ArrayList<IBattle> targets)
 	{
 		this.targets = targets; 
 	}

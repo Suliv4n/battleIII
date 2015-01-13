@@ -351,7 +351,7 @@ public class Ennemy implements IBattle
 	 * 		Les cibles de l'action préparée.
 	 */
 	@Override
-	public void setCibles(ArrayList<IBattle> cibles) 
+	public void setTargets(ArrayList<IBattle> cibles) 
 	{
 		this.targets = cibles;
 	}

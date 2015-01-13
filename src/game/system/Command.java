@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 
 import characters.EnnemisParty;
+import characters.Ennemy;
 import data.DataManager;
 import util.Regex;
 
@@ -104,6 +105,9 @@ public class Command {
 		}
 		else if(command.equalsIgnoreCase("exitbattle")){
 			return exitBattle();
+		}
+		else if(command.equalsIgnoreCase("ennemy")){
+			return printEnnemy();
 		}
 		return "Command does not exist";
 	}
@@ -217,6 +221,24 @@ public class Command {
 				return "State should be combat or battle with ATB.";
 			}
 		}
+	}
+	
+	private String printEnnemy(){
+		if(parameters.length < 1){
+			return "ennemy <index>";
+		}
+		if(Application.application().getGame().getCurrentStateID() != Config.BATTLE_ATB){
+			return "State should be battle.";
+		}
+		if(!parameters[0].matches("^[0-9]*$")){
+			return "Index should be integer.";
+		}
+		
+		int index = Integer.parseInt(parameters[0]);
+		
+		EnnemisParty ennemis = Application.application().getGame().getCurrentBattle().getEnnemis();
+		Ennemy ennemy = ennemis.getEnnemis().get(index);
+		return ennemy == null ? "NULL" : "[" + index + "] " + ennemy.getName() + " PV:" + ennemy.getHealtPoints() + "/" + ennemy.getMaximumHealthPoints() + "(" + (ennemy.isAlive() ? "alive" : "dead" ) +  ")" + "[" + (ennemis.isValidTarget(index) ? "" : "not " ) + "targetable" + "]";
 	}
 	
 }

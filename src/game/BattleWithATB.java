@@ -36,6 +36,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import animation.BattleAnimation;
 import characters.Character;
 import characters.EnnemisParty;
+import characters.Ennemy;
 import characters.Party;
 import skill.Skill;
 import ui.BarUI;
@@ -233,7 +234,7 @@ public class BattleWithATB extends Top
 			}
 		}
 		//File d'attente ATB
-		if(queueATB.size() != 0 && !showSkills){
+		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
 			actions.get(queueATB.get(0)).update(in);
 			equipeList.select(queueATB.get(0));
 			equipeList.setRenderCursor(true);
@@ -308,24 +309,50 @@ public class BattleWithATB extends Top
 	
 	@Override
 	public void onLeft(){
-		
+		if(typeSelectTargets == Skill.ENNEMY){
+			int cursor = ennemis.indexOf((Ennemy) cursorsTargets.get(0));
+			if(cursor % 2 == 1 && ennemis.isValidTarget(cursor - 1)){
+				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor - 1));
+			}
+			else if(cursor % 2 == 0 && ennemis.isValidTarget(cursor + 1)){
+				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor + 1));
+			}
+		}
 	}
 	
 	@Override
 	public void onRight(){
-		
+		if(typeSelectTargets == Skill.ENNEMY){
+			int cursor = ennemis.indexOf((Ennemy) cursorsTargets.get(0));
+			if(cursor % 2 == 0 && ennemis.isValidTarget(cursor + 1)){
+				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor + 1));
+			}
+			else if(cursor % 2 == 1 && ennemis.isValidTarget(cursor - 1)){
+				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor - 1));
+			}
+		}
 	}
 	
 	@Override
 	public void onUp(){
 		if(typeSelectTargets == Skill.ENNEMY){
-			
+			int cursor = ennemis.indexOf((Ennemy) cursorsTargets.get(0));
+			do{
+				cursor = (cursor + 4) % 6;
+			}while(!ennemis.isValidTarget(cursor));
+			cursorsTargets.set(0, ennemis.getEnnemis().get(cursor));
 		}
 	}
 	
 	@Override
 	public void onDown(){
-		
+		if(typeSelectTargets == Skill.ENNEMY){
+			int cursor = ennemis.indexOf((Ennemy) cursorsTargets.get(0));
+			do{
+				cursor = (cursor + 2) % 6;
+			}while(!ennemis.isValidTarget(cursor));
+			cursorsTargets.set(0, ennemis.getEnnemis().get(cursor));
+		}
 	}
 	
 	/**
@@ -367,5 +394,14 @@ public class BattleWithATB extends Top
 	 */
 	public Point getCoords(IBattle character) {
 		return coords.get(character);
+	}
+
+	/**
+	 * Retourne les ennemis du combat.
+	 * 
+	 * @return les ennemis du combat.
+	 */
+	public EnnemisParty getEnnemis() {
+		return ennemis;
 	}
 }
