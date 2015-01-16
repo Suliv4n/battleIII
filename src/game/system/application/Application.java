@@ -14,11 +14,13 @@ import game.InterfaceSac;
 import game.Menu;
 import game.TitleScreen;
 import game.input.TextInput;
+import game.settings.Settings;
 import game.system.Configurations;
 import game.system.Console;
 
 import map.Chest;
 import map.Map;
+import multiplayer.ConnectorManager;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
@@ -43,7 +45,7 @@ public class Application{
 	private static Application application;
 	private Game game;
 	private boolean launching = false;
-
+	private ConnectorManager server;
 	
 	/**
 	 * Constructeur.
@@ -58,6 +60,10 @@ public class Application{
 		Map.init(Configurations.SCREEN_WIDTH, Configurations.SCREEN_HEIGHT);
 		game = new Game(Configurations.GAME_TITLE);
 		this.container = new AppGameContainer(game);
+		if(Settings.MULTIPLAYER){
+			server = new ConnectorManager();
+			server.connect();
+		}
 	}
 	
 	/**
@@ -96,6 +102,13 @@ public class Application{
 			}
 		}
 		return application;
+	}
+	
+	/**
+	 * Retourne le connector manager pour le multiplayer.
+	 */
+	public ConnectorManager getConnector(){
+		return server;
 	}
 	
 	/**

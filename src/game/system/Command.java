@@ -6,6 +6,7 @@ import game.dialogue.Dialogue;
 import game.system.application.Application;
 
 import java.awt.Dialog;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.SlickException;
@@ -108,6 +109,12 @@ public class Command {
 		}
 		else if(command.equalsIgnoreCase("ennemy")){
 			return printEnnemy();
+		}
+		else if(command.equalsIgnoreCase("key")){
+			return setKey();
+		}
+		else if(command.equalsIgnoreCase("send")){
+			return sendServer();
 		}
 		return "Command does not exist";
 	}
@@ -241,4 +248,26 @@ public class Command {
 		return ennemy == null ? "NULL" : "[" + index + "] " + ennemy.getName() + " PV:" + ennemy.getHealtPoints() + "/" + ennemy.getMaximumHealthPoints() + "(" + (ennemy.isAlive() ? "alive" : "dead" ) +  ")" + "[" + (ennemis.isValidTarget(index) ? "" : "not " ) + "targetable" + "]";
 	}
 	
+	//------------------------------------CLIENT/SERVER-------------------------------------------
+	private String setKey(){
+		if(parameters.length < 1){
+			return "key <key>";
+		}
+		String key = parameters[0];
+		Application.application().getConnector().setKey(key);
+		return "Key : " + key;
+	}
+	
+	private String sendServer(){
+		if(parameters.length < 1){
+			return "key <key>";
+		}
+		String message = parameters[0];
+		try {
+			Application.application().getConnector().send(message, null);
+		} catch (IOException e) {
+			return e.getMessage(); 
+		}
+		return "Send to server : " + message;
+	}
 }

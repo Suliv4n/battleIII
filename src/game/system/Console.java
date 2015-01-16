@@ -56,7 +56,7 @@ public class Console {
 			Graphics g = Application.application().getGraphics();
 			Color current = g.getColor();
 			g.setColor(background);
-			g.fillRect(0, 0, Config.LONGUEUR, Config.LARGEUR);
+			g.fillRect(0, 0, Configurations.SCREEN_WIDTH, Configurations.SCREEN_HEIGHT);
 			g.setColor(defaultTextColor);
 			GUIContext context = Application.application().getContainer();
 			int lines = console.out().split("\n").length;
