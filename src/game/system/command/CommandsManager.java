@@ -4,6 +4,8 @@ import game.system.Console;
 import game.system.ConsoleLine;
 import game.system.application.Application;
 import game.system.command.commands.BattleCommand;
+import game.system.command.commands.multiplayer.AddPlayerCommand;
+import game.system.command.commands.multiplayer.SetKeyCommand;
 
 import java.util.HashMap;
 
@@ -16,6 +18,10 @@ public class CommandsManager {
 	{
 		commands = new HashMap<String, Executor>();
 		commands.put("battle", new BattleCommand());
+		
+		//multiplayer
+		commands.put("add-player", new AddPlayerCommand());
+		commands.put("key", new SetKeyCommand());
 	}
 	
 	public static void execute(Command command){

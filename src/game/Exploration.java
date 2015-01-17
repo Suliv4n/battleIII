@@ -53,8 +53,6 @@ public class Exploration extends Top
 	//Faux sinon.
 	private boolean playerMoving;
 	
-	//Animation du personnage qui marche.
-	private Animation animation;
 	
 	//dialogue en cours
 	private Dialogue dialogue;
@@ -94,10 +92,6 @@ public class Exploration extends Top
 			e.printStackTrace();
 		}
 		
-		
-		//animation = Jeu.getEquipe().getAnimation();
-		
-		//Jeu.saisir(null, "Nom du rôdeur :", "Tell", this.getID(), sbg);
 	}
 
 	
@@ -108,48 +102,21 @@ public class Exploration extends Top
 		
 		Map map = Application.application().getGame().getParty().getMap();
 		
-		map.afficherLayer(0);
-		map.afficherLayer(1);
+		map.drawLayer(0);
+		map.drawLayer(1);
 		
 		double X = Application.application().getGame().getParty().getRelativeX();
 		double Y = Application.application().getGame().getParty().getRelativeY();
 		
-		if(Application.application().getGame().getParty().getRelativeX()<Map.WIDTH/2)
-		{
-			X = Application.application().getGame().getParty().getAbsoluteX();
-		}
-		else if(Application.application().getGame().getParty().getRelativeX()>Map.WIDTH/2)
-		{
-			X = Map.WIDTH-Application.application().getGame().getParty().getMap().getTiledMap().getWidth()*32+Application.application().getGame().getParty().getAbsoluteX();
-		}
-		if(Application.application().getGame().getParty().getRelativeY()<Map.HEIGHT/2)
-		{
-			Y = Application.application().getGame().getParty().getAbsoluteY();
-		}
-		else if(Application.application().getGame().getParty().getRelativeY()>Map.HEIGHT/2)
-		{
-			Y = Map.HEIGHT - Application.application().getGame().getParty().getMap().getTiledMap().getHeight()*32+ Application.application().getGame().getParty().getAbsoluteY();
-		}
-			
-		X -= animation.getWidth()/2;
-		Y -= animation.getHeight()/2;
-				
 		
 		map.renderNPC();
 		//afficher Jeu.getEquipe()
-		if(playerMoving)
-		{		
-			g.drawAnimation(animation, (int) X, (int) Y);
-		}
-		else
-		{
-			g.drawImage(animation.getImage(2),(int) X, (int) Y);
-		}
+		Application.application().getGame().getParty().draw();
 		
 		
-		map.afficherLayer(2);
-		map.afficherLayer(3);
-		map.afficherLayer(4);
+		map.drawLayer(2);
+		map.drawLayer(3);
+		map.drawLayer(4);
 		
 		if(map.getExterieur())
 		{
@@ -175,8 +142,6 @@ public class Exploration extends Top
 	{	
 		super.update(container, sbg, delta);
 		
-		animation = Application.application().getGame().getParty().getAnimation();
-		
 		particles.update(delta);
 		
 		Input in = container.getInput();
@@ -187,10 +152,7 @@ public class Exploration extends Top
 		{	
 
 			EnnemisParty ennemis = null; //Prend une valeur en cas de rencontre si mouvement
-			
-			if(!animation.equals(Application.application().getGame().getParty().getAnimation())){
-				animation = Application.application().getGame().getParty().getAnimation();
-			}
+		
 			
 			//GESTION DES MOUVEMENTS + INTERACTION________________________________________________
 
@@ -506,10 +468,11 @@ public class Exploration extends Top
 		if(dialogue == null){
 			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
 			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), (int) (Application.application().getGame().getParty().speed()), 0);
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32,32, (int) (Application.application().getGame().getParty().speed()), 0);
 			
-			distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (-Application.application().getGame().getParty().speed()));
+			distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32,0 , (int) (-Application.application().getGame().getParty().speed()));
 			double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
+			
 			if(marge == 0)
 			{
 				Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
@@ -526,7 +489,7 @@ public class Exploration extends Top
 				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.NORTH);
 			}
-			playerMoving = true;
+			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
 	
@@ -535,7 +498,7 @@ public class Exploration extends Top
 		if(dialogue == null){
 			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
 			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32,0 , (int) (Application.application().getGame().getParty().speed()));
 			
 			double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
 	
@@ -556,7 +519,7 @@ public class Exploration extends Top
 				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.SOUTH);
 			}
-			playerMoving = true;
+			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
 	
@@ -565,7 +528,7 @@ public class Exploration extends Top
 		if(dialogue == null){
 			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
 			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(),0 , (int) (Application.application().getGame().getParty().speed()));
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32,0 , (int) (Application.application().getGame().getParty().speed()));
 			
 			double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
 			if(marge == 0)
@@ -584,7 +547,7 @@ public class Exploration extends Top
 				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.EAST);
 			}
-			playerMoving = true;
+			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
 	
@@ -593,7 +556,7 @@ public class Exploration extends Top
 		if(dialogue == null){
 			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
 			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, animation.getWidth(), animation.getHeight(), - (int) (Application.application().getGame().getParty().speed()), 0);
+			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32, - (int) (Application.application().getGame().getParty().speed()), 0);
 			
 			double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
 			if(marge == 0)
@@ -613,13 +576,13 @@ public class Exploration extends Top
 				Application.application().getGame().getParty().setDirection(Party.WEST);
 			}
 			
-			playerMoving = true;
+			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
 	
 	@Override
 	public void onNoDirectionKeyPressedOrDown(){
-		playerMoving = false;
+		Application.application().getGame().getParty().setMoving(false);
 	}
 	
 	

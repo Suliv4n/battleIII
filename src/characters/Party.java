@@ -57,7 +57,7 @@ public class Party implements Iterable<Character>
 	 * Direction dans laquelle regarde l'équipe.
 	 */
 	private int direction;
-	
+	private boolean moving = false;
 	
 	private Character[] party;
 	private int slots;
@@ -703,6 +703,29 @@ public class Party implements Iterable<Character>
 	public void updateMoney(int money)
 	{
 		this.money += money;
+	}
+
+	
+	/**
+	 * Dessine l'équipe.
+	 */
+	public void draw() {
+		Animation animation =  get(0).getAnimation(direction);
+		if(moving){
+			animation.draw((int)(relativeX - animation.getWidth()/2), (int)(relativeY - animation.getHeight()/2));
+		}
+		else{
+			animation.getImage(2).drawCentered((float) relativeX, (float) relativeY);
+		}
+	}
+
+	/**
+	 * Indique si l'équipe est en mouvement ou non.
+	 * @param moving
+	 * 		Vrai si l'équipe est en mouvement, sinon faux.
+	 */
+	public void setMoving(boolean moving) {
+		this.moving = moving;
 	}
 
 

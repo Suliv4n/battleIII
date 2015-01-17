@@ -108,7 +108,6 @@ public class Save
 		XMLParser parser = new XMLParser();
 		XMLElement root = parser.parse("ressources/donnees/saves/"+save+".xml");
 		
-		
 		//récupération de l'équipe de personnages
 		Party party = new Party(3);
 		XMLElementList characters = root.getChildrenByName("personnages").get(0).getChildren();
@@ -163,6 +162,7 @@ public class Save
 		party.setMap(map);
 		party.setDirection(direction);
 		Application.application().getGame().setParty(party);
+		Application.application().getGame().setCurrentSave(save);
 	}
 	
 	/**

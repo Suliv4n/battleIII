@@ -430,7 +430,7 @@ public class Map
 	 * @param layer
 	 * 		L'index du calque à afficher (premier index = 0)		
 	 */
-	public void afficherLayer(int layer) 
+	public void drawLayer(int layer) 
 	{
 		map.render((int) x, (int) y, layer);
 	}
@@ -462,6 +462,24 @@ public class Map
 	 * Affiche les personnages non joueurs
 	 */
 	public void renderNPC()
+	{
+		for(NonPlayerCharacter pnj : this.NPC)
+		{
+			if(pnj.isMoving())
+			{
+				pnj.getAnimation().draw((float) x + pnj.getX()*32, (float) y + pnj.getY()*32);
+			}
+			else
+			{
+				pnj.getAnimation().getImage(2).draw((float) x + pnj.getX()*32, (float) y + pnj.getY()*32);
+			}
+		}
+	}
+	
+	/**
+	 * Affiche les personnages non joueurs
+	 */
+	public void renderOtherPlayers()
 	{
 		for(NonPlayerCharacter pnj : this.NPC)
 		{

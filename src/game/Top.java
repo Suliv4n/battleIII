@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 
+import game.settings.Settings;
 import game.system.Configurations;
 import game.system.KeyboardControlsConfigurations;
 import game.system.SystemInformations;
@@ -42,6 +43,10 @@ public abstract class Top  extends BasicGameState
 			throws SlickException 
 	{
 		Input in = container.getInput();
+		
+		if(Settings.MULTIPLAYER && Application.application().getGame().getCurrentSave() != null){
+			Application.application().getConnector().sendInformationsToServer();
+		}
 		
 		directionKeyPressedOrDown = false;
 		

@@ -59,7 +59,7 @@ public class Game extends StateBasedGame{
 	private ArrayList<Chest> openedChests;
 	
 	private Party party;
-	private int currentSave = -1;
+	private String currentSave = null;
 	private Image arrows;
 	private UnicodeFont font;
 	
@@ -205,21 +205,22 @@ public class Game extends StateBasedGame{
 	}
 	
 	/**
-	 * Modifie le numéro de la sauvegarde courante.
+	 * Change le nom du fichier sauvegarde courrante.
+	 * (pas d'extension)
 	 * 
 	 * @param save
-	 * 		Nouveau numéro de la sauvegarde courante.
+	 * 		Nom de la sauvegarde courante.
 	 */
-	public void setCurrentSave(int save){
-		currentSave = save;
+	public void setCurrentSave(String save) {
+		this.currentSave = save;
 	}
 	
 	/**
-	 * Retourne le numéro de la sauvegarde courante.
+	 * Retourne le nom de la sauvegarde courrante.
 	 * 
-	 * @return le numéro de la sauvegarde courante.
+	 * @return le nom de la sauvegarde courrante.
 	 */
-	public int getCurrentSave(){
+	public String getCurrentSave(){
 		return currentSave;
 	}
 	
@@ -265,4 +266,6 @@ public class Game extends StateBasedGame{
 		TextInput.init(icon, message, defaut, out, operations, parameters);
 		Application.application().getGame().enterState(Config.SAISIE);
 	}
+
+
 }

@@ -1,5 +1,6 @@
 package multiplayer;
 
+import game.system.application.Application;
 import game.system.command.Command;
 import game.system.command.CommandParseException;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 import org.newdawn.slick.SlickException;
 
+import characters.Character;
 import characters.Party;
 
 public class ConnectorManager implements Runnable{
@@ -26,9 +28,13 @@ public class ConnectorManager implements Runnable{
 	private String key;
 	private HashMap<String,Party> players;
 	private Socket serverConnector;
+	private ArrayList<String> queue;
+	
+	private boolean connected = false;
 	
 	public void connect(){
 		byte[] host = {127,0,0,1};
+		queue = new ArrayList<String>();
 		try {
 			serverConnector = new Socket(InetAddress.getByAddress(host), DEFAULT_PORT);
 			initConnection();
@@ -42,15 +48,16 @@ public class ConnectorManager implements Runnable{
 		return true;
 	}
 	
-	public void send(String signal, ConnectionCallBack callBack) throws IOException
+	public void send(String signal) throws IOException
 	{
-		PrintWriter out = new PrintWriter(serverConnector.getOutputStream());
-        out.println(signal);
-        out.flush();
-        
-        if(callBack != null){
-        	callBack.callBack();
-        }
+		if(!connected){
+			queue.add(signal);
+		}
+		else{
+			PrintWriter out = new PrintWriter(serverConnector.getOutputStream());
+	        out.println(signal.replaceAll("\\{key\\}", key));
+	        out.flush();
+		}
 	}
 	
 	public void receive() throws IOException{
@@ -67,13 +74,43 @@ public class ConnectorManager implements Runnable{
 	
 	public void setKey(String key){
 		this.key = key;
+		connected = key != null;
 	}
 
+	/**
+	 * Sérialize les attributs de l'équipe en cours.
+	 * @return
+	 */
+	public String createPlayerInfo() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(Application.application().getGame().getParty().getMap().getId());
+		sb.append(" ");
+		sb.append((int) Application.application().getGame().getParty().getAbsoluteX());
+		sb.append(" ");
+		sb.append((int) Application.application().getGame().getParty().getAbsoluteY());
+		for(Character c : Application.application().getGame().getParty()){
+			sb.append(" ");
+			sb.append(c.getClass().getSimpleName());
+			sb.append(" ");
+			sb.append(c.getName());
+		}
+		return sb.toString();
+	}
+
+	public void addPlayer(String key, Party party) {
+		players.put(key, party);
+	}
 	
 	@Override
 	public void run() {
 		while(true){
 			try {
+				if(queue.size() > 0){
+					for(String signal : queue){
+						send(signal);
+					}
+					queue.clear();
+				}
 				receive();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -81,4 +118,14 @@ public class ConnectorManager implements Runnable{
 			}
 		}
 	}
+
+	public void sendInformationsToServer() {
+		try {
+			send("set-client-data {key} " + createPlayerInfo());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 }
