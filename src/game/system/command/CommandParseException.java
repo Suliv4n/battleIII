@@ -1,4 +1,4 @@
-package game.system;
+package game.system.command;
 
 public class CommandParseException extends Exception{
 

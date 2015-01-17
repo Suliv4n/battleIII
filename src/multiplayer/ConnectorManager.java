@@ -1,7 +1,7 @@
 package multiplayer;
 
-import game.system.Command;
-import game.system.CommandParseException;
+import game.system.command.Command;
+import game.system.command.CommandParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,7 +59,7 @@ public class ConnectorManager implements Runnable{
         
         try {
 			Command commande = new Command(signal);
-			System.out.println(commande.execute());
+			commande.execute();
 		} catch (CommandParseException | SlickException e) {
 			e.printStackTrace();
 		}

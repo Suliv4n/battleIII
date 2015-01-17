@@ -1,35 +1,18 @@
 package game.system.application;
 
-import java.util.ArrayList;
-
-import game.BattleWithATB;
-import game.Combat;
-import game.CombatResult;
-import game.Config;
-import game.Configuration;
-import game.Exploration;
-import game.GameOver;
-import game.GestionEquipe;
-import game.InterfaceSac;
-import game.Menu;
-import game.TitleScreen;
 import game.input.TextInput;
 import game.settings.Settings;
 import game.system.Configurations;
 import game.system.Console;
+import game.system.command.CommandsManager;
 
-import map.Chest;
 import map.Map;
 import multiplayer.ConnectorManager;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
-
 import animation.ResourcesAnimitationManager;
 import audio.MusicManager;
 
@@ -55,6 +38,7 @@ public class Application{
 	 */
 	private Application() throws SlickException{
 		TextInput.initSaisie();
+		CommandsManager.init();
 		MusicManager.init();
 		ResourcesAnimitationManager.init();
 		Map.init(Configurations.SCREEN_WIDTH, Configurations.SCREEN_HEIGHT);

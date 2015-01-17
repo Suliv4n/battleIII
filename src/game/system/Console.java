@@ -1,7 +1,11 @@
 package game.system;
 
+import java.util.ArrayList;
+
 import game.Config;
 import game.system.application.Application;
+import game.system.command.Command;
+import game.system.command.CommandParseException;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -59,8 +63,20 @@ public class Console {
 			g.fillRect(0, 0, Configurations.SCREEN_WIDTH, Configurations.SCREEN_HEIGHT);
 			g.setColor(defaultTextColor);
 			GUIContext context = Application.application().getContainer();
+			/*
 			int lines = console.out().split("\n").length;
 			g.drawString(console.out(), 3, Config.LARGEUR - 20 - 20 * lines);
+			*/
+			ArrayList<ConsoleLine> lines = console.out();
+			int lineHeight = 15;
+			int y = 20;
+			int cpt = 0;
+			for(int i=lines.size()-1; i>=0;i--){
+				ConsoleLine line = lines.get(i);
+				y += lineHeight * (line.getLine().split("\n").length) + 2;
+				Application.application().drawStringWithoutGameFont(line.getLine(), 3, Configurations.SCREEN_HEIGHT - y, line.getColor());
+				cpt++;
+			}
 			textField.render(context, g);
 			g.setColor(current);
 		}
@@ -84,15 +100,16 @@ public class Console {
 	}
 	
 	
-	private String out;
+	private ArrayList<ConsoleLine> lines;
 	private static Console self;
 	private ConsoleRenderer renderer;
+	public static final Color ERROR_COLOR_LINE = new Color(200,0,0);
 	
 	/**
 	 * Constructeur 
 	 */
 	private Console(){
-		this.out = "";
+		lines = new ArrayList<ConsoleLine>();
 		this.renderer = new ConsoleRenderer(new Color(0,0,0,0.75f) , Color.white);
 	}
 	
@@ -102,8 +119,8 @@ public class Console {
 	 * @param message 
 	 * 		Le message à afficher.
 	 */
-	public void print(String message){
-		out += message + "\n";
+	public void print(ConsoleLine line){
+		lines.add(line);
 	}
 	
 	/**
@@ -111,8 +128,8 @@ public class Console {
 	 * 
 	 * @return la sortie de la console.
 	 */
-	public String out(){
-		return out;
+	public ArrayList<ConsoleLine> out(){
+		return lines;
 	}
 	
 	/**
@@ -141,9 +158,9 @@ public class Console {
 	public void validate() throws SlickException{
 		//print(renderer.clearTextField());
 		try {
-			print(new Command(renderer.clearTextField()).execute());
+			new Command(renderer.clearTextField()).execute();
 		} catch (CommandParseException e) {
-			print(e.getMessage());
+			print(new ConsoleLine(e.getMessage(), ERROR_COLOR_LINE));
 		}
 	}
 
