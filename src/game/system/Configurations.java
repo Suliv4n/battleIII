@@ -60,4 +60,14 @@ public class Configurations {
 	 */
 	public static final String DATA_FOLDER = RESOURCES_FOLDER + "donnees/";
 	
+	/**
+	 * Dosser contenant les emmiters pour les particle systemes.
+	 */
+	public static final String PARTICLE_EMMITERS_FOLDER = RESOURCES_FOLDER + "particles/";
+	
+	/**
+	 * Dosser contenant les images.
+	 */
+	public static final String IMAGES_FOLDER = RESOURCES_FOLDER + "images/";
+	
 }

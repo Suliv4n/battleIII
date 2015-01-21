@@ -1,13 +1,8 @@
 package animation;
 
-import game.Combat;
 import game.battle.IBattle;
 
-import java.awt.Point;
 import java.util.ArrayList;
-
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 
 /**
  * Animation pour les combats.
@@ -15,40 +10,63 @@ import org.newdawn.slick.SlickException;
  * @author Darklev
  *
  */
-public class BattleAnimation 
+public abstract class BattleAnimation 
 {
-	private int frame;
-	private IAnimation animation;
+	private IBattle caster;
+	private ArrayList<IBattle> targets;
 	
 	/**
 	 * Les instances d'Animation sont créées à partir de 
 	 * la classe AnimationFactory.
 	 */
-	protected BattleAnimation(IAnimation animation)
+	public BattleAnimation(IBattle caster, ArrayList<IBattle> targets)
 	{
-		this.animation = animation;
-		frame = 0;
+		this.caster = caster;
+		this.targets = targets;
+		
+		init();
 	}
 	
 	/**
-	 * Joue la frame (affichage et son) en cours de l'Animation 
+	 * Retourne les cibles de l'animation.
 	 * 
-	 * @param caster
-	 * 		Le lanceur
-	 * @param targets
-	 * 		Les cibles
-
-	 * @return
-	 * 		Vrai si l'animation est terminée, faux sinon.
-	 * 
-	 * @throws SlickException
+	 * @return les cibles de l'animation.
 	 */
-	public boolean render(IBattle caster, ArrayList<IBattle> targets ) throws SlickException
-	{
-		boolean res =  animation.render(caster, targets, frame);
-		frame ++;
-		if(res)
-			frame = 0;
-		return res;
+	public ArrayList<IBattle> getTargets(){
+		return targets;
 	}
+	
+	/**
+	 * Retourne le lanceur de l'animation.
+	 * 
+	 * @return le lanceur de l'animation
+	 */
+	public IBattle getCaster(){
+		return caster;
+	}
+	
+	/**
+	 * Affiche l'animation (affichage et son) en cours de l'Animation 
+	 */
+	public abstract void render();
+	
+	/**
+	 * Met à jour l'animation
+	 * 
+	 * @param delta
+	 * 		Temps avant la dernière mise à jour en millisecondes.
+	 */
+	public abstract void update(int delta);
+	
+	/**
+	 * Initialisation
+	 */
+	public abstract void init();
+	
+	/**
+	 * Retourne vrai si l'animation est finie. Sinon retourne faux.
+	 * 
+	 * @return vrai si l'animation est finie. Sinon faux.
+	 */
+	public abstract boolean isFinished();
 }

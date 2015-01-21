@@ -22,7 +22,7 @@ public class SkillAction extends Action{
 	@Override
 	public BattleAnimation getBattleAnimation() {
 		if(currentAnimation == null){
-			currentAnimation = AnimationFactory.createAnimation("bouleDeFeu");
+			currentAnimation = AnimationFactory.createAnimation(caster, targets);
 		}
 		return currentAnimation;
 	}
@@ -33,12 +33,17 @@ public class SkillAction extends Action{
 	}
 	
 	@Override
-	public boolean render() throws SlickException{
-		return getBattleAnimation().render(caster, targets);
+	public void render() throws SlickException{
+		getBattleAnimation().render();
 	}
 
 	@Override
-	public void update() {
-		
+	public void update(int delta) {
+		getBattleAnimation().update(delta);
+	}
+
+	@Override
+	public boolean isRenderFisnished() {
+		return getBattleAnimation().isFinished();
 	}
 }

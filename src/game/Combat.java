@@ -356,13 +356,13 @@ public class Combat extends BasicGameState
 				message = lanceur.getName() + " attaque!";
 				if(((String) action).equalsIgnoreCase("Attaquer"))
 				{
-					animEnCours = AnimationFactory.createAnimation("attaquer");
+					//animEnCours = AnimationFactory.createAnimation("attaquer");
 				}
 			}
 			else if(action instanceof Skill)
 			{
 				message = lanceur.getName() + " utilise " + ((Skill)action).getName() + " niv. " + ((Skill)action).getLevel();
-				animEnCours = AnimationFactory.createAnimation(((Skill)action).getId());
+				//animEnCours = AnimationFactory.createAnimation(((Skill)action).getId());
 			}
 		}
 		else

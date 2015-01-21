@@ -3,6 +3,7 @@ package game;
 import game.dialogue.Dialogue;
 import game.dialogue.Line;
 import game.dialogue.Select;
+import game.settings.Settings;
 import game.system.application.Application;
 
 import java.io.File;
@@ -104,15 +105,13 @@ public class Exploration extends Top
 		
 		map.drawLayer(0);
 		map.drawLayer(1);
-		
-		double X = Application.application().getGame().getParty().getRelativeX();
-		double Y = Application.application().getGame().getParty().getRelativeY();
-		
-		
+
 		map.renderNPC();
 		//afficher Jeu.getEquipe()
-		Application.application().getGame().getParty().draw();
-		
+		Application.application().getGame().getParty().draw(1,false);
+		if(Settings.MULTIPLAYER){
+			map.renderOtherPlayers();
+		}
 		
 		map.drawLayer(2);
 		map.drawLayer(3);

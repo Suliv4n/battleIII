@@ -1,5 +1,8 @@
 package game.system.application;
 
+import java.io.File;
+import java.io.IOException;
+
 import game.input.TextInput;
 import game.settings.Settings;
 import game.system.Configurations;
@@ -13,6 +16,10 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
+
 import animation.ResourcesAnimitationManager;
 import audio.MusicManager;
 
@@ -134,6 +141,34 @@ public class Application{
 		return container.getGraphics();
 	}
 	
+
+	/**
+	 * Charge un particle system avec l'emmiter et l'image passé en paramètre.
+	 * 
+	 * @param emmiter
+	 * 		Fichier emmiter sans l'extension xml (depuis le dossier particles).
+	 * @param image
+	 * 		Image depuis le dossier des images.
+	 * @return le particle system avec l'emmiter et l'image passé en paramètre.
+	 */
+	public ParticleSystem loadParticleSystem(String emmiter, String image){
+		
+		emmiter = Configurations.PARTICLE_EMMITERS_FOLDER + emmiter + ".xml";
+		image = Configurations.IMAGES_FOLDER + image;
+		
+		File xmlFile = new File(emmiter);
+		ParticleSystem particle = new ParticleSystem(image);
+		
+		ConfigurableEmitter ce;
+		try {
+			ce = ParticleIO.loadEmitter(xmlFile);
+			particle.addEmitter(ce);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return particle;
+	}
 	
 	/**
 	 * Dessine la chaine de caractères passé en paramètre

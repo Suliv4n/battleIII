@@ -2,6 +2,8 @@ package characters;
 
 
 import game.Config;
+import game.system.Configurations;
+import game.system.application.Application;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -75,8 +77,8 @@ public class Party implements Iterable<Character>
 		party = new Character[slots];
 		this.slots = slots;
 		
-		relativeX = Config.LONGUEUR/2;
-		relativeY = Config.LARGEUR/2;
+		relativeX = Configurations.SCREEN_WIDTH/2;
+		relativeY = Configurations.SCREEN_HEIGHT/2;
 		
 		absoluteX = 100;
 		absoluteY = 100;
@@ -710,14 +712,43 @@ public class Party implements Iterable<Character>
 	 * Dessine l'équipe.
 	 */
 	public void draw() {
-		Animation animation =  get(0).getAnimation(direction);
+		draw(1, false);
+	}
+	
+	/**
+	 * Affiche l'équipe avec une certiane opacité
+	 * 	
+	 * @param alpha
+	 * 		Opacité entre 0 et 1
+	 * @param absolute
+	 * 		Vrai s'il faut utiliser les coordonnées absolues. Sinon faux.
+	 */
+	public void draw(float alpha, boolean absolute) {
+		Animation animation =  get(0).getAnimation(direction).copy();
+		animation.setAutoUpdate(true);
+		for(int i=0; i<animation.getFrameCount() ;i++){
+			animation.getImage(i).setAlpha(alpha);
+		}
+		
+		int x = (int)(relativeX - animation.getWidth()/2);
+		int y = (int)(relativeY - animation.getHeight()/2);
+		
+		if(absolute)
+		{
+			x = (int) (Application.application().getGame().getParty().getMap().getX() + absoluteX);
+			y = (int) (Application.application().getGame().getParty().getMap().getY() + absoluteY);
+			System.out.println("ax : " + absoluteX);
+			System.out.println("ay : " + absoluteY);
+		}
+		
 		if(moving){
-			animation.draw((int)(relativeX - animation.getWidth()/2), (int)(relativeY - animation.getHeight()/2));
+			animation.draw(x, y);
 		}
 		else{
-			animation.getImage(2).drawCentered((float) relativeX, (float) relativeY);
+			animation.getImage(2).draw(x, y);
 		}
 	}
+
 
 	/**
 	 * Indique si l'équipe est en mouvement ou non.
@@ -727,6 +758,4 @@ public class Party implements Iterable<Character>
 	public void setMoving(boolean moving) {
 		this.moving = moving;
 	}
-
-
 }

@@ -196,13 +196,16 @@ public class BattleWithATB extends Top
 				drawTargetsCursors();
 			}
 			else{
-				if(currentAction.render()){
+				if(currentAction.isRenderFisnished()){
 					currentAction = null;
 					queueATB.get(0).resetActiveTimeBattleManager();
 					queueATB.get(0).launchActiveTime();
 					typeSelectTargets = -1;
 					showSkills = false;
 					queueATB.remove(0);
+				}
+				else{
+					currentAction.render();
 				}
 			}
 		}
@@ -243,7 +246,9 @@ public class BattleWithATB extends Top
 			skillsLists.get(queueATB.get(0)).update(in);
 		}
 		else if(typeSelectTargets != -1){
-			
+			if(currentAction != null){
+				currentAction.update(delta);
+			}
 		}
 		
 		super.update(container, game, delta);

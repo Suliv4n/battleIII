@@ -50,6 +50,9 @@ public abstract class Action {
 		this.targets = targets;
 	}
 	
-	public abstract boolean render() throws SlickException;
-	public abstract void update();
+	public abstract void render() throws SlickException;
+	public abstract void update(int delta);
+
+	public abstract boolean isRenderFisnished();
+
 }

@@ -32,6 +32,10 @@ public class ConnectorManager implements Runnable{
 	
 	private boolean connected = false;
 	
+	public ConnectorManager(){
+		players = new HashMap<String, Party>();
+	}
+	
 	public void connect(){
 		byte[] host = {127,0,0,1};
 		queue = new ArrayList<String>();
@@ -99,6 +103,7 @@ public class ConnectorManager implements Runnable{
 
 	public void addPlayer(String key, Party party) {
 		players.put(key, party);
+		System.out.println("Client added on map " + party.getMap().getId());
 	}
 	
 	@Override
@@ -125,6 +130,14 @@ public class ConnectorManager implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Party getPlayer(String key) {
+		return players.get(key);
+	}
+
+	public HashMap<String, Party> getPlayers() {
+		return players;
 	}
 
 

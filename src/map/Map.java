@@ -426,6 +426,22 @@ public class Map
 	}
 	
 	/**
+	 * Retourne l'abscisse de l'affichage de la map.
+	 * @return l'abscisse de la map
+	 */
+	public double getX(){
+		return x;
+	}
+	
+	/**
+	 * Retourne l'ordonnée de l'affichage de la map.
+	 * @return l'ordonnée de la map.
+	 */
+	public double getY(){
+		return y;
+	}
+	
+	/**
 	 * Afficher le calque de la map dont l'index est passé en paramètre.
 	 * @param layer
 	 * 		L'index du calque à afficher (premier index = 0)		
@@ -477,19 +493,15 @@ public class Map
 	}
 	
 	/**
-	 * Affiche les personnages non joueurs
+	 * Affiche les personnages joueurs
 	 */
 	public void renderOtherPlayers()
 	{
-		for(NonPlayerCharacter pnj : this.NPC)
+		for(Party p : Application.application().getConnector().getPlayers().values())
 		{
-			if(pnj.isMoving())
-			{
-				pnj.getAnimation().draw((float) x + pnj.getX()*32, (float) y + pnj.getY()*32);
-			}
-			else
-			{
-				pnj.getAnimation().getImage(2).draw((float) x + pnj.getX()*32, (float) y + pnj.getY()*32);
+			if(p.getMap().id.equals(this.id)){
+				p.draw(0.5f, true);
+				System.out.println("draw " + p);
 			}
 		}
 	}
