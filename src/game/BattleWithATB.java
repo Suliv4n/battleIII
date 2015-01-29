@@ -54,7 +54,7 @@ public class BattleWithATB extends Top
 	private EnnemisParty ennemis;
 	private ArrayList<Character> queueATB;
 	private boolean showSkills = false;
-	private Action currentAction;
+	private ArrayList<Action> actionsQueue;
 	private int typeSelectTargets = -1; //Skill.ALL_ENNEMIES, ...
 	private ArrayList<IBattle> cursorsTargets;
 	
@@ -67,7 +67,7 @@ public class BattleWithATB extends Top
 	/**
 	 * Liste des actions
 	 */
-	private HashMap<Character,GUIList<String>> actions;
+	private HashMap<Character,GUIList<String>> actionsLists;
 	
 	private HashMap<Character,GUIList<Skill>> skillsLists;
 	
@@ -123,6 +123,8 @@ public class BattleWithATB extends Top
 		this.background = Application.application().getGame().getParty().getMap().getBackgroundBattle();
 		this.ennemis = ennemis;
 		
+		actionsQueue = new ArrayList<Action>(); 
+		
 		equipeList.setData(Application.application().getGame().getParty().getCharacters());
 		
 		coords = new HashMap<IBattle, Point>();
@@ -141,17 +143,18 @@ public class BattleWithATB extends Top
 			}
 			else if(i <= 3)
 			{
-				p = new Point(115+100*(i%2) - img.getWidth()/2, 250 - img.getHeight()/2);
+				p = new Point(115+100*(i % 2) - img.getWidth()/2, 250 - img.getHeight()/2);
 			}
 			else if(i <= 5)
 			{
-				p = new Point(130+100*(i%2) - img.getWidth()/2, 300 - img.getHeight()/2);
+				p = new Point(130+100*(i % 2) - img.getWidth()/2, 300 - img.getHeight()/2);
 			}
 			coords.put(ennemis.getEnnemis().get(i), p);
+			ennemis.getEnnemis().get(i).launchActiveTime();
 		}
 		
 		
-		actions = new HashMap<Character,GUIList<String>>();
+		actionsLists = new HashMap<Character,GUIList<String>>();
 		skillsLists = new HashMap<Character,GUIList<Skill>>();
 		for(Character p : Application.application().getGame().getParty()){
 			p.launchActiveTime();
@@ -161,15 +164,13 @@ public class BattleWithATB extends Top
 			GUIList<Skill> s = new GUIList<Skill>(4, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
 			s.setHeight(99);
 			s.setData(p.getSkills());
-			s.setElementRenderer(new ElementRenderer() {
-				
-				@Override
-				public void render(int x, int y, Object element, int index) {
+			s.setElementRenderer(
+				(int x, int y, Object element, int index) ->{
 					Skill skill = (Skill) element;
 					Application.application().drawString(skill.getName(), x, y);
-				}
 			});
-			actions.put(p, a);
+			
+			actionsLists.put(p, a);
 			skillsLists.put(p, s);
 		}
 	}
@@ -186,29 +187,29 @@ public class BattleWithATB extends Top
 		bottomPanel.render(0, 380);
 		equipeList.render(5, 385);
 		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
-			actions.get(queueATB.get(0)).render(0, 0);
+			actionsLists.get(queueATB.get(0)).render(0, 0);
 		}
 		else if(showSkills){
 			skillsLists.get(queueATB.get(0)).render(0, 0);
 		}
 		else if(typeSelectTargets != -1){
-			if(currentAction == null){
-				drawTargetsCursors();
+			drawTargetsCursors();
+		}
+		if(actionsQueue.size() > 0){
+			Action currentAction = actionsQueue.get(0);
+			if(currentAction.isRenderFisnished()){
+				actionsQueue.remove(currentAction);
+				queueATB.get(0).resetActiveTimeBattleManager();
+				queueATB.get(0).launchActiveTime();
+				typeSelectTargets = -1;
+				showSkills = false;
+				queueATB.remove(0);
 			}
 			else{
-				if(currentAction.isRenderFisnished()){
-					currentAction = null;
-					queueATB.get(0).resetActiveTimeBattleManager();
-					queueATB.get(0).launchActiveTime();
-					typeSelectTargets = -1;
-					showSkills = false;
-					queueATB.remove(0);
-				}
-				else{
-					currentAction.render();
-				}
+				currentAction.render();
 			}
 		}
+
 		super.render(container, game, g);
 	}
 	
@@ -236,20 +237,31 @@ public class BattleWithATB extends Top
 				queueATB.add(p);
 			}
 		}
+		for(Ennemy e : ennemis.getEnnemis().values()){
+			System.out.println(e.getActiveTimeBattleManager().getCurrent());
+			if(e.getActiveTimeBattleManager().getCurrent() == 100 && e.isAlive()){
+				actionsQueue.add(actionsQueue.size(), e.doIA(this));
+				e.getActiveTimeBattleManager().resetToZero();
+			}
+		}
 		//File d'attente ATB
 		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
-			actions.get(queueATB.get(0)).update(in);
+			actionsLists.get(queueATB.get(0)).update(in);
 			equipeList.select(queueATB.get(0));
 			equipeList.setRenderCursor(true);
 		}
 		else if(showSkills){
 			skillsLists.get(queueATB.get(0)).update(in);
 		}
-		else if(typeSelectTargets != -1){
-			if(currentAction != null){
-				currentAction.update(delta);
-			}
+
+		if(actionsQueue.size() > 0){
+			actionsQueue.get(0).update(delta);
+			pauseAllATB();
 		}
+		else{
+			resumeAllATB();
+		}
+
 		
 		super.update(container, game, delta);
 	}
@@ -282,7 +294,7 @@ public class BattleWithATB extends Top
 	@Override
 	public void onValidate(){
 		if(queueATB.size() > 0 && !showSkills && typeSelectTargets == -1){
-			if(actions.get(queueATB.get(0)).getSelectedIndex() == 1){
+			if(actionsLists.get(queueATB.get(0)).getSelectedIndex() == 1){
 				showSkills = true;
 			}
 		}
@@ -298,7 +310,7 @@ public class BattleWithATB extends Top
 		}
 		else{
 			queueATB.get(0).getAction().setTargets(cursorsTargets);
-			currentAction = queueATB.get(0).getAction();
+			actionsQueue.add(queueATB.get(0).getAction());
 		}
 	}
 	
@@ -409,4 +421,19 @@ public class BattleWithATB extends Top
 	public EnnemisParty getEnnemis() {
 		return ennemis;
 	}
+
+	
+	
+	public void pauseAllATB(){
+		for(IBattle i : coords.keySet()){
+			i.getActiveTimeBattleManager().pause();
+		}
+	}
+	
+	public void resumeAllATB(){
+		for(IBattle i : coords.keySet()){
+			i.getActiveTimeBattleManager().resume();
+		}
+	}
+
 }

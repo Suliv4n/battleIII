@@ -1,13 +1,9 @@
 package ui;
 
 import game.ControllerInput;
-import game.launcher.Launcher;
 import game.system.application.Application;
 
 import java.util.ArrayList;
-import java.util.Collections;
-
-import javax.xml.crypto.Data;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -16,7 +12,6 @@ import org.newdawn.slick.Input;
 
 
 
-import characters.Character;
 import ui.listController.ListController;
 import ui.listRenderer.CursorRenderer;
 import ui.listRenderer.ElementRenderer;
@@ -59,19 +54,13 @@ public class GUIList<T> {
 		this.drawGUI = drawGUI;
 		
 		//Renderer par défaut;
-		elementRenderer = new ElementRenderer() {
-			@Override
-			public void render(int x, int y, Object element, int index){
-				Application.application().drawString(element == null ? "null" : element.toString(), x + 15, y );
-			}
+		elementRenderer = (int x, int y, Object element, int index) -> {
+			Application.application().drawString(element == null ? "null" : element.toString(), x + 15, y );
 		};
 		
-		cursorRenderer = new CursorRenderer() {
-			@Override
-			public void render(int x, int y) {
-				Image cursor = Application.application().getGame().getArrow(0);
-				cursor.draw(x+1, y + cursor.getWidth());
-			}
+		cursorRenderer = (int x, int y) -> {
+			Image cursor = Application.application().getGame().getArrow(0);
+			cursor.draw(x+1, y + cursor.getWidth());
 		};
 		
 		listController = new ListController() {

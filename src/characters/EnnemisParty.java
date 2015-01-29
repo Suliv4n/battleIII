@@ -2,7 +2,10 @@ package characters;
 
 import game.battle.IBattle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import util.Random;
 
 /**
  * Représente un groupe d'ennemis.
@@ -144,5 +147,35 @@ public class EnnemisParty
 			}
 		}
 		return -1;
+	}
+	
+	
+	/**
+	 * Retourne les ennemis pouvant être ciblés.
+	 * 
+	 * @return les ennemis pouvant être ciblés.
+	 */
+	public ArrayList<IBattle> getValidTargets(){
+		
+		ArrayList<IBattle> out = new ArrayList<IBattle>();
+		
+		for(Integer i : ennemis.keySet()){
+			if(isValidTarget(i)){
+				out.add(ennemis.get(i));
+			}
+		}
+		
+		return out;
+	}
+
+	/**
+	 * Retourne un ennemi aléatoire pouvant être ciblé.
+	 * 
+	 * @return un ennemi aléatoire pouvant être ciblé.
+	 */
+	public IBattle getRandomTarget() {
+		ArrayList<IBattle> valids = getValidTargets();
+		
+		return valids.get(Random.randInt(0, valids.size() - 1));
 	}
 }

@@ -60,4 +60,11 @@ public class ActiveTimeBattleManager {
 	public void stop(){
 		atb.cancel();
 	}
+
+	/**
+	 * Remet à zéro l'ATB.
+	 */
+	public void resetToZero() {
+		onTick.setCurrent(0);
+	}
 }

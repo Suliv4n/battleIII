@@ -407,7 +407,7 @@ public class Combat extends BasicGameState
 					//application des effets de l'action en cours
 					appliquerEffets(effetsCurrent);
 					
-					if(equipe.numberOfAliveCharacter() == 0) //Perdu
+					if(equipe.numberOfAliveCharacters() == 0) //Perdu
 					{
 						issueDuCombat = 1;
 					}
@@ -1122,7 +1122,7 @@ public class Combat extends BasicGameState
 		}
 		
 		//-----------------
-		if(personnagesPrets.size() == equipe.numberOfAliveCharacter())
+		if(personnagesPrets.size() == equipe.numberOfAliveCharacters())
 		{
 			trier();
 			debutTour = true;
@@ -1231,7 +1231,7 @@ public class Combat extends BasicGameState
 		{
 			if(e.isAlive())
 			{
-				e.doIA(this);
+				//e.doIA(this);
 			}
 		}
 	}

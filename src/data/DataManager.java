@@ -2,6 +2,7 @@ package data;
 
 
 
+import game.battle.Artificialntelligences;
 import game.dialogue.Dialogue;
 import game.dialogue.Line;
 import game.system.Configurations;
@@ -375,6 +376,8 @@ public class DataManager
 				int experience = element.getIntAttribute("xp",1);
 				int money = element.getIntAttribute("argent",0);
 				
+				int typeAI = element.getIntAttribute("ai",Artificialntelligences.DEFAULT_AI);
+				
 				String imageValue = element.getAttribute("image");
 				
 				String[] dataImage = imageValue.split(";");
@@ -383,7 +386,7 @@ public class DataManager
 				
 				Image image = new Image(dataImage[0], new Color(255,0,255)).getSubImage(Integer.parseInt(dataImage[1]), Integer.parseInt(dataImage[2]), Integer.parseInt(dataImage[3]), Integer.parseInt(dataImage[4]));
 				
-				Ennemy ennemy = new Ennemy(id, name,description,physicAttaque,magicAttaque,physicDefense,magicDefense,agility,heal,health,experience,money,image);
+				Ennemy ennemy = new Ennemy(id, name,description,physicAttaque,magicAttaque,physicDefense,magicDefense,agility,heal,health,experience,money,image, typeAI);
 				return ennemy;
 			}
 		}

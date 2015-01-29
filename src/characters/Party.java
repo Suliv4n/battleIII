@@ -2,6 +2,7 @@ package characters;
 
 
 import game.Config;
+import game.battle.IBattle;
 import game.system.Configurations;
 import game.system.application.Application;
 
@@ -14,6 +15,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import util.Random;
 import bag.Bag;
 import bag.IItems;
 import bag.item.stuff.Stuff;
@@ -461,7 +463,7 @@ public class Party implements Iterable<Character>
 	 * 
 	 * @return le nombre de personnages vivants dans l'équipe.
 	 */
-	public int numberOfAliveCharacter() 
+	public int numberOfAliveCharacters() 
 	{
 		int total = 0;
 		for(Character p : party)
@@ -500,13 +502,13 @@ public class Party implements Iterable<Character>
 	 */
 	public Object getRandomCharacter() 
 	{
-		if(numberOfAliveCharacter() == 0)
+		if(numberOfAliveCharacters() == 0)
 		{
 			return null;
 		}
 		else
 		{
-			int a = (int) (Math.random() * numberOfAliveCharacter());
+			int a = (int) (Math.random() * numberOfAliveCharacters());
 			while (!party[a].isAlive())
 			{
 				a = (a + 1) % numberOfCharacters();
@@ -757,5 +759,35 @@ public class Party implements Iterable<Character>
 	 */
 	public void setMoving(boolean moving) {
 		this.moving = moving;
+	}
+
+
+	/**
+	 * Retourne un personnage aléatoire pouvant être ciblé.
+	 * 
+	 * @return un personnage valide de façon aléatoire.
+	 */
+	public IBattle getRandomValidTarget() {
+		
+		ArrayList<IBattle> validTargets = getValidTargets();
+		
+		return validTargets.get(Random.randInt(0, validTargets.size() - 1));
+	}
+
+
+	/**
+	 * Retourne les personnages pouvant être ciblé par une compétence ou un objet ...
+	 * 
+	 * @return les personnages pouvant être ciblés.
+	 */
+	public ArrayList<IBattle> getValidTargets() {
+		
+		ArrayList<IBattle> validTargets = new ArrayList<IBattle>();
+		for(Character c : this){
+			if(c.isAlive()){
+				validTargets.add(c);
+			}
+		}
+		return validTargets;
 	}
 }

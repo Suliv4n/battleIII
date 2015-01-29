@@ -18,6 +18,7 @@ public interface IBattle
 	public int getHealth();
 	public Image getImageForBattle();
 	public ActiveTimeBattleManager getActiveTimeBattleManager();
+	public void launchActiveTime();
 	
 	public int getHealtPoints();
 	public int getMaximumHealthPoints();

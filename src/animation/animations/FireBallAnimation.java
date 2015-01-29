@@ -46,7 +46,7 @@ public class FireBallAnimation extends BattleAnimation{
 
 	@Override
 	public void init() {
-		int factorSize = 10;
+		int factorSize = 50;
 		
 		IBattle target = getTargets().get(0);
 		IBattle caster = getCaster();

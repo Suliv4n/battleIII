@@ -1,6 +1,8 @@
 package characters;
 
+import game.BattleWithATB;
 import game.Combat;
+import game.battle.Artificialntelligences;
 import game.battle.IBattle;
 import game.battle.actions.Action;
 import game.battle.atb.ActiveTimeBattleManager;
@@ -8,6 +10,7 @@ import game.battle.atb.ActiveTimeBattleManager;
 import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.function.Function;
 
 import org.newdawn.slick.Image;
 
@@ -37,12 +40,15 @@ public class Ennemy implements IBattle
 	private int maximumHealthPoints;
 	private int healthPoints;
 	
+	private int typeArtificialIntelligence;
 	
 	private int experience;
 	private int money;
 	
 	private Action action;
 	private ArrayList<IBattle> targets;
+	
+	private Function<BattleWithATB, Action> ia;
 	
 	//Objets dropés
 
@@ -78,8 +84,9 @@ public class Ennemy implements IBattle
 	 * 		Argent que donne l'ennemi après avoir été tué.
 	 * @param image
 	 * 		Iamge de l'ennemi.
+	 * @param typeAI 
 	 */
-	public Ennemy(String id, String name, String description, int physicAttack, int magicAttack, int physicDefense, int magicDefense, int agility, int health, int maximumHealthPoints,int experience, int money, Image image)
+	public Ennemy(String id, String name, String description, int physicAttack, int magicAttack, int physicDefense, int magicDefense, int agility, int health, int maximumHealthPoints,int experience, int money, Image image, int typeAI)
 	{
 
 		this.id = id;
@@ -97,8 +104,12 @@ public class Ennemy implements IBattle
 		this.image = image;
 		this.healthPoints = maximumHealthPoints;
 		
+		this.skills = new ArrayList<Skill>();
+		
 		targets = new ArrayList<IBattle>();
 		activeTimeBattleManager = new ActiveTimeBattleManager(1000);
+		
+		this.ia = Artificialntelligences.createArtificialIntelligence(this, typeAI);
 	}
 
 	/**
@@ -134,15 +145,13 @@ public class Ennemy implements IBattle
 	
 	/**
 	 * L'ennemi calcule une action.
-	 * @param combat
+	 * @param battle
 	 * 		Combat en cours.
+	 * @return l'action résultat de l'ia.
 	 */
-	public void doIA(Combat combat)
+	public Action doIA(BattleWithATB battle)
 	{
-		//TODO : stratégie ennemi
-		Object action = "Attaquer";
-		targets.add((IBattle) combat.getEquipe().getRandomCharacter());
-		setAction(null);
+		return ia.apply(battle);
 	}
 	
 	/**
@@ -398,6 +407,24 @@ public class Ennemy implements IBattle
 	@Override
 	public ActiveTimeBattleManager getActiveTimeBattleManager() {
 		return activeTimeBattleManager;
+	}
+	
+	@Override
+	public void launchActiveTime() {
+		activeTimeBattleManager.launch(util.Random.randInt(20,60));
+	}
+	
+	public int getTypeArtificialIntelligence(){
+		return typeArtificialIntelligence;
+	}
+
+	/**
+	 * Retourne les compétences de l'ennemi.
+	 * 
+	 * @return les compétences de l'ennemi.
+	 */
+	public ArrayList<Skill> getSkills() {
+		return skills;
 	}
 
 	
