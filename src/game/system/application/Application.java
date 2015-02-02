@@ -2,13 +2,17 @@ package game.system.application;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import game.input.TextInput;
 import game.settings.Settings;
 import game.system.Configurations;
 import game.system.Console;
+import game.system.ConsoleLine;
+import game.system.ConsoleLogger;
 import game.system.command.CommandsManager;
-
 import map.Map;
 import multiplayer.ConnectorManager;
 
@@ -259,6 +263,23 @@ public class Application{
 	 */
 	public Console console(){
 		return Console.console();
+	}
+
+	/**
+	 * Retourne la console de log.
+	 * 
+	 * @return la console de log.
+	 */
+	public ConsoleLogger logger() {
+		return (ConsoleLogger) ConsoleLogger.logger();
+	}
+	
+	
+	
+	//-----------LOG-----------------
+	
+	public void debug(String message){
+		logger().print(new ConsoleLine("[" + new SimpleDateFormat("yyyy MMM dd HH:mm:ss").format(new Date()) +  "]" + "[debug]" + message, new Color(0,200,30)));
 	}
 	
 }

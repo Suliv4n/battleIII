@@ -25,6 +25,7 @@ public abstract class Top  extends BasicGameState
 	private boolean console = false;
 	private static boolean showSystemInfo = false;
 	private boolean directionKeyPressedOrDown = false;
+	private boolean logger = false;
 	
 	@Override
 	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
@@ -35,6 +36,9 @@ public abstract class Top  extends BasicGameState
 		}
 		if(console){
 			Application.application().console().render();
+		}
+		if(logger){
+			Application.application().logger().render();
 		}
 	}
 
@@ -54,18 +58,26 @@ public abstract class Top  extends BasicGameState
 			SystemInformations.getInstance().log(delta);
 		}
 		
-		if(in.isKeyPressed(Input.KEY_0) && Configurations.DEBUG){
+		if(in.isKeyPressed(Input.KEY_F1) && Configurations.DEBUG){
 			toggleConsole();
 		}
-		if(in.isKeyPressed(Input.KEY_9) && Configurations.DEBUG){
+		if(in.isKeyPressed(Input.KEY_F2) && Configurations.DEBUG){
 			showSystemInfo = !showSystemInfo;
 		}
+		if(in.isKeyPressed(Input.KEY_F3) && Configurations.DEBUG){
+			toggleLogger();
+		}
+		
 		if(console && Configurations.DEBUG){
 			Application.application().console().setFocus(true);
 			if(in.isKeyPressed(Input.KEY_ENTER)){
 				Application.application().console().validate();
 			}
 			in.clearKeyPressedRecord();
+		}
+		if(logger){
+			Application.application().logger().setFocus(true);
+			Application.application().logger().filter();
 		}
 		if(in.isKeyPressed(KeyboardControlsConfigurations.VALIDATE_KEY)){
 			onValidate();
@@ -126,9 +138,19 @@ public abstract class Top  extends BasicGameState
 	 */
 	private void toggleConsole(){
 		console = !console;
+		logger = false;
 		Application.application().console().setFocus(console);
 	}
 
+	/**
+	 * Affiche ou cache la console de logs.
+	 */
+	private void toggleLogger(){
+		logger = !logger;
+		console = false;
+		Application.application().logger().setFocus(logger);
+	}
+	
 	//----------------------------------------------------------------
 	//----------------------------EVENTS------------------------------
 	//----------------------------------------------------------------

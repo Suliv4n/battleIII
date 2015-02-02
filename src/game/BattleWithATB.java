@@ -3,12 +3,10 @@ package game;
 import game.battle.IBattle;
 import game.battle.actions.Action;
 import game.battle.actions.SkillAction;
-import game.dialogue.Select;
 import game.settings.Settings;
 import game.system.Configurations;
 import game.system.application.Application;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,25 +17,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-
-
-
-
-
-
-
-
-
-
-
-import animation.BattleAnimation;
 import characters.Character;
 import characters.EnnemisParty;
 import characters.Ennemy;
-import characters.Party;
 import skill.Skill;
 import ui.BarUI;
 import ui.GUIList;
@@ -45,7 +29,6 @@ import ui.Panel;
 import ui.TypeBarre;
 import ui.listRenderer.CursorRenderer;
 import ui.listRenderer.ElementRenderer;
-import util.Random;
 
 public class BattleWithATB extends Top
 {
