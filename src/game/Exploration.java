@@ -50,7 +50,7 @@ public class Exploration extends Top
 	private StateBasedGame game;
 	
 	
-	//Vrai si l'Jeu.getEquipe() est en mouvement.
+	//Vrai si l'"quipe est en mouvement.
 	//Faux sinon.
 	private boolean playerMoving;
 	

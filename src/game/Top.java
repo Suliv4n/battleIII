@@ -8,7 +8,7 @@ import game.system.KeyboardControlsConfigurations;
 import game.system.SystemInformations;
 import game.system.application.Application;
 
-
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -26,6 +26,7 @@ public abstract class Top  extends BasicGameState
 	private static boolean showSystemInfo = false;
 	private boolean directionKeyPressedOrDown = false;
 	private boolean logger = false;
+	private boolean showHitboxes = false;
 	
 	@Override
 	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
@@ -39,6 +40,10 @@ public abstract class Top  extends BasicGameState
 		}
 		if(logger){
 			Application.application().logger().render();
+		}
+		if(showHitboxes && Application.application().getGame().getCurrentStateID() == Config.EXPLORATION){
+			Application.application().getGame().getParty().getMap().drawHitbox(new Color(200,0,0,0.5f));
+			Application.application().getGame().getParty().drawHitbox(new Color(0,200,100,0.5f));
 		}
 	}
 
@@ -66,6 +71,9 @@ public abstract class Top  extends BasicGameState
 		}
 		if(in.isKeyPressed(Input.KEY_F3) && Configurations.DEBUG){
 			toggleLogger();
+		}
+		if(in.isKeyPressed(Input.KEY_F4) && Configurations.DEBUG){
+			showHitboxes = !showHitboxes;
 		}
 		
 		if(console && Configurations.DEBUG){

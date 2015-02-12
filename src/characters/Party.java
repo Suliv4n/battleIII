@@ -12,7 +12,9 @@ import java.util.Iterator;
 import map.Map;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import util.Random;
@@ -234,6 +236,7 @@ public class Party implements Iterable<Character>
 	 */
 	public void setRelativeX(double dx)
 	{	
+		party[0].getSkin().moveX((float) dx);
 		relativeX += dx;
 	}
 	
@@ -246,6 +249,7 @@ public class Party implements Iterable<Character>
 	 */
 	public void setRelativeY(double dy)
 	{		
+		party[0].getSkin().moveY((float) dy);
 		relativeY += dy;		
 	}
 	
@@ -369,7 +373,7 @@ public class Party implements Iterable<Character>
 	public void setValRelativeY(double y) 
 	{
 		this.relativeY = y;
-		
+		party[0].getSkin().setY((float) y);
 	}
 
 
@@ -379,8 +383,9 @@ public class Party implements Iterable<Character>
 	 * @param x
 	 * 		Nouvelle abscisse relative.
 	 */
-	public void setValRelativeX(int x) {
+	public void setValRelativeX(double x) {
 		this.relativeX = x;
+		party[0].getSkin().setX((float) x);
 	}
 
 
@@ -739,8 +744,7 @@ public class Party implements Iterable<Character>
 		{
 			x = (int) (Application.application().getGame().getParty().getMap().getX() + absoluteX);
 			y = (int) (Application.application().getGame().getParty().getMap().getY() + absoluteY);
-			System.out.println("ax : " + absoluteX);
-			System.out.println("ay : " + absoluteY);
+
 		}
 		
 		if(moving){
@@ -749,6 +753,10 @@ public class Party implements Iterable<Character>
 		else{
 			animation.getImage(2).draw(x, y);
 		}
+	}
+	
+	public void update(Input in){
+		
 	}
 
 
@@ -789,5 +797,9 @@ public class Party implements Iterable<Character>
 			}
 		}
 		return validTargets;
+	}
+	
+	public void drawHitbox(Color color){
+		party[0].getSkin().drawHitbox(color);
 	}
 }

@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
+import characters.skin.Skin;
 import bag.item.stuff.Weapon;
 import bag.item.stuff.Armor;
 
@@ -52,12 +53,8 @@ public class Ranger extends Character
 		
 		try 
 		{
-			sprites = new SpriteSheet("ressources/spritesheet/rodeur.png", 32,32,new Color(255,0,255));
-			for(int i = 0; i<5; i++)
-			{
-				animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
-			}
-			
+			SpriteSheet sprites = new SpriteSheet("ressources/spritesheet/rodeur.png", 32,32,new Color(255,0,255));
+			skin = new Skin(sprites);
 		} 
 		
 		catch (SlickException e) 

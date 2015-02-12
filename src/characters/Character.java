@@ -20,6 +20,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
+import characters.skin.Skin;
 import bag.IItems;
 import bag.item.stuff.*;
 import skill.Skill;
@@ -63,9 +64,7 @@ public abstract class Character implements IBattle
 	
 	protected ArrayList<Skill> skills;
 	
-	protected SpriteSheet sprites;
-	
-	protected Animation animations[];
+	protected Skin skin;
 	
 	//Action en cours => state combat
 	private Action action;
@@ -95,8 +94,6 @@ public abstract class Character implements IBattle
 		armors.put(Armor.LEGS, null);
 		armors.put(Armor.HEAD, null);
 		armors.put(Armor.CHEST, null);
-		
-		animations = new Animation[5];
 		
 		skills = new ArrayList<Skill>();
 		targets = new ArrayList<IBattle>();
@@ -367,7 +364,7 @@ public abstract class Character implements IBattle
 	
 	public Animation getAnimation(int direction) 
 	{
-		return animations[direction];
+		return skin.getAnimation(direction);
 	}
 	
 	/**
@@ -1011,5 +1008,10 @@ public abstract class Character implements IBattle
 
 	public void launchActiveTime() {
 		activeTimeBattleManager.launch(util.Random.randInt(20,60));
+	}
+
+
+	public Skin getSkin() {
+		return skin;
 	}
 }

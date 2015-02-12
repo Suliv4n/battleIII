@@ -2,24 +2,21 @@ package map;
 
 
 
-import game.launcher.Launcher;
 import game.system.application.Application;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
 import characters.EnnemisParty;
-import characters.Ennemy;
 import characters.NonPlayerCharacter;
 import characters.Party;
 import data.DataManager;
-import audio.MusicManager;
 
 
 /**
@@ -43,6 +40,7 @@ public class Map
 	private String id;
 	private String name;
 	private TiledMap map;
+	private Hitbox hitbox;
 	private Image backgroundBattle;
 	private ArrayList<Gate> gates;
 	private HashMap<Integer, AnimatedTileManager> animatedTiles;
@@ -90,12 +88,12 @@ public class Map
 		this.ennemis = ennemis;
 		this.commands = commandes;
 
-
 		
 		backgroundBattle = new Image(pathTerrain);
 		if(load)
 		{
 			map = new TiledMap(pathMap);
+			calculateHitbox();
 			animatedTiles = new HashMap<Integer, AnimatedTileManager>();
 			
 			//Propriétés des tiles:
@@ -288,54 +286,12 @@ public class Map
 	 * @return
 	 * 		La quantité de pixel nécessaire pour mettre à jour la position du personnage/de l'équipe
 	 */
-	
 	public double scrollX(double dx)
 	{
-		
-		//TODO
-		
-		/*
-        xTheorique -= dx;
-       
-        
-        if(LONG-map.getWidth()*32>0)
-        {
-        	//x-= dx;
-        	return dx;
-        }
-        
-       
-        
-        if(xTheorique>0 )
-        {
-        	x=0;
-            return dx;
-        }
-        
-        if(xTheorique<LONG - map.getWidth()*32)
-        {
-        	x = LONG-map.getWidth()*32;
-        	return dx;
-        }
-       
-        x-=dx;
-        if(x>0)
-        {
-            x=0;
-            return dx;
-        }
-        else if(x<LONG-map.getWidth()*32)
-        {
-            x = LONG-map.getWidth()*32;
-            return dx;
-        }
-        return 0;
-        */
+		hitbox.moveX(-dx);
 		
 		x-=dx;
-		
 		return 0;
-		
 	}
 
 	
@@ -353,42 +309,8 @@ public class Map
 	 */		
 	public double scrollY(double dy)
 	{
-		//TODO
-		/*
-        yTheorique -= dy;
-        
-
-        
-        if(LARG-map.getHeight()*32>0)
-        {
-        	//y-= dy;
-        	return dy;
-        }
-        
-        if(yTheorique>0)
-        {
-        	y=0;
-            return dy;
-        }
-        else if(yTheorique<LARG - map.getHeight()*32)
-        {
-        	y = LARG-map.getHeight()*32;
-        	return dy;
-        }
-       
-        y-=dy;
-        if(y>0)
-        {
-            y=0;
-            return dy;
-        }
-        else if(y<LARG-map.getHeight()*32)
-        {
-            y = LARG-map.getHeight()*32;
-            return dy;
-        }
-        return 0;
-        */
+		hitbox.moveY(-dy);
+		
 		y-=dy;
 		return 0;
 	}
@@ -548,6 +470,30 @@ public class Map
 		{
 			return false;
 		}
+	}
+	
+	public void calculateHitbox(){
+		hitbox = new Hitbox();
+		for(int axeX=0; axeX<map.getWidth();axeX++)
+		{
+			for(int axeY=0; axeY<map.getHeight();axeY++)
+			{
+				for(int i=0;i<3;i++)
+				{
+					int tileID = map.getTileId((int) axeX,(int) axeY, i);
+					/* Test collision */
+					boolean collision = "true".equalsIgnoreCase(map.getTileProperty(tileID, "collision", "false"));
+					if(collision)
+					{
+						hitbox.addShape(new Rectangle((int) (axeX*map.getTileWidth() + x), (int) (axeY*map.getTileHeight() + y), map.getTileWidth(), map.getTileHeight()));
+					}
+				}
+			}
+		}
+	}
+	
+	public void drawHitbox(Color color) {
+		hitbox.draw(color);
 	}
 	
 	/*
@@ -896,4 +842,6 @@ public class Map
 	public int getOriginalTileId(int x, int y, int z){
 		return originalTilesId[x][y][z];
 	}
+
+
 }
