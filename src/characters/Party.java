@@ -127,9 +127,12 @@ public class Party implements Iterable<Character>
 		
 		if(i < slots)
 		{
+			character.getSkin().getHitbox().setCenterX((float) relativeX);
+			character.getSkin().getHitbox().setCenterY((float) relativeY);
 			party[i]=character;
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -224,7 +227,8 @@ public class Party implements Iterable<Character>
 	public double speed()
 	{
 		//Modifier vitesse 10 default 
-		return 15 + party[0].getSpeed();
+		//return 15 + party[0].getSpeed();
+		return 1;
 	}
 
 	/**
@@ -236,8 +240,8 @@ public class Party implements Iterable<Character>
 	 */
 	public void setRelativeX(double dx)
 	{	
-		party[0].getSkin().moveX((float) dx);
 		relativeX += dx;
+		party[0].getSkin().moveX((float) dx);
 	}
 	
 	/**
@@ -248,9 +252,9 @@ public class Party implements Iterable<Character>
 	 * 
 	 */
 	public void setRelativeY(double dy)
-	{		
+	{	
+		relativeY += dy;
 		party[0].getSkin().moveY((float) dy);
-		relativeY += dy;		
 	}
 	
 	/**
@@ -302,7 +306,11 @@ public class Party implements Iterable<Character>
 	 */
 	public void setAbsoluteX(double dx) 
 	{
-		this.absoluteX += dx;
+		if(!party[0].getSkin().getHitbox().copy(dx,0).intersects(map.getHitbox())){
+			this.absoluteX += dx;
+			map.scrollX(dx);
+		}
+		party[0].getSkin().getHitbox().moveX(-dx);
 	}
 	
 	
@@ -325,7 +333,11 @@ public class Party implements Iterable<Character>
 	 */
 	public void setAbsoluteY(double dy) 
 	{
-		this.absoluteY += dy;
+		if(!party[0].getSkin().getHitbox().copy(0,dy).intersects(map.getHitbox())){
+			this.absoluteY += dy;
+			map.scrollY(dy);
+		}
+		party[0].getSkin().getHitbox().moveY(-dy);
 	}
 
 	
@@ -373,7 +385,9 @@ public class Party implements Iterable<Character>
 	public void setValRelativeY(double y) 
 	{
 		this.relativeY = y;
-		party[0].getSkin().setY((float) y);
+		for(Character c : party){
+			c.getSkin().setY((float) y);
+		}
 	}
 
 
@@ -385,7 +399,9 @@ public class Party implements Iterable<Character>
 	 */
 	public void setValRelativeX(double x) {
 		this.relativeX = x;
-		party[0].getSkin().setX((float) x);
+		for(Character c : party){
+			c.getSkin().setX((float) x);
+		}
 	}
 
 
@@ -748,16 +764,13 @@ public class Party implements Iterable<Character>
 		}
 		
 		if(moving){
-			animation.draw(x, y);
+			animation.draw(x , y);
 		}
 		else{
 			animation.getImage(2).draw(x, y);
 		}
 	}
 	
-	public void update(Input in){
-		
-	}
 
 
 	/**

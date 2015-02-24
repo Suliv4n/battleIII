@@ -465,29 +465,15 @@ public class Exploration extends Top
 	@Override
 	public void onHoldUp(){
 		if(dialogue == null){
-			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32,32, (int) (Application.application().getGame().getParty().speed()), 0);
 			
-			distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32,0 , (int) (-Application.application().getGame().getParty().speed()));
-			double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
-			
-			if(marge == 0)
-			{
-				Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
-			}
-			else
-			{
-				Application.application().getGame().getParty().setRelativeY(marge);
-			}
-			Application.application().getGame().getParty().setAbsoluteY(distance);
-			
-			Application.application().getGame().getParty();
 			if(Application.application().getGame().getParty().getDirection() != Party.NORTH)
 			{
-				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.NORTH);
 			}
+			
+			double speed = Application.application().getGame().getParty().speed();
+			Application.application().getGame().getParty().setAbsoluteY(-speed);
+			
 			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
@@ -495,29 +481,15 @@ public class Exploration extends Top
 	@Override
 	public void onHoldDown(){
 		if(dialogue == null){
-			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32,0 , (int) (Application.application().getGame().getParty().speed()));
 			
-			double marge = Application.application().getGame().getParty().getMap().scrollY(distance);
-	
-			if(marge == 0)
-			{
-				Application.application().getGame().getParty().setValRelativeY(Map.HEIGHT/2);
-			}
-			else
-			{
-				Application.application().getGame().getParty().setRelativeY(marge);
-			}
-			Application.application().getGame().getParty().setAbsoluteY(distance);
-	
-			
-			Application.application().getGame().getParty();
 			if(Application.application().getGame().getParty().getDirection() != Party.SOUTH)
 			{
-				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.SOUTH);
 			}
+			
+			double speed = Application.application().getGame().getParty().speed();
+			Application.application().getGame().getParty().setAbsoluteY(speed);
+			
 			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
@@ -525,27 +497,15 @@ public class Exploration extends Top
 	@Override
 	public void onHoldRight(){
 		if(dialogue == null){
-			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32,0 , (int) (Application.application().getGame().getParty().speed()));
 			
-			double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
-			if(marge == 0)
-			{
-				Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
-			}
-			else
-			{
-				Application.application().getGame().getParty().setRelativeX(marge);
-			}
-			Application.application().getGame().getParty().setAbsoluteX(distance);
-			
-			Application.application().getGame().getParty();
 			if(Application.application().getGame().getParty().getDirection() != Party.EAST)
 			{
-				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.EAST);
 			}
+			
+			double speed = Application.application().getGame().getParty().speed();
+			Application.application().getGame().getParty().setAbsoluteX(speed);
+			
 			Application.application().getGame().getParty().setMoving(true);
 		}
 	}
@@ -553,27 +513,14 @@ public class Exploration extends Top
 	@Override
 	public void onHoldLeft(){
 		if(dialogue == null){
-			int X = (int) (Application.application().getGame().getParty().getAbsoluteX());
-			int Y = (int) (Application.application().getGame().getParty().getAbsoluteY());
-			double distance = Application.application().getGame().getParty().getMap().distance(X, Y, 32, 32, - (int) (Application.application().getGame().getParty().speed()), 0);
 			
-			double marge = Application.application().getGame().getParty().getMap().scrollX(distance);
-			if(marge == 0)
-			{
-				Application.application().getGame().getParty().setValRelativeX(Map.WIDTH/2);
-			}
-			else
-			{
-				Application.application().getGame().getParty().setRelativeX(marge);
-			}
-			
-			Application.application().getGame().getParty().setAbsoluteX(distance);
-			Application.application().getGame().getParty();
 			if(Application.application().getGame().getParty().getDirection() != Party.WEST)
 			{
-				Application.application().getGame().getParty();
 				Application.application().getGame().getParty().setDirection(Party.WEST);
 			}
+			
+			double speed = Application.application().getGame().getParty().speed();
+			Application.application().getGame().getParty().setAbsoluteX(-speed);
 			
 			Application.application().getGame().getParty().setMoving(true);
 		}
@@ -587,7 +534,7 @@ public class Exploration extends Top
 	
 	@Override
 	public void onStart(){
-		if(dialogue == null){
+		if(dialogue != null){
 			game.enterState(Config.MENU);
 		}
 	}

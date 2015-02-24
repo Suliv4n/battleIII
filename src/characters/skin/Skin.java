@@ -6,6 +6,7 @@ import map.Hitbox;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 
 public class Skin {
@@ -18,7 +19,7 @@ public class Skin {
 		for(int i = 0; i<5; i++)
 		{
 			animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
-			hitbox = new Hitbox(new Rectangle(0, 0, 32, 32));
+			hitbox = new Hitbox(new Polygon(new float[]{0,0,32,0,32,32,0,32}));
 		}
 	}
 	
@@ -31,11 +32,11 @@ public class Skin {
 	}
 	
 	public void setX(float x){
-		hitbox.setX(x);
+		hitbox.setCenterX(x);
 	}
 
 	public void setY(float y){
-		hitbox.setY(y);
+		hitbox.setCenterY(y);
 	}
 	
 	public void drawHitbox(Color color){
@@ -45,5 +46,10 @@ public class Skin {
 	public Animation getAnimation(int direction) {
 		return animations[direction];
 	}
+
+	public Hitbox getHitbox() {
+		return hitbox;
+	}
+
 	
 }

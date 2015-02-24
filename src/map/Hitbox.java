@@ -7,23 +7,24 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.ShapeFill;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.ShapeRenderer;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Hitbox {
-	private ArrayList<Shape> shapes;
+	private ArrayList<Polygon> shapes;
 	
 	public Hitbox(){
-		shapes = new ArrayList<Shape>();
+		shapes = new ArrayList<Polygon>();
 	}
 	
-	public Hitbox(Shape shape){
-		shapes = new ArrayList<Shape>();
+	public Hitbox(Polygon shape){
+		shapes = new ArrayList<Polygon>();
 		shapes.add(shape);
 	}
 	
-	public void addShape(Shape shape){
+	public void addShape(Polygon shape){
 		shapes.add(shape);
 	}
 	
@@ -31,21 +32,24 @@ public class Hitbox {
 		for(Shape s : shapes){
 			for(Shape o : other.shapes){
 				if(s.intersects(o)){
+					Application.application().debug("INTERSECT");
 					return true;
 				}
 			}
 		}
-		
+		Application.application().debug("NO INTERSECT");
 		return false;
 	}
 
 	public void moveX(double d) {
+		Application.application().debug("dx = "+d);
 		for(Shape s : shapes){
 			s.setX((float) (s.getX() + d));
 		}
 	}
 	
 	public void moveY(double d) {
+		Application.application().debug("dy = "+d);
 		for(Shape s : shapes){
 			s.setY((float) (s.getY() + d));
 		}
@@ -73,4 +77,38 @@ public class Hitbox {
 			s.setY(y);
 		}
 	}
+	
+	public void setCenterX(float x) {
+		for(Shape s : shapes){
+			s.setCenterX(x);
+		}
+	}
+	
+	public void setCenterY(float y) {
+		for(Polygon s : shapes){
+			s.setCenterY(y);
+		}
+	}
+
+	/**
+	 * Retourne une copie de la hitbox avec un décalage.
+	 * 
+	 * @param dx
+	 * 	Décalage abscisse
+	 * @param dy
+	 * 	Décalage ordonée
+	 * @return
+	 */
+	public Hitbox copy(double dx, double dy) {
+		Hitbox copy = new Hitbox();
+		
+		for(Polygon s : shapes){
+			s.copy();
+			copy.addShape(s);
+		}
+		copy.moveX(dx);
+		copy.moveY(dy);
+		return copy;
+	}
+	
 }

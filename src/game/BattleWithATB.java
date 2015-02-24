@@ -292,7 +292,6 @@ public class BattleWithATB extends Top
 			queueATB.get(0).setAction(new SkillAction(queueATB.get(0), null, skill));
 		}
 		else{
-			queueATB.get(0).getAction().setTargets(cursorsTargets);
 			actionsQueue.add(queueATB.get(0).getAction());
 		}
 	}

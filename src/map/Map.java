@@ -13,6 +13,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
+import util.PolygonFactory;
 import characters.EnnemisParty;
 import characters.NonPlayerCharacter;
 import characters.Party;
@@ -485,7 +486,7 @@ public class Map
 					boolean collision = "true".equalsIgnoreCase(map.getTileProperty(tileID, "collision", "false"));
 					if(collision)
 					{
-						hitbox.addShape(new Rectangle((int) (axeX*map.getTileWidth() + x), (int) (axeY*map.getTileHeight() + y), map.getTileWidth(), map.getTileHeight()));
+						hitbox.addShape(PolygonFactory.createRectangle((float)(axeX*map.getTileWidth() + x), (float) (axeY*map.getTileHeight() + y), map.getTileWidth(), map.getTileHeight()));
 					}
 				}
 			}
@@ -841,6 +842,10 @@ public class Map
 	 */
 	public int getOriginalTileId(int x, int y, int z){
 		return originalTilesId[x][y][z];
+	}
+
+	public Hitbox getHitbox() {
+		return hitbox;
 	}
 
 
