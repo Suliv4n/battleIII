@@ -91,20 +91,20 @@ public class Hitbox {
 	}
 
 	/**
-	 * Retourne une copie de la hitbox avec un décalage.
+	 * Retourne une copie de la hitbox avec un dÃ©calage.
 	 * 
 	 * @param dx
-	 * 	Décalage abscisse
+	 * 	DÃ©calage abscisse
 	 * @param dy
-	 * 	Décalage ordonée
+	 * 	DÃ©calage ordonÃ©e
 	 * @return
 	 */
 	public Hitbox copy(double dx, double dy) {
 		Hitbox copy = new Hitbox();
 		
 		for(Polygon s : shapes){
-			s.copy();
-			copy.addShape(s);
+			Polygon shapeCopy = s.copy();
+			copy.addShape(shapeCopy);
 		}
 		copy.moveX(dx);
 		copy.moveY(dy);
