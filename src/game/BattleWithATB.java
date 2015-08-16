@@ -289,7 +289,7 @@ public class BattleWithATB extends Top
 			if(typeSelectTargets == Skill.ENNEMY){
 				cursorsTargets.add(ennemis.getFirstValidTarget());
 			}
-			queueATB.get(0).setAction(new SkillAction(queueATB.get(0), null, skill));
+			queueATB.get(0).setAction(new SkillAction(queueATB.get(0), cursorsTargets, skill));
 		}
 		else{
 			actionsQueue.add(queueATB.get(0).getAction());

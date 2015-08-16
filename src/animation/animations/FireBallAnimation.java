@@ -34,7 +34,6 @@ public class FireBallAnimation extends BattleAnimation{
 	@Override
 	public void render(){
 		fireBall.render((float)x, (float)y);
-		Application.application().console().print(new ConsoleLine(x + " " + y, new Color(0,100,250)));
 	}
 
 	@Override

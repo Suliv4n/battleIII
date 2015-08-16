@@ -20,6 +20,7 @@ public class Skin {
 		{
 			animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
 			hitbox = new Hitbox(new Polygon(new float[]{0,0,32,0,32,32,0,32}));
+			animations[i].setAutoUpdate(true);
 		}
 	}
 	

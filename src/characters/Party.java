@@ -747,8 +747,8 @@ public class Party implements Iterable<Character>
 	 * 		Vrai s'il faut utiliser les coordonnées absolues. Sinon faux.
 	 */
 	public void draw(float alpha, boolean absolute) {
-		Animation animation =  get(0).getAnimation(direction).copy();
-		animation.setAutoUpdate(true);
+		Animation animation =  get(0).getAnimation(direction);
+	
 		for(int i=0; i<animation.getFrameCount() ;i++){
 			animation.getImage(i).setAlpha(alpha);
 		}
@@ -765,6 +765,7 @@ public class Party implements Iterable<Character>
 		
 		if(moving){
 			animation.draw(x , y);
+			animation.setAutoUpdate(true);
 		}
 		else{
 			animation.getImage(2).draw(x, y);
