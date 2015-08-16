@@ -54,5 +54,7 @@ public abstract class Action {
 	public abstract void update(int delta);
 
 	public abstract boolean isRenderFisnished();
+	
+	//public abstract HashMap<IBattle, ArrayList<Effect>> getEffects();
 
 }
