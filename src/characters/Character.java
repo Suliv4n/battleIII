@@ -34,7 +34,7 @@ import ui.TypeBarre;
  * @author Darklev
  *
  */
-public abstract class Character implements IBattle
+public abstract class Character extends IBattle
 {
 	
 	public static final int MAIN_WEAPON=0;

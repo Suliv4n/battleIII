@@ -22,7 +22,7 @@ import skill.Skill;
  * @author Darklev
  *
  */
-public class Ennemy implements IBattle
+public class Ennemy extends IBattle
 {
 	private String id;
 	private String name;

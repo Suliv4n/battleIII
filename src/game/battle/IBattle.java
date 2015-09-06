@@ -8,30 +8,30 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.Image;
 
-public interface IBattle 
+public abstract class IBattle 
 {
-	public int getPhysicAttack();
-	public int getMagicAttack();
-	public int getPhysicDefense();
-	public int getMagicDefense();
-	public int getAgility();
-	public int getHealth();
-	public Image getImageForBattle();
-	public ActiveTimeBattleManager getActiveTimeBattleManager();
-	public void launchActiveTime();
+	public abstract int getPhysicAttack();
+	public abstract int getMagicAttack();
+	public abstract int getPhysicDefense();
+	public abstract int getMagicDefense();
+	public abstract int getAgility();
+	public abstract int getHealth();
+	public abstract Image getImageForBattle();
+	public abstract ActiveTimeBattleManager getActiveTimeBattleManager();
+	public abstract void launchActiveTime();
 	
-	public int getHealtPoints();
-	public int getMaximumHealthPoints();
-	public void updateHealthPoints(int dPV);
-	public boolean isAlive();	
+	public abstract int getHealtPoints();
+	public abstract int getMaximumHealthPoints();
+	public abstract void updateHealthPoints(int dPV);
+	public abstract boolean isAlive();	
 	
-	public String getName();
+	public abstract String getName();
 	
-	public void setTargets(ArrayList<IBattle> cibles);
-	public ArrayList<IBattle> getTargets();
-	public void chooseNextTarget(Combat combat);
+	public abstract void setTargets(ArrayList<IBattle> cibles);
+	public abstract ArrayList<IBattle> getTargets();
+	public abstract void chooseNextTarget(Combat combat);
 	
-	public Action getAction();
-	public void setAction(Action action);
-	public void cancelAction();
+	public abstract Action getAction();
+	public abstract void setAction(Action action);
+	public abstract void cancelAction();
 }
