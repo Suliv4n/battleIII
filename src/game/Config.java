@@ -60,7 +60,7 @@ public class Config
 	
 	//#region -----VOLUMES------------
 	//Volume du jeu
-	public static int musique = 0;
+	public static int musique = 100;
 	public static int son = 100;
 	//#endregion
 	protected static Color couleurPV = new Color(50,200,50);

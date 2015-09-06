@@ -29,9 +29,9 @@ import data.DataManager;
 
 
 /**
- * Une √©quipe est compos√©e de personnages.
+ * Une Èquipe est composÈe de personnages.
  * 
- * Une √©quipe ne peut comporter qu'un certain nombre de personnages.
+ * Une Èquipe ne peut comporter qu'un certain nombre de personnages.
  * 
  * @author Darklev
  *
@@ -45,7 +45,7 @@ public class Party implements Iterable<Character>
 	
 	
 	//COORDONNEES
-	private double relativeX; // par rapport √† l'√©cran
+	private double relativeX; // par rapport √† l'Ècran
 	private double relativeY;
 	
 	private double absoluteX; // par rapport √† la Map
@@ -54,13 +54,13 @@ public class Party implements Iterable<Character>
 	private Map map;
 	//___________
 
-	//liste des id des ennemis analys√©s
+	//liste des id des ennemis analysÈs
 	private ArrayList<String> analysedEnnemis;
 	private Bag sac;
 	private int money;
 	
 	/**
-	 * Direction dans laquelle regarde l'√©quipe.
+	 * Direction dans laquelle regarde l'Èquipe.
 	 */
 	private int direction;
 	private boolean moving = false;
@@ -73,7 +73,7 @@ public class Party implements Iterable<Character>
 	 * Constructeur de Equipe.
 	 * 
 	 * @param slots
-	 * 		Le nombre de personnages autoris√© dans l'√©quipe
+	 * 		Le nombre de personnages autorisÈ dans l'Èquipe
 	 * @throws SlickException 
 	 */
 	public Party(int slots) throws SlickException
@@ -95,7 +95,7 @@ public class Party implements Iterable<Character>
 		sac = new Bag();
 		
 		
-		//Correcteur de coordonn√©es relatives initiales
+		//Correcteur de coordonnÈes relatives initiales
 		/*
 		if(absolueX<Map.LONG/2)
 		{
@@ -106,15 +106,15 @@ public class Party implements Iterable<Character>
 			relativeY = absolueY;
 		}
 		*/
-		//Fin correcteur de coordonn√©es relatives initiales
+		//Fin correcteur de coordonnÈes relatives initiales
 	}
 	 
 
 	/**
-	 * Ajoute un Personnage dans l'√©quipe s'il y a assez de place dans l'√©quipe.
+	 * Ajoute un Personnage dans l'Èquipe s'il y a assez de place dans l'Èquipe.
 	 * 
 	 * @param Le personnage √† ajouter.
-	 * @return Vrai si le personnage a pu √™tre ajout√©, sinon faux.
+	 * @return Vrai si le personnage a pu Ítre ajoutÈ, sinon faux.
 	 * 
 	 */
 	public boolean add(Character character)
@@ -137,10 +137,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne l'animation du premier personnage vivant de l'√©quipe en fonction
+	 * Retourne l'animation du premier personnage vivant de l'Èquipe en fonction
 	 * de la direction dans laquelle il regarde.
 	 * 
-	 * @return l'animation de l'√©quipe.
+	 * @return l'animation de l'Èquipe.
 	 */
 	public Animation getAnimation()
 	{
@@ -148,7 +148,7 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne le premier personnage vivant de l'√©quipe.
+	 * Retourne le premier personnage vivant de l'Èquipe.
 	 * @return
 	 */
 	private Character firstAliveCharacter() {
@@ -163,9 +163,9 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Retourne la direction dans la quelle regarde l'√©quipe.
+	 * Retourne la direction dans la quelle regarde l'Èquipe.
 	 * 
-	 * @return la direction dans la quelle regarde l'√©quipe.
+	 * @return la direction dans la quelle regarde l'Èquipe.
 	 */
 	public int getDirection()
 	{
@@ -190,7 +190,7 @@ public class Party implements Iterable<Character>
 
 	/**
 	 * Retourne la map sur laquelle se trouve l'equipe.
-	 * @return la map sur laquelle se trouve l'√©quipe.
+	 * @return la map sur laquelle se trouve l'Èquipe.
 	 */
 	public Map getMap() 
 	{
@@ -198,10 +198,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne le sac de l'√©quipe o√π se trouve les objets 
-	 * de l'√©quipe.
+	 * Retourne le sac de l'Èquipe o√π se trouve les objets 
+	 * de l'Èquipe.
 	 * 
-	 * @return le sac de l'√©quipe.
+	 * @return le sac de l'Èquipe.
 	 */
 	public Bag getBag()
 	{
@@ -209,9 +209,9 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Retourne la monaie de l'√©quipe.
+	 * Retourne la monaie de l'Èquipe.
 	 * 
-	 * @return la monaie de l'√©quipe.
+	 * @return la monaie de l'Èquipe.
 	 */
 	public int getMoney()
 	{
@@ -219,10 +219,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne la citesse de d√©placement en pixel/frame de l'√©quipe.
+	 * Retourne la citesse de dÈplacement en pixel/frame de l'Èquipe.
 	 * Il s'agit de la vitesse du personnage √† l'index 0.
 	 * 
-	 * @return la vitesse de l'√©quipe.
+	 * @return la vitesse de l'Èquipe.
 	 */
 	public double speed()
 	{
@@ -232,10 +232,10 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Met √† jour la position relative (coordonn√©es par rapport √† la fen√™tre) sur l'axe X de l'√©quipe.
+	 * Met √† jour la position relative (coordonnÈes par rapport √† la fenÍtre) sur l'axe X de l'Èquipe.
 	 * 
 	 * @param dx
-	 * 		D√©placement horizontal.
+	 * 		DÈplacement horizontal.
 	 * 
 	 */
 	public void setRelativeX(double dx)
@@ -245,10 +245,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Met √† jour la position relative (coordonn√©es par rapport √† la fen√™tre) sur l'aye Y de l'√©quipe.
+	 * Met √† jour la position relative (coordonnÈes par rapport √† la fenÍtre) sur l'aye Y de l'Èquipe.
 	 * 
 	 * @param dy
-	 * 		D√©placement vertical
+	 * 		DÈplacement vertical
 	 * 
 	 */
 	public void setRelativeY(double dy)
@@ -258,7 +258,7 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Change la direction dans laquelle regarde l'√©quipe.
+	 * Change la direction dans laquelle regarde l'Èquipe.
 	 * 
 	 * @param la nouvelle direction (NORTH,SOUTH,EAST,WEST)
 	 */
@@ -268,9 +268,9 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Retourne la position relative (par rapport √† la fenetre) de l'√©quipe sur l'axe X.
+	 * Retourne la position relative (par rapport √† la fenetre) de l'Èquipe sur l'axe X.
 	 * 
-	 * @return la position relative (par rapport √† la fenetre) de l'√©quipe sur l'axe X.
+	 * @return la position relative (par rapport √† la fenetre) de l'Èquipe sur l'axe X.
 	 */
 	public double getRelativeX() 
 	{
@@ -278,9 +278,9 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne la position relative (par rapport √† la fenetre) de l'√©quipe sur l'axe Y.
+	 * Retourne la position relative (par rapport √† la fenetre) de l'Èquipe sur l'axe Y.
 	 * 
-	 * @return la position relative (par rapport √† la fenetre) de l'√©quipe sur l'axe Y.
+	 * @return la position relative (par rapport √† la fenetre) de l'Èquipe sur l'axe Y.
 	 */
 	public double getRelativeY() 
 	{
@@ -288,9 +288,9 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne la position absolue (par rapport √† la map) de l'√©quipe sur l'axe X.
+	 * Retourne la position absolue (par rapport √† la map) de l'Èquipe sur l'axe X.
 	 * 
-	 * @return la position absolue (par rapport √† la map) de l'√©quipe sur l'axe X.
+	 * @return la position absolue (par rapport √† la map) de l'Èquipe sur l'axe X.
 	 */
 	public double getAbsoluteX()
 	{
@@ -298,10 +298,10 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Met √† jour la position absolue (coordonn√©es par rapport √† la map) sur l'aye X de l'√©quipe.
+	 * Met √† jour la position absolue (coordonnÈes par rapport √† la map) sur l'aye X de l'Èquipe.
 	 * 
 	 * @param dx
-	 * 		D√©placement sur l'axe X
+	 * 		DÈplacement sur l'axe X
 	 * 
 	 */
 	public void setAbsoluteX(double dx) 
@@ -314,9 +314,9 @@ public class Party implements Iterable<Character>
 	
 	
 	/**
-	 * Retourne la position absolue (par rapport √† la map) de l'√©quipe sur l'axe Y.
+	 * Retourne la position absolue (par rapport √† la map) de l'Èquipe sur l'axe Y.
 	 * 
-	 * @return la position absolue (par rapport √† la map) de l'√©quipe sur l'axe Y.
+	 * @return la position absolue (par rapport √† la map) de l'Èquipe sur l'axe Y.
 	 */	
 	public double getAbsoluteY() 
 	{
@@ -325,10 +325,10 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Met √† jour la position absolue (coordonn√©es par rapport √† la map) sur l'aye Y de l'√©quipe.
+	 * Met √† jour la position absolue (coordonnÈes par rapport √† la map) sur l'aye Y de l'Èquipe.
 	 * 
 	 * @param dy
-	 * 		D√©placement sur l'axe Y
+	 * 		DÈplacement sur l'axe Y
 	 */
 	public void setAbsoluteY(double dy) 
 	{
@@ -340,12 +340,12 @@ public class Party implements Iterable<Character>
 
 	
 	/**
-	 * Retourne le personnage √† la position pass√© en param√®tre.
+	 * Retourne le personnage √† la position passÈ en param√®tre.
 	 * 
 	 * @param i
 	 * 		Index du personnage √† retourner.
 	 * @return
-	 * 		le personnage de l'√©quipe √† l'index i.
+	 * 		le personnage de l'Èquipe √† l'index i.
 	 */
 	public Character get(int i) 
 	{
@@ -354,7 +354,7 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne le personnage √† l'index pass√© en param√®tre ou retourne
+	 * Retourne le personnage √† l'index passÈ en param√®tre ou retourne
 	 * null si le personnage n'existe pas.
 	 * 
 	 * @param i
@@ -375,10 +375,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Modifie l'ordonn√©e relative de l'√©quipe (par raport √† l'√©cran).
+	 * Modifie l'ordonnÈe relative de l'Èquipe (par raport √† l'Ècran).
 	 * 
 	 * @param y
-	 * 		Nouvelle ordonn√©e relative.
+	 * 		Nouvelle ordonnÈe relative.
 	 */
 	public void setValRelativeY(double y) 
 	{
@@ -390,7 +390,7 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Modifie l'abscisse relative de l'√©quipe (par raport √† l'√©cran).
+	 * Modifie l'abscisse relative de l'Èquipe (par raport √† l'Ècran).
 	 * 
 	 * @param x
 	 * 		Nouvelle abscisse relative.
@@ -404,12 +404,12 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Affiche sur la fen√™tre un r√©sum√© de chaque personnage de l'√©quipe (nom, xp, pv ...)
+	 * Affiche sur la fenÍtre un rÈsumÈ de chaque personnage de l'Èquipe (nom, xp, pv ...)
 	 *  
 	 * @param g
 	 * 		Graphics
 	 * @param selection
-	 * 		Index du personnage s√©lectionn√© par le joueur.
+	 * 		Index du personnage sÈlectionnÈ par le joueur.
 	 */
 	public void renderTeamList(Graphics g, int selection)
 	{
@@ -422,10 +422,10 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Retourne le nombre de personnages dans l'√©quipe.
+	 * Retourne le nombre de personnages dans l'Èquipe.
 	 * 
 	 * @return
-	 * 		Le nombre de personnage dans l'√©qupe.
+	 * 		Le nombre de personnage dans l'Èqupe.
 	 */
 	public int numberOfCharacters() 
 	{
@@ -442,7 +442,7 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Permutte la position d'un personnage de l'√©quipe avec celle d'un autre.
+	 * Permutte la position d'un personnage de l'Èquipe avec celle d'un autre.
 	 * 
 	 * @param p0
 	 * 		Position initiale du personnage.
@@ -457,11 +457,11 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne l'index du personnage pass√© en param√®tre ou -1 si le personnage n'est pas dans l'√©quipe.
+	 * Retourne l'index du personnage passÈ en param√®tre ou -1 si le personnage n'est pas dans l'Èquipe.
 	 * @param personnage
 	 * 		Personnage dont l'index est √† retourner.
 	 * @return
-	 * 		l'index du personnage pass√© en param√®tre ou -1 si le personnage n'est pas dans l'√©quipe.
+	 * 		l'index du personnage passÈ en param√®tre ou -1 si le personnage n'est pas dans l'Èquipe.
 	 */
 	public int indexOf(Character personnage)
 	{
@@ -480,7 +480,7 @@ public class Party implements Iterable<Character>
 	/**
 	 * Retourne le nombre de personnage dont les PV sont >= 1.
 	 * 
-	 * @return le nombre de personnages vivants dans l'√©quipe.
+	 * @return le nombre de personnages vivants dans l'Èquipe.
 	 */
 	public int numberOfAliveCharacters() 
 	{
@@ -496,10 +496,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne vrai si tous les membres de l'√©quipe pr√©parent une action 
+	 * Retourne vrai si tous les membres de l'Èquipe prÈparent une action 
 	 * lors d'un combat, sinon retourne faux.
 	 * 
-	 * @return vrai si tous les personnages de l'√©quipe sont pr√™ts, faux sinon.
+	 * @return vrai si tous les personnages de l'Èquipe sont prÍts, faux sinon.
 	 */
 	public boolean isReady()
 	{
@@ -515,9 +515,9 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Retourne un personnage al√©atoire parmis les personnages vivants de l'√©quipe.
+	 * Retourne un personnage alÈatoire parmis les personnages vivants de l'Èquipe.
 	 * 
-	 * @return un personnage al√©atoire vivant de l'√©quipe.
+	 * @return un personnage alÈatoire vivant de l'Èquipe.
 	 */
 	public Object getRandomCharacter() 
 	{
@@ -538,11 +538,11 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Retourne vrai si l'√©quipe a d√©j√† analys√© l'ennemi dont l'id est pass√© en param√®tre, sinon faux.
+	 * Retourne vrai si l'Èquipe a dÈj√† analysÈ l'ennemi dont l'id est passÈ en param√®tre, sinon faux.
 	 * @param id
 	 * 		L'id de l'ennemi.
 	 * @return
-	 * 		 vrai si l'√©quipe a d√©j√† analys√© l'ennemi dont l'id est pass√© en param√®tre, sinon faux.
+	 * 		 vrai si l'Èquipe a dÈj√† analysÈ l'ennemi dont l'id est passÈ en param√®tre, sinon faux.
 	 */
 	public boolean isAnalysed(String id) 
 	{
@@ -550,10 +550,10 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Retourne le mage de l'√©quipe ou null s'il n'y a pas de mage.
+	 * Retourne le mage de l'Èquipe ou null s'il n'y a pas de mage.
 	 * 
 	 * @return 
-	 * 		le mage de l'√©quipe ou null s'il n'y a pas de mage.
+	 * 		le mage de l'Èquipe ou null s'il n'y a pas de mage.
 	 */
 	public Mage getMage()
 	{
@@ -568,10 +568,10 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Retourne le rodeur de l'√©quipe ou null s'il n'y a pas de rodeur.
+	 * Retourne le rodeur de l'Èquipe ou null s'il n'y a pas de rodeur.
 	 * 
 	 * @return 
-	 * 		le rodeur de l'√©quipe ou null s'il n'y a pas de rodeur.
+	 * 		le rodeur de l'Èquipe ou null s'il n'y a pas de rodeur.
 	 */
 	public Ranger getRanger()
 	{		
@@ -587,10 +587,10 @@ public class Party implements Iterable<Character>
 	
 	
 	/**
-	 * Retourne le guerrier de l'√©quipe ou null s'il n'y a pas de guerrier.
+	 * Retourne le guerrier de l'Èquipe ou null s'il n'y a pas de guerrier.
 	 * 
 	 * @return 
-	 * 		le guerrier de l'√©quipe ou null s'il n'y a pas de guerrier.
+	 * 		le guerrier de l'Èquipe ou null s'il n'y a pas de guerrier.
 	 */
 	public Warrior getWarrior()
 	{		
@@ -606,14 +606,14 @@ public class Party implements Iterable<Character>
 	
 	
 	/**
-	 * Retourne vrai si l'equipable pass√© en param√®tre est √©quip√©
-	 * par l'un des personnage de l'√©quipe, sinon faux.
+	 * Retourne vrai si l'equipable passÈ en param√®tre est ÈquipÈ
+	 * par l'un des personnage de l'Èquipe, sinon faux.
 	 * 
 	 * @param equipable
 	 * 		Stuff √† tester
 	 * 
-	 * @return vrai si l'equipable pass√© en param√®tre est √©quip√©
-	 * par l'un des personnage de l'√©quipe, sinon faux.
+	 * @return vrai si l'equipable passÈ en param√®tre est ÈquipÈ
+	 * par l'un des personnage de l'Èquipe, sinon faux.
 	 */
 	public boolean isEquiped(Stuff equipable)
 	{
@@ -650,12 +650,12 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Ajoute un objet en quantit√© pass√© en param√®tre dans le sac de l'√©quipe.
+	 * Ajoute un objet en quantitÈ passÈ en param√®tre dans le sac de l'Èquipe.
 	 * 
 	 * @param item
 	 * 		Objet √† ajouter.
 	 * @param quantity
-	 * 		Quantit√© de l'objet √† ajouter.
+	 * 		QuantitÈ de l'objet √† ajouter.
 	 */
 	public void addItemInBag(IItems item,int quantity)
 	{
@@ -663,9 +663,9 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Retourne un tableau avec tous les personnages de l'√©quipe.
+	 * Retourne un tableau avec tous les personnages de l'Èquipe.
 	 * 
-	 * @return un tableau des personnages de l'√©quipe.
+	 * @return un tableau des personnages de l'Èquipe.
 	 */
 	public Character[] getCharacters()
 	{
@@ -673,11 +673,11 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Ajoute un ennemi √† la liste des ennemis analys√©s.
-	 * (Comp√©tence "Recherche" du mage)
+	 * Ajoute un ennemi √† la liste des ennemis analysÈs.
+	 * (CompÈtence "Recherche" du mage)
 	 * 
 	 * @param id
-	 *		L'id de l'ennemi analys√©.
+	 *		L'id de l'ennemi analysÈ.
 	 */
 	public void analyse(String id)
 	{
@@ -685,10 +685,10 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * CHange la map o√π se trouve l'√©quipe.
+	 * CHange la map o√π se trouve l'Èquipe.
 	 * 
 	 * @param map
-	 * 		Nouvelle map o√π se trouve l'√©quipe.
+	 * 		Nouvelle map o√π se trouve l'Èquipe.
 	 */
 	public void setMap(Map map) 
 	{
@@ -696,7 +696,7 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Modifie l'absisse absolue de l'√©quipe. (par rapport √† la map)
+	 * Modifie l'absisse absolue de l'Èquipe. (par rapport √† la map)
 	 * 
 	 * @param x
 	 * 		Nouvelle abscisse absolue
@@ -707,10 +707,10 @@ public class Party implements Iterable<Character>
 	}
 	
 	/**
-	 * Modifie l'ordonn√©e absolue de l'√©quipe. (par rapport √† la map)
+	 * Modifie l'ordonnÈe absolue de l'Èquipe. (par rapport √† la map)
 	 * 
 	 * @param x
-	 * 		Nouvelle ordonn√©e absolue
+	 * 		Nouvelle ordonnÈe absolue
 	 */
 	public void setValAbsoluteY(double y)
 	{
@@ -719,9 +719,9 @@ public class Party implements Iterable<Character>
 	}
 
 	/**
-	 * Met √† jour la monaie de l'√©quipe en ajoutant la valeur pass√© en param√®tre.
+	 * Met √† jour la monaie de l'Èquipe en ajoutant la valeur passÈ en param√®tre.
 	 * @param money
-	 * 		Valeur √† ajouter √† la monaie de l'√©quipe.
+	 * 		Valeur √† ajouter √† la monaie de l'Èquipe.
 	 */
 	public void updateMoney(int money)
 	{
@@ -730,19 +730,19 @@ public class Party implements Iterable<Character>
 
 	
 	/**
-	 * Dessine l'√©quipe.
+	 * Dessine l'Èquipe.
 	 */
 	public void draw() {
 		draw(1, false);
 	}
 	
 	/**
-	 * Affiche l'√©quipe avec une certiane opacit√©
+	 * Affiche l'Èquipe avec une certiane opacitÈ
 	 * 	
 	 * @param alpha
-	 * 		Opacit√© entre 0 et 1
+	 * 		OpacitÈ entre 0 et 1
 	 * @param absolute
-	 * 		Vrai s'il faut utiliser les coordonn√©es absolues. Sinon faux.
+	 * 		Vrai s'il faut utiliser les coordonnÈes absolues. Sinon faux.
 	 */
 	public void draw(float alpha, boolean absolute) {
 		Animation animation =  get(0).getAnimation(direction);
@@ -773,9 +773,9 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Indique si l'√©quipe est en mouvement ou non.
+	 * Indique si l'Èquipe est en mouvement ou non.
 	 * @param moving
-	 * 		Vrai si l'√©quipe est en mouvement, sinon faux.
+	 * 		Vrai si l'Èquipe est en mouvement, sinon faux.
 	 */
 	public void setMoving(boolean moving) {
 		this.moving = moving;
@@ -783,9 +783,9 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Retourne un personnage al√©atoire pouvant √™tre cibl√©.
+	 * Retourne un personnage alÈatoire pouvant Ítre ciblÈ.
 	 * 
-	 * @return un personnage valide de fa√ßon al√©atoire.
+	 *@return un personnage valide de faÁon alÈatoire.
 	 */
 	public IBattle getRandomValidTarget() {
 		
@@ -796,9 +796,9 @@ public class Party implements Iterable<Character>
 
 
 	/**
-	 * Retourne les personnages pouvant √™tre cibl√© par une comp√©tence ou un objet ...
+	 * Retourne les personnages pouvant Ítre ciblÈ par une compÈtence ou un objet ...
 	 * 
-	 * @return les personnages pouvant √™tre cibl√©s.
+	 * @return les personnages pouvant Ítre ciblÈs.
 	 */
 	public ArrayList<IBattle> getValidTargets() {
 		

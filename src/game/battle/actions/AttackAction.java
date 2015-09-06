@@ -1,6 +1,8 @@
 package game.battle.actions;
 
 import game.battle.IBattle;
+import game.battle.effect.Effect;
+import game.battle.effect.EffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +44,13 @@ public class AttackAction extends Action{
 	@Override
 	public boolean isRenderFisnished() {
 		return getBattleAnimation().isFinished();
+	}
+
+	@Override
+	public void calculateEffects() {
+		Effect e = new Effect(targets.get(0), EffectType.PHYSIQUE_DAMAGE);
+		e.setValue(50);
+		super.effects.add(e);
 	}
 
 }

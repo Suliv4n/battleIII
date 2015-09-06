@@ -534,7 +534,7 @@ public class Exploration extends Top
 	
 	@Override
 	public void onStart(){
-		if(dialogue != null){
+		if(dialogue == null){
 			game.enterState(Config.MENU);
 		}
 	}

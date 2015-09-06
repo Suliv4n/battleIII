@@ -1,6 +1,7 @@
 package game.battle.actions;
 
 import game.battle.IBattle;
+import game.battle.effect.Effect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +22,14 @@ public abstract class Action {
 	protected ArrayList<IBattle> targets;
 	protected BattleAnimation currentAnimation;
 	
+	protected ArrayList<Effect> effects;
+	
 	public Action(IBattle caster, ArrayList<IBattle> targets)
 	{
 		this.caster = caster;
 		this.targets = targets;
+		
+		this.effects = new ArrayList<Effect>();
 	}
 	
 	/**
@@ -55,6 +60,12 @@ public abstract class Action {
 
 	public abstract boolean isRenderFisnished();
 	
-	//public abstract HashMap<IBattle, ArrayList<Effect>> getEffects();
+	public abstract void calculateEffects();
+
+	public final void applyEffects() {
+		for(Effect e : effects){
+			e.apply();
+		}
+	}
 
 }

@@ -69,10 +69,10 @@ public class BattleWithATB extends Top
 			public void render(int x, int y, Object element, int index) {
 				Character p = (Character) element;
 				Graphics g = Application.application().getGraphics();
-				BarUI hvBar = new BarUI(Configurations.HEALTH_BAR_COLOR, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				BarUI hpBar = new BarUI(Configurations.HEALTH_BAR_COLOR, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
 				BarUI energyBar = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
 				BarUI atb = new BarUI(p.getActiveTimeBattleManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getActiveTimeBattleManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				hvBar.render(g, x, y+13);
+				hpBar.render(g, x, y+13);
 				energyBar.render(g, x+170, y+13);
 				atb.render(g,x+500,y+3);
 				
@@ -168,6 +168,7 @@ public class BattleWithATB extends Top
 			entity.getImageForBattle().drawCentered(coords.get(entity).getX(), coords.get(entity).getY());
 		}
 		bottomPanel.render(0, 380);
+		Application.application().debug(String.valueOf(Application.application().getGame().getParty().getRanger().getHealtPoints()));
 		equipeList.render(5, 385);
 		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
 			actionsLists.get(queueATB.get(0)).render(0, 0);
@@ -180,15 +181,7 @@ public class BattleWithATB extends Top
 		}
 		if(actionsQueue.size() > 0){
 			Action currentAction = actionsQueue.get(0);
-			if(currentAction.isRenderFisnished()){
-				actionsQueue.remove(currentAction);
-				queueATB.get(0).resetActiveTimeBattleManager();
-				queueATB.get(0).launchActiveTime();
-				typeSelectTargets = -1;
-				showSkills = false;
-				queueATB.remove(0);
-			}
-			else{
+			if(!currentAction.isRenderFisnished()){
 				currentAction.render();
 			}
 		}
@@ -239,6 +232,19 @@ public class BattleWithATB extends Top
 
 		if(actionsQueue.size() > 0){
 			actionsQueue.get(0).update(delta);
+			if(actionsQueue.get(0).isRenderFisnished()){
+				actionsQueue.get(0).calculateEffects();
+				actionsQueue.get(0).applyEffects();
+				
+				actionsQueue.remove(0);
+				queueATB.get(0).resetActiveTimeBattleManager();
+				queueATB.get(0).launchActiveTime();
+				
+				
+				typeSelectTargets = -1;
+				showSkills = false;
+				queueATB.remove(0);
+			}
 			pauseAllATB();
 		}
 		else{

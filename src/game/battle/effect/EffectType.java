@@ -25,7 +25,15 @@ public enum EffectType {
 		Application.application().getGame().getParty().analyse(((Ennemy)target).getID());
 	});
 	
-	private EffectType(BiConsumer<IBattle, Integer> apply){
-		
+	private BiConsumer<IBattle, Integer> applier;
+	
+	private EffectType(BiConsumer<IBattle, Integer> applier){
+		this.applier = applier;
 	}
+	
+	public void apply(IBattle target, int value){
+		applier.accept(target, value);
+	}
+	
+	
 }

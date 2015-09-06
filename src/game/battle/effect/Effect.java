@@ -1,6 +1,7 @@
 package game.battle.effect;
 
 import game.battle.IBattle;
+import game.system.application.Application;
 
 public class Effect {
 	
@@ -16,12 +17,9 @@ public class Effect {
 	public void setValue(int value){
 		this.value = value;
 	}
-	
-	
-	
-	
-	
-	public static void takeDamage(IBattle target, int value){
-		target.updateHealthPoints(value);
+
+	public void apply() {
+		Application.application().debug(target.getName() + " take " + value + " damage" );
+		type.apply(target, value);
 	}
 }
