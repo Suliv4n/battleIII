@@ -56,7 +56,7 @@ public class MusicManager
 		if(musics.containsKey(musique))
 		{
 			currentMusic = musics.get(musique);
-			path = "ressources/musiques/"+musique+".ogg";
+			path = "resources/musiques/"+musique+".ogg";
 			if(!musics.get(musique).playing())
 			{
 				currentMusic.loop();
@@ -65,7 +65,7 @@ public class MusicManager
 		}
 		else
 		{
-			musique = "ressources/musiques/"+musique+".ogg";
+			musique = "resources/musiques/"+musique+".ogg";
 			if(!path.equals(musique))
 			{
 					try 
@@ -114,6 +114,6 @@ public class MusicManager
 	 */
 	public static void loadMusic(String musique) throws SlickException
 	{
-		musics.put(musique, new Music("ressources/musiques/"+musique+".ogg"));
+		musics.put(musique, new Music("resources/musiques/"+musique+".ogg"));
 	}
 }

@@ -69,10 +69,10 @@ public class Game extends StateBasedGame{
 
 	public void init() throws SlickException {
 		party = new Party(0);
-		arrows = new Image("ressources/images/fleches.png",new Color(255,0,255));
+		arrows = new Image("resources/images/fleches.png",new Color(255,0,255));
 		openedChests = new ArrayList<Chest>();
 		
-		InputStream inputStream	= ResourceLoader.getResourceAsStream("ressources/fonts/8bitoperator.ttf");
+		InputStream inputStream	= ResourceLoader.getResourceAsStream("resources/fonts/8bitoperator.ttf");
 		Font font;
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, inputStream);

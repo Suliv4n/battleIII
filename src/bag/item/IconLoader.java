@@ -26,7 +26,7 @@ public class IconLoader
 	{
 		if(icones == null)
 		{
-			icones = new Image("ressources/images/objets.png", new Color(255,0,255));
+			icones = new Image("resources/images/objets.png", new Color(255,0,255));
 		}
 		return icones.getSubImage(1+(id%6)*21, 1 + ((int) id/6), 20, 20);
 	}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ennemis>
+	<ennemi id="1" nom="Carniplante" description="Plante carnivore sympa pour décorer son intérieur!"  atqphy="40" atqmag="40" defphy="10"  defmag="10" dext="5" soin="10" pv="50" xp="1" argent="2" image="resources\images\ennemis\1.png;0;0;47;52"/>
+</ennemis>

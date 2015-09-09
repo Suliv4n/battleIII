@@ -53,7 +53,7 @@ public class Configurations {
 	/**
 	 * Dossier contenant les ressouces du jeu.
 	 */
-	public static final String RESOURCES_FOLDER = "ressources/";
+	public static final String RESOURCES_FOLDER = "resources/";
 
 	/**
 	 * Dosser contenant les données.

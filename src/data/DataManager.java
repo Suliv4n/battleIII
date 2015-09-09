@@ -37,7 +37,7 @@ import skill.Skill;
 /**
  * La classe GenerateurDonnees permet de récupérer des 
  * objets (Skill, Map...) à partir des fichiers XML dans le dossier
- * ressources/donnees 
+ * resources/donnees 
  * 
  */
 public class DataManager 
@@ -60,7 +60,7 @@ public class DataManager
 	
 	/**
 	 * Retourne le skill dont l'id est passé en paramètre à partir
-	 * du fichier xml ressources/donnees/skills.xml
+	 * du fichier xml resources/donnees/skills.xml
 	 * 
 	 * Retourne null si le fichier ne peut 5 chargé, ou si l'id n'existe pas.
 	 * 
@@ -434,7 +434,7 @@ public class DataManager
 				}
 				
 				
-				Image icon = getIcone( idImage, "ressources/images/objets.png");
+				Image icon = getIcone( idImage, "resources/images/objets.png");
 				item = new Item(id, icon, description, name, battle, rarity, effects);
 			}
 		}
@@ -517,7 +517,7 @@ public class DataManager
 			if(e.getAttribute("id").equals(id))
 			{					
 				String name = e.getAttribute("nom", "???");
-				String pathSpriteSheet = "ressources/spritesheet/"+e.getAttribute("spritesheet");
+				String pathSpriteSheet = "resources/spritesheet/"+e.getAttribute("spritesheet");
 				
 				SpriteSheet sprites = new SpriteSheet(pathSpriteSheet, 32,32,new Color(255,0,255));
 				Animation[] animations = new Animation[4];
@@ -587,7 +587,7 @@ public class DataManager
 				int magicDefense = e.getIntAttribute("defmag",0);
 				int type = Weapon.codeWeapon(e.getAttribute("type","epee"));
 				
-				String pathImage = e.getAttribute("image", "ressources/images/equipables.png");
+				String pathImage = e.getAttribute("image", "resources/images/equipables.png");
 				int idImage = e.getIntAttribute("idimg",0);
 			    
 				int x = idImage%15;

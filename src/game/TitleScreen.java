@@ -39,7 +39,7 @@ public class TitleScreen extends Top{
 	@Override
 	public void init(GameContainer arg0, StateBasedGame game)
 			throws SlickException {
-		fond = new Image("ressources/images/title_screen.png");
+		fond = new Image("resources/images/title_screen.png");
 		menu = new String[]{"Nouveau jeu",
 							"Charger"};
 		this.game = game;

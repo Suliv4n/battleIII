@@ -84,7 +84,7 @@ public class Save
 		XMLOutputter out = new XMLOutputter(org.jdom2.output.Format.getPrettyFormat());
 		try 
 		{
-			out.output(document, new FileOutputStream("ressources/donnees/saves/"+save+".xml"));
+			out.output(document, new FileOutputStream("resources/donnees/saves/"+save+".xml"));
 			return true;
 		} 
 		catch (IOException e) 
@@ -106,7 +106,7 @@ public class Save
 	public static void loadSave(String save) throws SlickException
 	{
 		XMLParser parser = new XMLParser();
-		XMLElement root = parser.parse("ressources/donnees/saves/"+save+".xml");
+		XMLElement root = parser.parse("resources/donnees/saves/"+save+".xml");
 		
 		//récupération de l'équipe de personnages
 		Party party = new Party(3);
@@ -236,7 +236,7 @@ public class Save
 		ArrayList<Party> res = new ArrayList<Party>();
 		
 		for(int i = 1; i<100; i++){
-			File file = new File("ressources/donnees/saves/save"+i+".xml");
+			File file = new File("resources/donnees/saves/save"+i+".xml");
 			Party party = null;
 			if(file.exists())
 			{

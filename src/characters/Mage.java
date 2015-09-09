@@ -52,7 +52,7 @@ public class Mage extends Character
 		
 		try 
 		{
-			SpriteSheet sprites = new SpriteSheet("ressources/spritesheet/mage.png", 32,32,new Color(255,0,255));
+			SpriteSheet sprites = new SpriteSheet("resources/spritesheet/mage.png", 32,32,new Color(255,0,255));
 			skin = new Skin(sprites);
 		} catch (SlickException e) 
 		{

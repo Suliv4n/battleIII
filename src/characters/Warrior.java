@@ -56,7 +56,7 @@ public class Warrior extends Character
 		
 
 		try {
-			SpriteSheet sprites = new SpriteSheet("ressources/spritesheet/guerrier.png", 32,32,new Color(255,0,255));
+			SpriteSheet sprites = new SpriteSheet("resources/spritesheet/guerrier.png", 32,32,new Color(255,0,255));
 			skin = new Skin(sprites);
 		} catch (SlickException e) {
 			e.printStackTrace();

@@ -23,7 +23,7 @@ map => path de la map tmx
 
 
 <maps>
-	<map id="foret1" nom="La forêt" terrain="ressources/spritesheet/guerrier.png" musique="test2" map="ressources/map/foret1.tmx">	
+	<map id="foret1" nom="La forêt" terrain="resources/spritesheet/guerrier.png" musique="test2" map="resources/map/foret1.tmx">	
 		<portails>
 			<portail x="15" y="16" target="test1" xt="7" yt="2"/>
 			<portail x="14" y="16" target="test1" xt="7" yt="2"/>
@@ -36,7 +36,7 @@ map => path de la map tmx
 		</coffres>
 	</map>
 	
-	<map id="test1" nom="Salle de test" terrain="ressources/map/terrains/salle_test.png" musique="test2" map="ressources/map/salle_test1.tmx" exterieur="false" image="">
+	<map id="test1" nom="Salle de test" terrain="resources/map/terrains/salle_test.png" musique="test2" map="resources/map/salle_test1.tmx" exterieur="false" image="">
 
 		<ennemis>
 			<groupe id="1"/>		
@@ -52,7 +52,7 @@ map => path de la map tmx
 		</portails>		
 	</map>
 	
-	<map id="donjon1" nom="Donjon" terrain="ressources/map/terrains/donjon.png" musique="test2" map="ressources/map/donjon_1.tmx">	
+	<map id="donjon1" nom="Donjon" terrain="resources/map/terrains/donjon.png" musique="test2" map="resources/map/donjon_1.tmx">	
 		
 		<coffres>
 			<coffre x="30" y="3" contenu="objet:1" qte="3" />

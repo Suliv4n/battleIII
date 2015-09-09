@@ -82,9 +82,9 @@ public class Exploration extends Top
 		this.dialogue = new Dialogue(repliques);
 		dialogue.next();
 		
-		particles = new ParticleSystem("ressources/images/particles/rain.png", 1500, new Color(255,0,255));
+		particles = new ParticleSystem("resources/images/particles/rain.png", 1500, new Color(255,0,255));
 		
-		File xmlFile = new File("ressources/particles/rain.xml");
+		File xmlFile = new File("resources/particles/rain.xml");
 		ConfigurableEmitter ce;
 		try {
 			ce = ParticleIO.loadEmitter(xmlFile);
