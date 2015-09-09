@@ -148,7 +148,7 @@ public class BattleWithATB extends Top
 			s.setHeight(99);
 			s.setData(p.getSkills());
 			s.setElementRenderer(
-				(int x, int y, Object element, int index) ->{
+				(int x, int y, Object element, int index) -> {
 					Skill skill = (Skill) element;
 					Application.application().drawString(skill.getName(), x, y);
 			});
@@ -235,11 +235,17 @@ public class BattleWithATB extends Top
 			if(actionsQueue.get(0).isRenderFisnished()){
 				actionsQueue.get(0).calculateEffects();
 				actionsQueue.get(0).applyEffects();
+				actionsQueue.get(0).getCaster();
+				
+				IBattle caster = actionsQueue.get(0).getCaster();
+				caster.resetActiveTimeBattleManager();
+				caster.launchActiveTime();
+				
+				if(caster instanceof Character){
+					queueATB.remove(caster);
+				}
 				
 				actionsQueue.remove(0);
-				queueATB.get(0).resetActiveTimeBattleManager();
-				queueATB.get(0).launchActiveTime();
-				
 				
 				typeSelectTargets = -1;
 				showSkills = false;

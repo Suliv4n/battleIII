@@ -18,6 +18,7 @@ public abstract class IBattle
 	public abstract int getHealth();
 	public abstract Image getImageForBattle();
 	public abstract ActiveTimeBattleManager getActiveTimeBattleManager();
+	public abstract void resetActiveTimeBattleManager();
 	public abstract void launchActiveTime();
 	
 	public abstract int getHealtPoints();
@@ -34,4 +35,5 @@ public abstract class IBattle
 	public abstract Action getAction();
 	public abstract void setAction(Action action);
 	public abstract void cancelAction();
+	
 }

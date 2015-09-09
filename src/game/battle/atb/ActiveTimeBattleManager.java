@@ -67,4 +67,5 @@ public class ActiveTimeBattleManager {
 	public void resetToZero() {
 		onTick.setCurrent(0);
 	}
+
 }

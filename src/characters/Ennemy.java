@@ -414,6 +414,12 @@ public class Ennemy extends IBattle
 		activeTimeBattleManager.launch(util.Random.randInt(20,60));
 	}
 	
+	@Override
+	public void resetActiveTimeBattleManager() {
+		activeTimeBattleManager.stop();
+		activeTimeBattleManager = new ActiveTimeBattleManager(100);
+	}
+	
 	public int getTypeArtificialIntelligence(){
 		return typeArtificialIntelligence;
 	}

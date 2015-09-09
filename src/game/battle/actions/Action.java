@@ -68,4 +68,8 @@ public abstract class Action {
 		}
 	}
 
+	public IBattle getCaster() {
+		return caster;
+	}
+
 }
