@@ -383,7 +383,6 @@ public class DataManager
 				
 				String[] dataImage = imageValue.split(";");
 				
-				System.out.println(dataImage[0]);
 				
 				Image image = new Image(dataImage[0], new Color(255,0,255)).getSubImage(Integer.parseInt(dataImage[1]), Integer.parseInt(dataImage[2]), Integer.parseInt(dataImage[3]), Integer.parseInt(dataImage[4]));
 				

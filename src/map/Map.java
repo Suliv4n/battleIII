@@ -424,7 +424,6 @@ public class Map
 		{
 			if(p.getMap().id.equals(this.id)){
 				p.draw(0.5f, true);
-				System.out.println("draw " + p);
 			}
 		}
 	}

@@ -527,7 +527,6 @@ public class InterfaceSac extends Top
 			indexA = curseursAbsolus.get(curseurCategorie);
 			int indexR = curseursRelatifs.get(curseurCategorie);
 			
-			System.out.println(curseursAbsolus.get(curseurCategorie));
 			
 			if(indexA + 1 == getCategorie().size())
 			{

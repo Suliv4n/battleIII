@@ -103,7 +103,6 @@ public class ConnectorManager implements Runnable{
 
 	public void addPlayer(String key, Party party) {
 		players.put(key, party);
-		System.out.println("Client added on map " + party.getMap().getId());
 	}
 	
 	@Override

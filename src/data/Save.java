@@ -219,7 +219,6 @@ public class Save
 		party.setValAbsoluteY(y);
 		party.setMap(map);
 		party.setDirection(direction);
-		System.out.println(party.get(0));
 		Application.application().getGame().setParty(party);
 			
 		return party;

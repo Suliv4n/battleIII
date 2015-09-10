@@ -2,6 +2,7 @@ package game;
 
 import game.battle.IBattle;
 import game.battle.actions.Action;
+import game.battle.actions.AttackAction;
 import game.battle.actions.SkillAction;
 import game.settings.Settings;
 import game.system.Configurations;
@@ -36,7 +37,10 @@ public class BattleWithATB extends Top
 	private Image background;
 	private EnnemisParty ennemis;
 	private ArrayList<Character> queueATB;
+	
 	private boolean showSkills = false;
+	private boolean attacking = false;
+	
 	private ArrayList<Action> actionsQueue;
 	private int typeSelectTargets = -1; //Skill.ALL_ENNEMIES, ...
 	private ArrayList<IBattle> cursorsTargets;
@@ -165,7 +169,9 @@ public class BattleWithATB extends Top
 		topPanel.render(0, 0);
 		background.drawCentered(Configurations.SCREEN_WIDTH/2, Configurations.SCREEN_HEIGHT/2);
 		for(IBattle entity : coords.keySet()){
-			entity.getImageForBattle().drawCentered(coords.get(entity).getX(), coords.get(entity).getY());
+			if(entity.isAlive()){
+				entity.getImageForBattle().drawCentered(coords.get(entity).getX(), coords.get(entity).getY());
+			}
 		}
 		bottomPanel.render(0, 380);
 		Application.application().debug(String.valueOf(Application.application().getGame().getParty().getRanger().getHealtPoints()));
@@ -249,7 +255,7 @@ public class BattleWithATB extends Top
 				
 				typeSelectTargets = -1;
 				showSkills = false;
-				queueATB.remove(0);
+				
 			}
 			pauseAllATB();
 		}
@@ -288,12 +294,18 @@ public class BattleWithATB extends Top
 	
 	@Override
 	public void onValidate(){
-		if(queueATB.size() > 0 && !showSkills && typeSelectTargets == -1){
-			if(actionsLists.get(queueATB.get(0)).getSelectedIndex() == 1){
+		if(queueATB.size() > 0 && !showSkills && typeSelectTargets == -1){ //selection d'une action
+			if(actionsLists.get(queueATB.get(0)).getSelectedIndex() == 0){
+				typeSelectTargets = Skill.ENNEMY;
+				cursorsTargets.clear();
+				cursorsTargets.add(ennemis.getFirstValidTarget());
+				attacking = true;
+			}
+			else if(actionsLists.get(queueATB.get(0)).getSelectedIndex() == 1){
 				showSkills = true;
 			}
 		}
-		else if(showSkills && queueATB.get(0).getSkills().size() > 0){
+		else if(showSkills && queueATB.get(0).getSkills().size() > 0){ //selection d'un skill
 			showSkills = false;
 			Skill skill = skillsLists.get(queueATB.get(0)).getObject();
 			typeSelectTargets = skill.getTargets();
@@ -303,7 +315,12 @@ public class BattleWithATB extends Top
 			}
 			queueATB.get(0).setAction(new SkillAction(queueATB.get(0), cursorsTargets, skill));
 		}
-		else{
+		else if(queueATB.size() > 0){ //ajout de l'action dans la queue actions
+			if(attacking){
+				attacking = false;
+				queueATB.get(0).setAction(new AttackAction(queueATB.get(0), cursorsTargets));
+			}
+			typeSelectTargets = -1;
 			actionsQueue.add(queueATB.get(0).getAction());
 		}
 	}
@@ -328,6 +345,20 @@ public class BattleWithATB extends Top
 			else if(cursor % 2 == 0 && ennemis.isValidTarget(cursor + 1)){
 				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor + 1));
 			}
+			if(cursor % 2 == 0){
+				for(int i : new int[]{1,3,5}){
+					if(ennemis.isValidTarget(i)){
+						cursorsTargets.set(0, ennemis.getEnnemis().get(i));
+					}
+				}
+			}
+			else{
+				for(int i : new int[]{0,2,4}){
+					if(ennemis.isValidTarget(i)){
+						cursorsTargets.set(0, ennemis.getEnnemis().get(i));
+					}
+				}
+			}
 		}
 	}
 	
@@ -335,11 +366,28 @@ public class BattleWithATB extends Top
 	public void onRight(){
 		if(typeSelectTargets == Skill.ENNEMY){
 			int cursor = ennemis.indexOf((Ennemy) cursorsTargets.get(0));
+			
 			if(cursor % 2 == 0 && ennemis.isValidTarget(cursor + 1)){
 				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor + 1));
 			}
 			else if(cursor % 2 == 1 && ennemis.isValidTarget(cursor - 1)){
 				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor - 1));
+			}
+			else{
+				if(cursor % 2 == 0){
+					for(int i : new int[]{1,3,5}){
+						if(ennemis.isValidTarget(i)){
+							cursorsTargets.set(0, ennemis.getEnnemis().get(i));
+						}
+					}
+				}
+				else{
+					for(int i : new int[]{0,2,4}){
+						if(ennemis.isValidTarget(i)){
+							cursorsTargets.set(0, ennemis.getEnnemis().get(i));
+						}
+					}
+				}
 			}
 		}
 	}

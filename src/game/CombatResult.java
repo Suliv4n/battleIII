@@ -125,7 +125,6 @@ public class CombatResult extends BasicGameState
 			g.fillRect(71, 71+delta*i, 199, 19);
 			g.setColor(Config.couleurXP);
 			g.fillRect(71, 71+delta*i, (float) (equipe.get(i).getExperience()/(double) (equipe.get(i).experienceRequiredForNextLevel())*199) , 19);
-			System.out.println((double) (equipe.get(i).getExperience()/equipe.get(i).experienceRequiredForNextLevel())*198);
 			
 			g.drawImage(equipe.get(i).getAnimation(Party.SOUTH).getImage(2), 10, 60+i*delta);
 			g.setColor(Color.white);

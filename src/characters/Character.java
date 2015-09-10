@@ -746,10 +746,9 @@ public abstract class Character extends IBattle
 		
 		if(targets.size() == 1)
 		{
-			System.out.println( "cibles.size() == 1" );
+
 			if(targets.get(0) instanceof Ennemy)
 			{
-				System.out.println( "cibles.get(0) instanceof Ennemi" + " - " + !targets.get(0).isAlive());
 				if(!targets.get(0).isAlive())
 				{
 					EnnemisParty ennemis = combat.getEnnemis();
@@ -758,11 +757,9 @@ public abstract class Character extends IBattle
 					
 					for(Ennemy e : ennemis.getEnnemis().values())
 					{
-						System.out.println( "boucle : " + e );
 						if(e.isAlive())
 						{
 							targets.set(0,e);
-							System.out.println( "NOUVELLE CIBLE : " + e );
 							break;
 						}
 					}

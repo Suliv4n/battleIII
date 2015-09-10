@@ -224,7 +224,6 @@ public class Ennemy extends IBattle
 						if(combat.getEquipe().get((i + indexCible) % equipe.numberOfCharacters()).isAlive())
 						{
 							targets.set(0, combat.getEquipe().get((i + indexCible) % equipe.numberOfCharacters()));
-							System.out.println("cible reseter");
 							break;
 						}
 					}

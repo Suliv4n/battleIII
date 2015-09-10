@@ -162,7 +162,6 @@ public class Exploration extends Top
 				if(portail != null)
 				{
 					Application.application().getGame().getParty().setMap(DataManager.loadMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
-					System.out.println("new coords : " + (int) (portail.getXT()*32 - Config.LONGUEUR/2)+ "  -  " + ((int) portail.getYT()*32 - Config.LARGEUR/2));
 					Application.application().getGame().getParty().setValAbsoluteX(portail.getXT() * 32 +16);
 					Application.application().getGame().getParty().setValAbsoluteY(portail.getYT() * 32 +16);
 					
@@ -317,7 +316,7 @@ public class Exploration extends Top
 	*/
 	
 	public void controllerButtonPressed(int controller, int button){
-		System.out.println(controller + " " + button);
+
 		if(button == ControllerInput.START){
 			onStart();
 		}
