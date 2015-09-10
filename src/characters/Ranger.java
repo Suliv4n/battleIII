@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import characters.skin.Skin;
+import data.DataManager;
 import bag.item.stuff.Weapon;
 import bag.item.stuff.Armor;
 
@@ -28,8 +29,9 @@ public class Ranger extends Character
 	 * 
 	 * @param name
 	 * 		Nom du ranger.
+	 * @throws SlickException 
 	 */
-	public Ranger(String name) 
+	public Ranger(String name) throws SlickException 
 	{
 		super(name);		
 		statistics.put("endurance",15);
@@ -51,17 +53,7 @@ public class Ranger extends Character
 		
 		armorTypes.add(Armor.FABRIC);
 		
-		try 
-		{
-			SpriteSheet sprites = new SpriteSheet("resources/spritesheet/rodeur.png", 32,32,new Color(255,0,255));
-			skin = new Skin(sprites);
-		} 
-		
-		catch (SlickException e) 
-		{
-			e.printStackTrace();
-		}
-		
+		skin = DataManager.loadSkin("2");
 
 	}
 

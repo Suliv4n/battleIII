@@ -14,12 +14,12 @@ public class Skin {
 	private Animation[] animations;
 	private Hitbox hitbox;
 	
-	public Skin(SpriteSheet sprites){
+	public Skin(SpriteSheet sprites, int x, int y, int width, int height){
 		animations = new Animation[5];
 		for(int i = 0; i<5; i++)
 		{
 			animations[i] = new Animation(sprites, 0, i, 2,i ,true, 100, true);
-			hitbox = new Hitbox(new Polygon(new float[]{0,0,32,0,32,32,0,32}));
+			hitbox = new Hitbox(new Polygon(new float[]{x,y,x,y+height,x+width,y+height,x+width,y}));
 			animations[i].setAutoUpdate(true);
 		}
 	}

@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import characters.skin.Skin;
+import data.DataManager;
 import bag.item.stuff.*;
 
 
@@ -27,8 +28,9 @@ public class Warrior extends Character
 	 * 
 	 * @param name
 	 * 		Nom du guerrier.
+	 * @throws SlickException 
 	 */
-	public Warrior(String name)
+	public Warrior(String name) throws SlickException
 	{
 		super(name);		
 		statistics.put("endurance",20);
@@ -54,13 +56,7 @@ public class Warrior extends Character
 		armorTypes.add(Armor.CHAINMAIL);
 		armorTypes.add(Armor.LEATHER);
 		
-
-		try {
-			SpriteSheet sprites = new SpriteSheet("resources/spritesheet/guerrier.png", 32,32,new Color(255,0,255));
-			skin = new Skin(sprites);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		skin = DataManager.loadSkin("3");
 	}	
 	
 	

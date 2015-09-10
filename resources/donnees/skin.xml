@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialogues>
-	<dialogue id="test">
-		<replique enonciateur="$pnj[1]" replique="$if[equipe0=mage] Bonjour $mage! $end"/>
-		<replique enonciateur="$pnj[1]" replique="Êtes-vous un ami de $mage?"/>
-	</dialogue>
-</dialogues>
+<skins>
+	<skin id="1" name="Mage" >
+		<spritesheet path="resources/spritesheet/mage.png" />
+		<hitbox x="6" y="12" width="20" height="20" />
+	</skin>
+	<skin id="2" name="Mage" >
+		<spritesheet path="resources/spritesheet/rodeur.png" />
+		<hitbox x="6" y="12" width="20" height="20" />
+	</skin>
+	<skin id="3" name="Mage" >
+		<spritesheet path="resources/spritesheet/guerrier.png" />
+		<hitbox x="6" y="12" width="20" height="20" />
+	</skin>
+</skins>

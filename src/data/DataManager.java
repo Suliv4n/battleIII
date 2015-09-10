@@ -26,6 +26,7 @@ import org.newdawn.slick.util.xml.*;
 import characters.EnnemisParty;
 import characters.Ennemy;
 import characters.NonPlayerCharacter;
+import characters.skin.Skin;
 import bag.IItems;
 import bag.item.Item;
 import bag.item.stuff.Weapon;
@@ -630,6 +631,41 @@ public class DataManager
 				
 				return image.getSubImage(x, y, width, height);
 				
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Charge le skin dont l'id est passé en paramètre.
+	 * 
+	 * @param id
+	 * 		L'id du skin à retourner.
+	 * @return
+	 * 		Le skin.
+	 * @throws SlickException 
+	 */
+	public static Skin loadSkin(String id) throws SlickException{
+		ArrayList<XMLElement> collectionImages = getChildrenFromXML("skin.xml", "skin");
+		
+		for(XMLElement e : collectionImages)
+		{
+			if(e.getAttribute("id").equals(id))
+			{
+				XMLElement spriteSheet = e.getChildrenByName("spritesheet").get(0);
+				String path = spriteSheet.getAttribute("path");
+				
+				SpriteSheet sprites = new SpriteSheet(path, 32,32,new Color(255,0,255));
+				//skin = new Skin(sprites);
+
+				
+				XMLElement hitbox = e.getChildrenByName("hitbox").get(0);
+				int x = hitbox.getIntAttribute("x",0);
+				int y = hitbox.getIntAttribute("y",0);
+				int height = hitbox.getIntAttribute("height",32);
+				int width = hitbox.getIntAttribute("width",32);
+				
+				return new Skin(sprites, x, y, width, height);
 			}
 		}
 		return null;

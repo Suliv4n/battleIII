@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import characters.skin.Skin;
+import data.DataManager;
 import bag.item.stuff.Weapon;
 import bag.item.stuff.Armor;
 
@@ -26,8 +27,9 @@ public class Mage extends Character
 	 * 
 	 * @param name
 	 * 		Nom du personnage.
+	 * @throws SlickException 
 	 */
-	public Mage(String name) 
+	public Mage(String name) throws SlickException 
 	{
 		super(name);		
 		statistics.put("endurance",10);
@@ -50,14 +52,8 @@ public class Mage extends Character
 		
 		mana = statistics.get("intelligence")*5;
 		
-		try 
-		{
-			SpriteSheet sprites = new SpriteSheet("resources/spritesheet/mage.png", 32,32,new Color(255,0,255));
-			skin = new Skin(sprites);
-		} catch (SlickException e) 
-		{
-			e.printStackTrace();
-		}
+		skin = DataManager.loadSkin("1");
+		
 	}
 
 

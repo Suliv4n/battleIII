@@ -64,7 +64,7 @@ public class FireBallAnimation extends BattleAnimation{
 	@Override
 	public boolean isFinished() {
 		return (  Math.abs(x - battle.getCoords(getCaster()).getX()) >= Math.abs(xDistance)
-				&&  Math.abs(y - battle.getCoords(getCaster()).getY()) >= Math.abs(yDistance) ) ;
+			&&  Math.abs(y - battle.getCoords(getCaster()).getY()) >= Math.abs(yDistance) ) ;
 	}
 
 }
