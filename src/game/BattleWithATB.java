@@ -220,7 +220,6 @@ public class BattleWithATB extends Top
 			}
 		}
 		for(Ennemy e : ennemis.getEnnemis().values()){
-			System.out.println(e.getActiveTimeBattleManager().getCurrent());
 			if(e.getActiveTimeBattleManager().getCurrent() == 100 && e.isAlive()){
 				actionsQueue.add(actionsQueue.size(), e.doIA(this));
 				e.getActiveTimeBattleManager().resetToZero();

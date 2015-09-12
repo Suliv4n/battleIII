@@ -27,6 +27,7 @@ public class SkillAction extends Action{
 	public BattleAnimation getBattleAnimation() {
 		if(currentAnimation == null){
 			currentAnimation = AnimationFactory.createAnimation(caster, targets);
+			currentAnimation.init();
 		}
 		return currentAnimation;
 	}

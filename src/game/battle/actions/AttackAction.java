@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 
 import animation.AnimationFactory;
 import animation.BattleAnimation;
+import animation.animations.NormalAttackAnimation;
 
 public class AttackAction extends Action{
 
@@ -21,7 +22,7 @@ public class AttackAction extends Action{
 	@Override
 	public BattleAnimation getBattleAnimation() {
 		if(currentAnimation == null){
-			currentAnimation = AnimationFactory.createAnimation(caster, targets);
+			currentAnimation = new NormalAttackAnimation(caster, targets);
 		}
 		return currentAnimation;
 	}
