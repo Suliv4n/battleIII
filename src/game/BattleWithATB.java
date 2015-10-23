@@ -174,7 +174,6 @@ public class BattleWithATB extends Top
 			}
 		}
 		bottomPanel.render(0, 380);
-		Application.application().debug(String.valueOf(Application.application().getGame().getParty().getRanger().getHealtPoints()));
 		equipeList.render(5, 385);
 		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
 			actionsLists.get(queueATB.get(0)).render(0, 0);
@@ -190,6 +189,9 @@ public class BattleWithATB extends Top
 			if(!currentAction.isRenderFisnished()){
 				currentAction.render();
 			}
+			else if(!currentAction.getEffectsAnimation().isFinished()){
+				currentAction.getEffectsAnimation().render();
+			}
 		}
 
 		super.render(container, game, g);
@@ -202,8 +204,8 @@ public class BattleWithATB extends Top
 				Point p = coords.get(t);
 				Graphics g = Application.application().getGraphics();
 				g.drawImage(Application.application().getGame().getArrow(0), 
-						p.getX() - t.getImageForBattle().getWidth(), 
-						p.getY());
+					p.getX() - t.getImageForBattle().getWidth(), 
+					p.getY());
 			}
 		}
 	}
@@ -225,7 +227,7 @@ public class BattleWithATB extends Top
 				e.getActiveTimeBattleManager().resetToZero();
 			}
 		}
-		//File d'attente ATB
+		//File d' ATB
 		if(queueATB.size() != 0 && !showSkills && typeSelectTargets == -1){
 			actionsLists.get(queueATB.get(0)).update(in);
 			equipeList.select(queueATB.get(0));
@@ -238,23 +240,28 @@ public class BattleWithATB extends Top
 		if(actionsQueue.size() > 0){
 			actionsQueue.get(0).update(delta);
 			if(actionsQueue.get(0).isRenderFisnished()){
-				actionsQueue.get(0).calculateEffects();
-				actionsQueue.get(0).applyEffects();
-				actionsQueue.get(0).getCaster();
 				
-				IBattle caster = actionsQueue.get(0).getCaster();
-				caster.resetActiveTimeBattleManager();
-				caster.launchActiveTime();
-				
-				if(caster instanceof Character){
-					queueATB.remove(caster);
+				actionsQueue.get(0).calculateEffectsOnce();
+				actionsQueue.get(0).getEffectsAnimation().update(delta);
+				if(actionsQueue.get(0).getEffectsAnimation().isFinished()){
+					
+					actionsQueue.get(0).applyEffects();
+					
+					IBattle caster = actionsQueue.get(0).getCaster();
+					caster.resetActiveTimeBattleManager();
+					caster.launchActiveTime();
+					
+					if(caster instanceof Character){
+						queueATB.remove(caster);
+					}
+					
+					actionsQueue.remove(0);
+					
+					typeSelectTargets = -1;
+					showSkills = false;
+					
+					onActionFinished();
 				}
-				
-				actionsQueue.remove(0);
-				
-				typeSelectTargets = -1;
-				showSkills = false;
-				
 			}
 			pauseAllATB();
 		}
@@ -477,4 +484,8 @@ public class BattleWithATB extends Top
 		}
 	}
 
+	private void onActionFinished(){
+		
+	}
+	
 }

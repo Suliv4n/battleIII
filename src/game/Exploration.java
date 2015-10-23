@@ -4,6 +4,7 @@ import game.dialogue.Dialogue;
 import game.dialogue.Line;
 import game.dialogue.Select;
 import game.settings.Settings;
+import game.system.Configurations;
 import game.system.application.Application;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.particles.ConfigurableEmitter;
@@ -61,38 +63,16 @@ public class Exploration extends Top
 	private int curseurSelect = 0;
 	
 	private ParticleSystem particles;
-	
-	
+
 	
 	//#endregion
 
 	//#region ------OVERRIDE BASICGAMESTATE--------
 	@Override
-	public void init(GameContainer arg0, StateBasedGame sbg)
+	public void init(GameContainer container, StateBasedGame sbg)
 			throws SlickException 
 	{
 		this.game = sbg;
-		
-
-		ArrayList<Line> repliques = new ArrayList<Line>();
-		repliques.add(new Line("Hello world!", "Sul"));
-		repliques.add(new Line("Ceci est un dialogue", "Sul"));
-		//repliques.add(new Line("Doit je répéter? $select[Oui{0};Non;Quitter{end}]", "Sul"));
-		repliques.add(new Line("Au revoir", "Sul"));
-		this.dialogue = new Dialogue(repliques);
-		dialogue.next();
-		
-		particles = new ParticleSystem("resources/images/particles/rain.png", 1500, new Color(255,0,255));
-		
-		File xmlFile = new File("resources/particles/rain.xml");
-		ConfigurableEmitter ce;
-		try {
-			ce = ParticleIO.loadEmitter(xmlFile);
-			particles.addEmitter(ce);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	
@@ -122,7 +102,9 @@ public class Exploration extends Top
 			afficherFiltreTemporel(g);
 		}
 		
-		particles.render();
+		if(particles != null){
+			particles.render();
+		}
 		
 		//AFFICHAGE DU DIALOGUE
 		if(dialogue != null)
@@ -132,6 +114,8 @@ public class Exploration extends Top
 		//!AFFICHAGE DU DIALOGUE
 		
 		//test.render(50, 50);
+		
+		
 		super.render(container, sbg, g);
 	}
 
@@ -141,7 +125,9 @@ public class Exploration extends Top
 	{	
 		super.update(container, sbg, delta);
 		
-		particles.update(delta);
+		if(particles != null){
+			particles.update(delta);
+		}
 		
 		Input in = container.getInput();
 		
@@ -238,7 +224,7 @@ public class Exploration extends Top
 	}
 
 	@Override
-	public int getID() 
+	public int getID()
 	{		
 		return Config.EXPLORATION;
 	}

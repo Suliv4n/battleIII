@@ -9,7 +9,7 @@ import characters.Ennemy;
 import game.system.application.Application;
 
 public enum EffectType {
-	PHYSIQUE_DAMAGE((IBattle target , Integer value) -> {
+	PHYSIC_DAMAGE((IBattle target , Integer value) -> {
 		target.updateHealthPoints(-value);
 	}),
 	

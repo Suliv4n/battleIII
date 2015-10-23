@@ -13,7 +13,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 
 import characters.Character;
-import animation.animations.FireBallAnimation;
+import animation.action.FireBallAnimation;
 import bag.item.stuff.Weapon;
 import data.DataManager;
 

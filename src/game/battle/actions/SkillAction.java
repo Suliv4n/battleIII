@@ -33,8 +33,8 @@ public class SkillAction extends Action{
 	}
 
 	@Override
-	public HashMap<IBattle, ArrayList<String>> getEffectsAction() {
-		return null;
+	public ArrayList<Effect> getEffectsAction() {
+		return effects;
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class SkillAction extends Action{
 
 	@Override
 	public boolean isRenderFisnished() {
-		return getBattleAnimation().isFinished();
+		return getBattleAnimation().isFinished() && getEffectsAnimation().isFinished();
 	}
 	
 	public void calculateEffects(){
@@ -75,7 +75,7 @@ public class SkillAction extends Action{
 					power -= Ratio.PHYSIC_DEFENSE * target.getPhysicDefense(); 
 					power *= Random.rand(Ratio.PHYSIC_RANDOM_MIN, Ratio.PHYSIC_RANDOM_MAX);
 					power = Math.max(1, power);
-					type = EffectType.PHYSIQUE_DAMAGE;
+					type = EffectType.PHYSIC_DAMAGE;
 					break;	
 			}
 			

@@ -56,18 +56,23 @@ public class Configurations {
 	public static final String RESOURCES_FOLDER = "resources/";
 
 	/**
-	 * Dosser contenant les données.
+	 * Dossier contenant les données.
 	 */
 	public static final String DATA_FOLDER = RESOURCES_FOLDER + "donnees/";
 	
 	/**
-	 * Dosser contenant les emmiters pour les particle systemes.
+	 * Dossier contenant les emmiters pour les particle systemes.
 	 */
 	public static final String PARTICLE_EMMITERS_FOLDER = RESOURCES_FOLDER + "particles/";
 	
 	/**
-	 * Dosser contenant les images.
+	 * Dossier contenant les images.
 	 */
 	public static final String IMAGES_FOLDER = RESOURCES_FOLDER + "images/";
 	
+	/**
+	 * Couleurs pour les Effects displayer
+	 */
+	public static final Color DAMAGE_LABEL_COLOR = new Color(150,50,0);
+	public static final Color HEAL_LABEL_COLOR = new Color(50,150,0);
 }

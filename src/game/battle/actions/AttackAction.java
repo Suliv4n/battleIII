@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 
 import animation.AnimationFactory;
 import animation.BattleAnimation;
-import animation.animations.NormalAttackAnimation;
+import animation.action.NormalAttackAnimation;
 
 public class AttackAction extends Action{
 
@@ -28,7 +28,7 @@ public class AttackAction extends Action{
 	}
 
 	@Override
-	public HashMap<IBattle, ArrayList<String>> getEffectsAction() {
+	public ArrayList<Effect> getEffectsAction() {
 		return null;
 	}
 
@@ -49,7 +49,7 @@ public class AttackAction extends Action{
 
 	@Override
 	public void calculateEffects() {
-		Effect e = new Effect(targets.get(0), EffectType.PHYSIQUE_DAMAGE);
+		Effect e = new Effect(targets.get(0), EffectType.PHYSIC_DAMAGE);
 		e.setValue(50);
 		super.effects.add(e);
 	}

@@ -4,11 +4,11 @@ import game.battle.IBattle;
 import game.battle.effect.Effect;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.newdawn.slick.SlickException;
 
 import animation.BattleAnimation;
+import animation.BattleEffectsDisplayer;
 
 /**
  * Représente une action lors d'un combat.
@@ -22,7 +22,10 @@ public abstract class Action {
 	protected ArrayList<IBattle> targets;
 	protected BattleAnimation currentAnimation;
 	
+	protected BattleEffectsDisplayer effectsDisplayer;
+	
 	protected ArrayList<Effect> effects;
+	private boolean effectsCalculated = false;
 	
 	public Action(IBattle caster, ArrayList<IBattle> targets)
 	{
@@ -38,12 +41,13 @@ public abstract class Action {
 	 * @return l'animation pour le combat.
 	 */
 	public abstract BattleAnimation getBattleAnimation();
+
 	/**
 	 * Retourne les effets de l'action.
 	 * 
 	 * @return les effets de l'action par caster/targets.
 	 */
-	public abstract HashMap<IBattle, ArrayList<String>> getEffectsAction();
+	public abstract ArrayList<Effect> getEffectsAction();
 
 	/**
 	 * Modifie les cibles.
@@ -55,12 +59,26 @@ public abstract class Action {
 		this.targets = targets;
 	}
 	
+	public BattleEffectsDisplayer getEffectsAnimation(){
+		
+		if(effectsDisplayer == null){
+			effectsDisplayer = new BattleEffectsDisplayer(effects);		
+		}
+		return effectsDisplayer;
+	}
+	
 	public abstract void render() throws SlickException;
 	public abstract void update(int delta);
 
 	public abstract boolean isRenderFisnished();
-	
 	public abstract void calculateEffects();
+	
+	public final void calculateEffectsOnce(){
+		if(!effectsCalculated){
+			calculateEffects();
+		}
+		effectsCalculated = true;
+	};
 
 	public final void applyEffects() {
 		for(Effect e : effects){
