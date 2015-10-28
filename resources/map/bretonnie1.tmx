@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="bretonnie" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileset/bretonnie.png" trans="ff00ff" width="716" height="400"/>
+  <tile id="1">
+   <properties>
+    <property name="animation" value="15"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="animation" value="15"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="animation" value="15"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="animation" value="15"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="animation" value="15"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="collision" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="background1" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NkYGBgHMWjeBSP4iGAATEAE1WwBAAA
+  </data>
+ </layer>
+ <layer name="background2" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMgqEBAGlKTgywBAAA
+  </data>
+ </layer>
+ <layer name="objet" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMgqEBAGlKTgywBAAA
+  </data>
+ </layer>
+ <layer name="foreground1" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACxNjYGAQozKmFhg1b9S8UfOGtnlMVMYA7J9+5bAEAAA=
+  </data>
+ </layer>
+ <layer name="foreground2" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMgqEBAGlKTgywBAAA
+  </data>
+ </layer>
+</map>

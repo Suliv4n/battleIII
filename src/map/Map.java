@@ -381,12 +381,13 @@ public class Map
 	{
 		for(int x=0;x<map.getWidth();x++)
 		{
-			for(int y=0;y<map.getWidth();y++)
+			for(int y=0;y<map.getHeight();y++)
 			{
 				for(int z=0;z<map.getLayerCount();z++)
 				{
 					for(Integer atm : animatedTiles.keySet())
 					{
+						System.out.println(x + " " + y + " " + " " + z);
 						if(animatedTiles.get(atm).containsTile(map.getTileId(x, y, z)))
 						{
 							map.setTileId(x, y, z, animatedTiles.get(atm).next());

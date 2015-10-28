@@ -74,4 +74,8 @@ map => path de la map tmx
 		
 	</map>
 	
+	<map id="bretonnie1" nom="Bretonnie" terrain="resources/map/terrains/donjon.png" musique="test2" map="resources/map/bretonnie1.tmx" >
+	
+	</map>
+	
 </maps>
