@@ -18,9 +18,10 @@ public class AnimatedTileManager
 	private ArrayList<Integer> frames;
 	
 	private int begin; //premier tile
-	private int currentFrame = 0;
 	private int index = 0; //le tile à fichier à pour id : begin + index 
 	private int max;
+	
+	private int time = 0;
 	
 	
 	private int id;
@@ -50,25 +51,28 @@ public class AnimatedTileManager
 	 * @return
 	 * 		l'id du tile courant.
 	 */
-	public int next()
+	public void update(int delta)
 	{
-		currentFrame += 1;
-		if(currentFrame >= frames.get(index))
+		time += delta;
+		
+		if(time >= frames.get(index))
 		{
 			index = (index + 1) % frames.size(); 
 		}
-		if(currentFrame == max)
+		if(time >= max)
 		{
-			currentFrame = 0;
+			time = 0;
 		}
-		return begin + index;
+
+		
+		id = begin + index;
 	}
 	
 	/**
 	 * Retourne l'id du tile courant.
 	 * @return
 	 */
-	public int getID()
+	public int getCurrentID()
 	{
 		return id;
 	}

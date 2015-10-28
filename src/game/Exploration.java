@@ -218,7 +218,7 @@ public class Exploration extends Top
 			onValidate();
 		}
 		
-		Application.application().getGame().getParty().getMap().updateAnimatedTile();
+		Application.application().getGame().getParty().getMap().updateAnimatedTiles(delta);
 		
 		in.clearKeyPressedRecord();
 	}

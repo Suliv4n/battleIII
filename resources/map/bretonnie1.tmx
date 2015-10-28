@@ -4,27 +4,27 @@
   <image source="tileset/bretonnie.png" trans="ff00ff" width="716" height="400"/>
   <tile id="1">
    <properties>
-    <property name="animation" value="15"/>
+    <property name="animation" value="1000"/>
    </properties>
   </tile>
   <tile id="2">
    <properties>
-    <property name="animation" value="15"/>
+    <property name="animation" value="2000"/>
    </properties>
   </tile>
   <tile id="3">
    <properties>
-    <property name="animation" value="15"/>
+    <property name="animation" value="1000"/>
    </properties>
   </tile>
   <tile id="4">
    <properties>
-    <property name="animation" value="15"/>
+    <property name="animation" value="1000"/>
    </properties>
   </tile>
   <tile id="5">
    <properties>
-    <property name="animation" value="15"/>
+    <property name="animation" value="1000"/>
    </properties>
   </tile>
   <tile id="21">

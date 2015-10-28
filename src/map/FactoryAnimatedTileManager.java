@@ -39,21 +39,24 @@ public class FactoryAnimatedTileManager
 		
 		if(!animRequest.equals("false"))
 		{
-			//récupération de toutes les tiles nécessaire à l'animation
-			ArrayList<Integer> framekey = new ArrayList<Integer>();
+			//récupération de toutes les tiles nécessaires à l'animation
+			ArrayList<Integer> timekeys = new ArrayList<Integer>();
 			int i = idTile;
-			int fk;
+			int time = 0;
+			int timekey = 0;
 			do
 			{
-				fk = parseTile(i, map);
-				if(fk != -1)
+				timekey = parseTile(i, map);
+				if(timekey != -1)
 				{
-					framekey.add(fk);
+					time += timekey;
+					timekeys.add(time);
 				}
 				i++;
 			}
-			while(fk != -1);
-			return new AnimatedTileManager(codeType, framekey , idTile);
+			while(timekey != -1);
+			System.out.println(timekeys);
+			return new AnimatedTileManager(codeType, timekeys , idTile);
 		}
 		else
 		{
