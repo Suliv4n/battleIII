@@ -4,27 +4,33 @@
   <image source="tileset/bretonnie.png" trans="ff00ff" width="716" height="400"/>
   <tile id="1">
    <properties>
-    <property name="animation" value="1000"/>
+    <property name="animation" value="100"/>
+    <property name="animationtype" value="reverse"/>
+    <property name="collision" value="true"/>
    </properties>
   </tile>
   <tile id="2">
    <properties>
-    <property name="animation" value="2000"/>
+    <property name="animation" value="100"/>
+    <property name="collision" value="true"/>
    </properties>
   </tile>
   <tile id="3">
    <properties>
-    <property name="animation" value="1000"/>
+    <property name="animation" value="100"/>
+    <property name="collision" value="true"/>
    </properties>
   </tile>
   <tile id="4">
    <properties>
-    <property name="animation" value="1000"/>
+    <property name="animation" value="100"/>
+    <property name="collision" value="true"/>
    </properties>
   </tile>
   <tile id="5">
    <properties>
-    <property name="animation" value="1000"/>
+    <property name="animation" value="100"/>
+    <property name="collision" value="true"/>
    </properties>
   </tile>
   <tile id="21">
@@ -40,7 +46,7 @@
  </layer>
  <layer name="background2" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAWjYBSMgqEBAGlKTgywBAAA
+   H4sIAAAAAAAAC2NgGAWjYBSMAtoAJipjAK0LIC2wBAAA
   </data>
  </layer>
  <layer name="objet" width="20" height="15">
@@ -50,7 +56,7 @@
  </layer>
  <layer name="foreground1" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACxNjYGAQozKmFhg1b9S8UfOGtnlMVMYA7J9+5bAEAAA=
+   H4sIAAAAAAAACxNjYGAQozKmFhg1b9S8UfOGtnnUBgAo3hDEsAQAAA==
   </data>
  </layer>
  <layer name="foreground2" width="20" height="15">

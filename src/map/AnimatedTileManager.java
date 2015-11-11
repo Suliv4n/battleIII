@@ -23,6 +23,8 @@ public class AnimatedTileManager
 	
 	private int time = 0;
 	
+	private boolean reversing = false;
+	
 	
 	private int id;
 	
@@ -53,16 +55,36 @@ public class AnimatedTileManager
 	 */
 	public void update(int delta)
 	{
-		time += delta;
-		
-		if(time >= frames.get(index))
-		{
-			index = (index + 1) % frames.size(); 
+		if(!reversing){
+			time += delta;
 		}
+		else{
+			time -= delta;
+		}
+		
 		if(time >= max)
 		{
-			time = 0;
+			if(type == REVERSE){
+				reversing = true;
+				index = frames.size() - 1;
+			}
+			else{
+				time = 0;
+			}
 		}
+		if(time <= 0 && type == REVERSE ){
+			reversing = false;
+		}
+		
+		System.out.println(time);
+		if(!reversing && time >= frames.get(index))
+		{
+			index = (index + 1) % frames.size();
+		}
+		else if(reversing && index != 0 && time <= frames.get(index - 1)){
+			index = (index - 1 % frames.size()) % frames.size();
+		}
+
 
 		
 		id = begin + index;

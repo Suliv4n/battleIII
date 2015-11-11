@@ -25,7 +25,7 @@ public class FactoryAnimatedTileManager
 	public static AnimatedTileManager make(TiledMap map, int idTile)
 	{
 		String animRequest = map.getTileProperty(idTile, "animation", "false");
-		String type = map.getTileProperty(idTile, "type", "loop");
+		String type = map.getTileProperty(idTile, "animationtype", "loop");
 		int codeType = 0;
 		if(type.equalsIgnoreCase("loop"))
 		{
