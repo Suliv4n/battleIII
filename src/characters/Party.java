@@ -220,7 +220,7 @@ public class Party implements Iterable<Character>
 	
 	/**
 	 * Retourne la citesse de déplacement en pixel/frame de l'équipe.
-	 * Il s'agit de la vitesse du personnage Ã  l'index 0.
+	 * Il s'agit de la vitesse du personnage à  l'index 0.
 	 * 
 	 * @return la vitesse de l'équipe.
 	 */
@@ -228,7 +228,7 @@ public class Party implements Iterable<Character>
 	{
 		//Modifier vitesse 10 default 
 		//return 15 + party[0].getSpeed();
-		return 1;
+		return 5;
 	}
 
 	/**

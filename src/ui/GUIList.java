@@ -12,6 +12,8 @@ import org.newdawn.slick.Input;
 
 
 
+
+import audio.SoundsManager;
 import ui.listController.ListController;
 import ui.listRenderer.CursorRenderer;
 import ui.listRenderer.ElementRenderer;
@@ -42,6 +44,9 @@ public class GUIList<T> {
 	
 	private boolean renderCursor = true;
 	private boolean automaticWidth = true;
+	
+	private boolean playSound = true;
+	private String soundId = "select";
 	
 	public GUIList(int count, Color underground, Color frame, boolean drawGUI){
 		list = new ArrayList<T>();
@@ -103,10 +108,16 @@ public class GUIList<T> {
 			if(listController.isDown(in)){
 				absoluteIndex = absoluteIndex + 1 == list.size() ? 0 : absoluteIndex + 1;
 				relativeIndex = relativeIndex + 1 < count && relativeIndex + 1 < list.size() ?  relativeIndex + 1 : absoluteIndex == 0 ? 0 : count-1;
+				if(playSound){
+					SoundsManager.play(soundId);
+				}
 			}
 			else if(listController.isUp(in)){
 				absoluteIndex = absoluteIndex  == 0 ? list.size() - 1: absoluteIndex - 1;
 				relativeIndex = relativeIndex > 0 ?  relativeIndex - 1 : absoluteIndex ==  list.size() - 1  ? Math.min(list.size() - 1, count - 1) : 0;
+				if(playSound){
+					SoundsManager.play(soundId);
+				}
 			}
 		}
 	}
@@ -200,5 +211,18 @@ public class GUIList<T> {
 	 */
 	public void setAutomaticWidth(boolean auto){
 		automaticWidth = auto;
+	}
+	
+	public void setPlaySound(boolean playSound){
+		this.playSound = playSound;
+	}
+	
+	public void setSoundId(String soundId){
+		if(soundId == null){
+			this.playSound = false;
+		}
+		else{
+			this.soundId = soundId;
+		}
 	}
 }

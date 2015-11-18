@@ -26,6 +26,7 @@ import org.newdawn.slick.particles.ParticleSystem;
 
 import animation.ResourcesAnimitationManager;
 import audio.MusicManager;
+import audio.SoundsManager;
 
 /**
  * Application Slick2d
@@ -79,6 +80,8 @@ public class Application{
 	private void init() throws SlickException{
 		MusicManager.loadMusic("victory");		
 		MusicManager.loadMusic("battle");
+		
+		SoundsManager.init();
 	}
 	
 	/**

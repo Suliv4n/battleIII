@@ -71,6 +71,11 @@ public class Configurations {
 	public static final String IMAGES_FOLDER = RESOURCES_FOLDER + "images/";
 	
 	/**
+	 * Dossier contenant les sons
+	 */
+	public static final String SOUNDS_FOLDER = RESOURCES_FOLDER + "musiques/sounds/";
+	
+	/**
 	 * Couleurs pour les Effects displayer
 	 */
 	public static final Color DAMAGE_LABEL_COLOR = new Color(150,50,0);
