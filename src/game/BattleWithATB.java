@@ -172,6 +172,9 @@ public class BattleWithATB extends Top
 			if(entity.isAlive()){
 				entity.getImageForBattle().drawCentered(coords.get(entity).getX(), coords.get(entity).getY());
 			}
+			else if(entity instanceof Ennemy && !((Ennemy)entity).getDeathRenderer().isFinished()){
+				((Ennemy)entity).getDeathRenderer().render();
+			}
 		}
 		bottomPanel.render(0, 380);
 		equipeList.render(5, 385);
@@ -267,6 +270,13 @@ public class BattleWithATB extends Top
 		}
 		else{
 			resumeAllATB();
+		}
+		
+		//Mise à jour d'éventuel(s) DeathRenderer
+		for(Ennemy ennemy : ennemis.getEnnemis().values()){
+			if(!ennemy.isAlive() && !ennemy.getDeathRenderer().isFinished()){
+				ennemy.getDeathRenderer().update(delta);
+			}
 		}
 
 		

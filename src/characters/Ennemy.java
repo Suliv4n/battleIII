@@ -14,6 +14,8 @@ import java.util.function.Function;
 
 import org.newdawn.slick.Image;
 
+import animation.DeathAnimation;
+import animation.death.StandardDeathAnimation;
 import skill.Skill;
 
 /**
@@ -55,6 +57,8 @@ public class Ennemy extends IBattle
 	private ArrayList<Skill> skills;
 
 	private ActiveTimeBattleManager activeTimeBattleManager;
+	
+	private DeathAnimation deathAnimation;
 	
 	/**
 	 * 
@@ -432,5 +436,12 @@ public class Ennemy extends IBattle
 		return skills;
 	}
 
+	public DeathAnimation getDeathRenderer() {
+		if(deathAnimation == null){
+			deathAnimation = new StandardDeathAnimation(this);
+		}
+		
+		return deathAnimation;
+	}
 	
 }
