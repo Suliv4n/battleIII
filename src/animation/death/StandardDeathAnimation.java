@@ -28,7 +28,7 @@ public class StandardDeathAnimation extends DeathAnimation{
 		float g = 0.3f;
 		float b = 0.2f;
 		float a = Math.max(0, 1 - (float)time / (float)DURATION);
-		Application.application().debug("ALPHA : " + a);
+		img.setAlpha(a);
 		img.setColor(Image.BOTTOM_LEFT, r, g, b, a);
 		img.setColor(Image.BOTTOM_RIGHT, r, g, b, a);
 		img.setColor(Image.TOP_LEFT, r, g, b, a);
