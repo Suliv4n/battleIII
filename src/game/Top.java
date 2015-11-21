@@ -47,11 +47,13 @@ public abstract class Top  extends BasicGameState
 		}
 	}
 
+	
 	@Override
 	public void update(GameContainer container, StateBasedGame arg1, int delta)
 			throws SlickException 
 	{
 		Input in = container.getInput();
+
 		
 		if(Settings.MULTIPLAYER && Application.application().getGame().getCurrentSave() != null){
 			Application.application().getConnector().sendInformationsToServer();
@@ -100,19 +102,19 @@ public abstract class Top  extends BasicGameState
 			onL();
 		}
 		//KEY PRESSED
-		if(in.isKeyPressed(KeyboardControlsConfigurations.DOWN_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.DOWN_KEY) || ControllerInput.isControllerDownPressed(0, in)){
 			onDown();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfigurations.UP_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.UP_KEY) || ControllerInput.isControllerUpPressed(0, in)){
 			onUp();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfigurations.LEFT_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.LEFT_KEY) || ControllerInput.isControllerLeftPressed(0, in)){
 			onLeft();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfigurations.RIGHT_KEY)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.RIGHT_KEY) || ControllerInput.isControllerDownPressed(0, in)){
 			onRight();
 			directionKeyPressedOrDown = true;
 		}
@@ -120,19 +122,19 @@ public abstract class Top  extends BasicGameState
 			onStart();
 		}
 		//KEY DOWN
-		if(in.isKeyDown(KeyboardControlsConfigurations.DOWN_KEY) && !console){
+		if((in.isKeyDown(KeyboardControlsConfigurations.DOWN_KEY) || ControllerInput.isControllerDownDown(0, in)) && !console){
 			onHoldDown();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyDown(KeyboardControlsConfigurations.UP_KEY) && !console){
+		if((in.isKeyDown(KeyboardControlsConfigurations.UP_KEY) || ControllerInput.isControllerUpDown(0, in)) && !console){
 			onHoldUp();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyDown(KeyboardControlsConfigurations.LEFT_KEY) && !console){
+		if((in.isKeyDown(KeyboardControlsConfigurations.LEFT_KEY) || ControllerInput.isControllerLeftDown(0, in)) && !console){
 			onHoldLeft();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyDown(KeyboardControlsConfigurations.RIGHT_KEY) && !console){
+		if((in.isKeyDown(KeyboardControlsConfigurations.RIGHT_KEY) || ControllerInput.isControllerRightDown(0, in)) && !console){
 			onHoldRight();
 			directionKeyPressedOrDown = true;
 		}
@@ -162,6 +164,16 @@ public abstract class Top  extends BasicGameState
 	//----------------------------------------------------------------
 	//----------------------------EVENTS------------------------------
 	//----------------------------------------------------------------
+	
+	public final void controllerButtonPressed(int controller, int button){
+
+		if(button == ControllerInput.START){
+			onStart();
+		}
+		else if(button == ControllerInput.VALIDATE){
+			onValidate();
+		}
+	}
 	
 	
 	/**

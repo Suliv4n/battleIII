@@ -127,12 +127,7 @@ public class TitleScreen extends Top{
 	}
 	
 	
-	@Override
-	public void controllerButtonPressed(int controller, int button){
-		if(button == ControllerInput.VALIDATE){
-			onValidate();
-		}
-	}
+
 	
 	//-----------------------------------------------------------
 	//-------------------------EVENTS----------------------------

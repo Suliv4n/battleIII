@@ -301,15 +301,6 @@ public class Exploration extends Top
 	}
 	*/
 	
-	public void controllerButtonPressed(int controller, int button){
-
-		if(button == ControllerInput.START){
-			onStart();
-		}
-		else if(button == ControllerInput.VALIDATE){
-			onValidate();
-		}
-	}
 	
 	
 	//#endregion

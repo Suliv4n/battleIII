@@ -71,16 +71,7 @@ public class Menu extends Top
 		super.update(container, game, delta);
 	}
 	
-	public void controllerButtonPressed(int controller, int button){
-		if(button == ControllerInput.VALIDATE){
-			onValidate();
-		}
-		else if(button == ControllerInput.START){
-			game.enterState(Config.EXPLORATION);
-		}
-		
-	}
-	
+
 	@Override
 	public void onValidate(){
 		switch(cursor)

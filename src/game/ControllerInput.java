@@ -1,5 +1,7 @@
 package game;
 
+import game.system.application.Application;
+
 import org.newdawn.slick.Input;
 
 public class ControllerInput {
@@ -18,7 +20,7 @@ public class ControllerInput {
 	}
 	
 	public static boolean isControllerUpPressed(int controller, Input in){
-		boolean res = in.isControllerUp(controller) && !buttonUp;	
+		boolean res = in.isControllerUp(controller) && !buttonUp;
 		buttonUp = in.isControllerUp(controller);
 		return res;
 	}
@@ -33,6 +35,23 @@ public class ControllerInput {
 		boolean res = in.isControllerRight(controller) && !buttonRight;
 		buttonRight = in.isControllerRight(controller);
 		return res;
+	}
+	
+	
+	public static boolean isControllerDownDown(int controller, Input in){
+		return in.isControllerDown(controller);
+	}
+	
+	public static boolean isControllerUpDown(int controller, Input in){
+		return in.isControllerUp(controller);
+	}
+	
+	public static boolean isControllerLeftDown(int controller, Input in){
+		return in.isControllerLeft(controller);
+	}
+	
+	public static boolean isControllerRightDown(int controller, Input in){
+		return in.isControllerRight(controller);
 	}
 
 }
