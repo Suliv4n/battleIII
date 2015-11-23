@@ -154,7 +154,7 @@ public class BattleWithATB extends Top
 			s.setElementRenderer(
 				(int x, int y, Object element, int index) -> {
 					Skill skill = (Skill) element;
-					Application.application().drawString(skill.getName(), x, y);
+					Application.application().drawString(skill.getName(), x + 20, y);
 			});
 			
 			actionsLists.put(p, a);
@@ -260,8 +260,8 @@ public class BattleWithATB extends Top
 					
 					actionsQueue.remove(0);
 					
-					typeSelectTargets = -1;
-					showSkills = false;
+					//typeSelectTargets = -1;
+					//showSkills = false;
 					
 					onActionFinished();
 				}

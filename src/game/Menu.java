@@ -1,20 +1,12 @@
 package game;
 
-import game.launcher.Launcher;
-import game.system.application.Application;
-
-import java.util.ArrayList;
-
-import org.newdawn.slick.Color;
+import game.settings.Settings;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-
+import ui.GUIList;
 import data.Save;
 
 /**
@@ -28,9 +20,7 @@ public class Menu extends Top
 {
 
 	//#region --------PROPRIETES--------------
-	private ArrayList<String> menu;
-	private int cursor;
-	private Image fleche;
+	private GUIList<String> menu;
 	
 	private StateBasedGame game;
 	//#endregion
@@ -42,39 +32,44 @@ public class Menu extends Top
 			throws SlickException 
 	{
 		this.game = game;
-				
-		cursor = 0;
-		menu = new ArrayList<String>();
-		menu.add("Continuer");
-		menu.add("Equipe");
-		menu.add("Configuration");
-		menu.add("Sac");
-		menu.add("Sauvegarder");
-		menu.add("Quitter");
 		
-		fleche = Application.application().getGame().getArrow(0);
+		menu = new GUIList<String>(6, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
+		
+		menu.setWidth(280);
+		menu.setHeight(300);
+		
+		
+		menu.setData(new String[]{
+			"Continuer",
+			"Équipe",
+			"Configurations",
+			"Sac",
+			"Sauvegarder",
+			"Quitter",
+		});
+
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException 
 	{
-		dessinerCadre(g);
-		afficherMenu(g);
-		dessinerCurseur(g);	
+
+		menu.render(170, 90);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException 
 	{
+		menu.update(container.getInput());
 		super.update(container, game, delta);
 	}
 	
 
 	@Override
 	public void onValidate(){
-		switch(cursor)
+		switch(menu.getSelectedIndex())
 		{
 		case(0):
 			game.getContainer().getInput().clearKeyPressedRecord();
@@ -116,45 +111,7 @@ public class Menu extends Top
 	
 	//#region -------AFFICHAGE----------------
 	
-	private void dessinerCadre(Graphics g)
-	{
-		g.setColor(Config.couleur1);
-		
-		g.fillRect(170, 90, 280, 300);
-		
-		g.setColor(Config.couleur2);
-		g.drawRect(169, 89, 281, 301);
-		g.drawRect(168, 88, 282, 303);
-		
-		g.setColor(new Color(0,150,225));
-		g.drawString("°~MENU~°", 270, 100);
-	}
 	
-	private void afficherMenu(Graphics g)
-	{
-		g.setColor(new Color(255,255,255));
-		for(int i=0; i<menu.size();i++)
-		{
-			g.drawString(menu.get(i), 210, 150+30*i);
-		}
-	}
-	
-	private void dessinerCurseur(Graphics g)
-	{
-		g.drawImage(fleche,210-fleche.getWidth()-5,153+30*cursor);
-	}
-	
-	//#endregion
-	
-	@Override
-	public void onDown(){
-		cursor = (cursor+1)%menu.size();
-	}
-	
-	@Override
-	public void onUp(){
-		cursor = (cursor-1+menu.size())%menu.size(); 
-	}
 	
 	@Override
 	public void onStart(){
