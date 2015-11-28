@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <equipe>
-  <position x="232" y="254" map="bretonnie1" direction="0" />
+  <position x="232" y="254" map="bretonnie1" direction="1" />
   <personnages>
     <mage nom="Magelev" xp="200">
       <skill id="bouleDeFeu" level="2" />
