@@ -50,7 +50,7 @@ public class Map
 	
 	private boolean outDoor;
 	
-	private boolean[][] collisions;
+
 	private int[][][] originalTilesId;
 	
 	private ArrayList<String> ennemis;
@@ -98,32 +98,17 @@ public class Map
 			animatedTiles = new HashMap<Integer, AnimatedTileManager>();
 			
 			//Propriétés des tiles:
-			collisions = new boolean[map.getWidth()][map.getHeight()];
+			
 			originalTilesId = new int[map.getWidth()][map.getHeight()][map.getLayerCount()];
 			for(int axeX=0; axeX<map.getWidth();axeX++)
 			{
 				for(int axeY=0; axeY<map.getHeight();axeY++)
 				{
-					collisions[axeX][axeY]=false;
+
 					for(int i=0;i<map.getLayerCount();i++)
 					{
 						int tileID = map.getTileId((int) axeX,(int) axeY, i);
 						originalTilesId[axeX][axeY][i] = tileID;
-						boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
-						if(i<3){
-						/* Test collision */
-							boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
-							if(portail)
-							{
-								collisions[axeX][axeY] = false;
-								break;
-							}
-							else if(collision)
-							{
-								collisions[axeX][axeY] = true;
-							}
-						}
-						
 
 						
 						/* Test animation de tiles */
@@ -444,36 +429,7 @@ public class Map
 		return outDoor;
 	}
 	
-	/**
-	 * Retourne vrai si la tile dont les coordonnées sont en paramètre
-	 * est un obstacle, sinon retourne faux.
-	 * 
-	 * @param xC
-	 * 		l'abscisse du tile.
-	 * @param yC
-	 * 		l'ordonnée du tile.
-	 * @return
-	 *	 	vrai si la tile dont les coordonnées sont en paramètre
-	 *		est un obstacle, sinon retourne faux.
-	 */
-	private boolean estObstacle(int xC, int yC)
-	{
-		//System.out.println(xC+"  "+yC);
-		try
-		{
-			boolean perso = false;
-			for(NonPlayerCharacter p : NPC)
-			{
-				perso = p.getX() == xC && p.getY() == yC;
-				if(perso) break;
-			}
-			return collisions[xC][yC] || perso;
-		}
-		catch(IndexOutOfBoundsException e)
-		{
-			return false;
-		}
-	}
+
 	
 	public void calculateHitbox(){
 		hitbox = new Hitbox();
@@ -481,7 +437,7 @@ public class Map
 		{
 			for(int axeY=0; axeY<map.getHeight();axeY++)
 			{
-				for(int i=0;i<3;i++)
+				for(int i=0;i<map.getLayerCount();i++)
 				{
 					int tileID = map.getTileId((int) axeX,(int) axeY, i);
 					/* Test collision */
@@ -537,66 +493,7 @@ public class Map
 	}
 	*/
 	
-	/**
-	 * Retourne la distance que peut parcourir le joueur
-	 * avant de rencontrer un obstacle.
-	 * 
-	 * @return
-	 * 		la distance pouvant être parcourue avec de rencontrer un obstacle.
-	 */
-	public int distance(int x0, int y0, int width, int height, int dx, int dy)
-	{
-		int i = 0;
-		
-		//Droite
-		if(dx>0)
-		{
-			for(i=0; i<dx;i++)
-			{
-				if(estObstacle((int)(x0+i+15)/32,(int)(y0+height-19)/32))
-				{
-					break;					
-				}
-			}
-		}
-		
-		//Gauche
-		if(dx<0)
-		{
-			for(i=0; i>dx;i--)
-			{
-				if(estObstacle((int)(x0+i-16)/32,(int)(y0+height-19)/32))
-				{
-					break;					
-				}
-			}
-		}
-		
-		//Bas
-		if(dy>0)
-		{
-			for(i=0; i<dy;i++)
-			{
-				if(estObstacle((int)(x0)/32,(int)(y0+15+i)/32) || estObstacle((int)(x0-15)/32,(int)(y0+15+i)/32))
-				{
-					break;					
-				}
-			}
-		}
-		
-		//haut
-		if(dy<0)
-		{
-			for(i=0; i>dy;i--)
-			{
-				if(estObstacle((int)(x0)/32,(int)(y0+height+i-20)/32) || estObstacle((int)(x0-15)/32,(int)(y0+height+i-20)/32))
-				{
-					break;					
-				}
-			}
-		}
-		return i;
-	}
+
 	
 	/**
 	 * Génère un groupe d'ennemi présent sur la maps selon l'indice de rareté des groupes.
@@ -758,37 +655,7 @@ public class Map
 		return null;
 	}
 	
-	/**
-	 * Recalcul la matrice de collisions.
-	 */
-	public void reloadCollisions(){
-		collisions = new boolean[map.getWidth()][map.getHeight()];
-		for(int axeX=0; axeX<map.getWidth();axeX++)
-		{
-			for(int axeY=0; axeY<map.getHeight();axeY++)
-			{
-				collisions[axeX][axeY]=false;
-				for(int i=0;i<3;i++) //uniquement les 3 premières couches
-				{
-					//current tile
-					int tileID=map.getTileId((int) axeX,(int) axeY, i);
-					
-					/* Test collision */
-					boolean collision = "true".equals(map.getTileProperty(tileID, "collision", "false"));
-					boolean portail = "true".equals(map.getTileProperty(tileID, "portail", "false"));
-					if(portail)
-					{
-						collisions[axeX][axeY] = false;
-						break;
-					}
-					else if(collision)
-					{
-						collisions[axeX][axeY] = true;
-					}
-				}
-			}
-		}	
-	}
+
 	
 	/**
 	 * Supprime ou réaffiche une tile dont les coordonnées sont passées
@@ -808,7 +675,6 @@ public class Map
 		else{
 			map.setTileId(x, y, z, 0);
 		}
-		reloadCollisions();
 	}
 	
 	/**

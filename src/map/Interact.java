@@ -55,7 +55,7 @@ public class Interact {
 			map.getTiledMap().setTileId(x, y, z, idTile); //réaffichage
 		}
 		
-		map.reloadCollisions();
+
 	}
 	
 	/**
