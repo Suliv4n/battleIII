@@ -144,7 +144,7 @@ public class Party implements Iterable<Character>
 	 */
 	public Animation getAnimation()
 	{
-		return firstAliveCharacter().getAnimation(direction);
+		return firstAliveCharacter().getAnimation((int)(Math.log(direction)/Math.log(2)));
 	}
 	
 	/**
@@ -745,7 +745,7 @@ public class Party implements Iterable<Character>
 	 * 		Vrai s'il faut utiliser les coordonnées absolues. Sinon faux.
 	 */
 	public void draw(float alpha, boolean absolute) {
-		Animation animation =  get(0).getAnimation(direction);
+		Animation animation =  getAnimation();
 	
 		for(int i=0; i<animation.getFrameCount() ;i++){
 			animation.getImage(i).setAlpha(alpha);
