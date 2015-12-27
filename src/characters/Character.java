@@ -364,7 +364,7 @@ public abstract class Character extends IBattle
 	
 	public Animation getAnimation(int direction) 
 	{
-		return skin.getAnimation(direction);
+		return skin.getAnimation((int)(Math.log(direction)/Math.log(2)));
 	}
 	
 	/**

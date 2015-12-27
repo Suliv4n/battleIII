@@ -55,7 +55,6 @@ public class FactoryAnimatedTileManager
 				i++;
 			}
 			while(timekey != -1);
-			System.out.println(timekeys);
 			return new AnimatedTileManager(codeType, timekeys , idTile);
 		}
 		else

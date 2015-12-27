@@ -144,7 +144,7 @@ public class Party implements Iterable<Character>
 	 */
 	public Animation getAnimation()
 	{
-		return firstAliveCharacter().getAnimation((int)(Math.log(direction)/Math.log(2)));
+		return firstAliveCharacter().getAnimation(direction);
 	}
 	
 	/**

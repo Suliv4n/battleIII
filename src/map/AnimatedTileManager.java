@@ -76,7 +76,6 @@ public class AnimatedTileManager
 			reversing = false;
 		}
 		
-		System.out.println(time);
 		if(!reversing && time >= frames.get(index))
 		{
 			index = (index + 1) % frames.size();
