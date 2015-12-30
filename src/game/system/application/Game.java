@@ -173,6 +173,7 @@ public class Game extends StateBasedGame{
 	 */
 	public void launchBattle(EnnemisParty ennemis) {
 		battleWithATB.launch(ennemis);
+		MusicManager.stop();
 		MusicManager.playLoop(ennemis.getMusic());
 		Application.application().getGame().enterState(Config.BATTLE_ATB);
 	}

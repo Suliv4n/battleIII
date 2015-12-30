@@ -53,6 +53,7 @@ public class MusicManager
 	 */
 	public static void playLoop(String musique)
 	{
+		System.out.println(musique);
 		if(musics.containsKey(musique))
 		{
 			currentMusic = musics.get(musique);

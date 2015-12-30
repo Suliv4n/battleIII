@@ -102,6 +102,13 @@ public class CombatResult extends BasicGameState
 		return Config.COMBATRESULT;
 	}
 	
+	@Override
+	public void enter(GameContainer container, StateBasedGame sbg) throws SlickException{
+
+		MusicManager.playLoop("victory");
+		
+	}
+	
 	private void dessinerCadrePrincipal(Graphics g) 
 	{
 		g.setColor(Config.couleur1);

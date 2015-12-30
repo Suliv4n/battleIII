@@ -63,6 +63,8 @@ public class Exploration extends Top
 	private int curseurSelect = 0;
 	
 	private ParticleSystem particles;
+	
+	private String currentMapMusic = ""; 
 
 	
 	//#endregion
@@ -169,19 +171,6 @@ public class Exploration extends Top
 			
 			Map map = Application.application().getGame().getParty().getMap();
 			
-			//GESTION MUSIQUE---NE PAS JOUER MUSIQUE SI Jeu.getEquipe()ENNEMIS
-			//JouerEnBoucle() ne fait rien si la musique est déjà en train de jouer.
-			if( map.getMusic() == null)
-			{
-				MusicManager.stop();
-			}
-			else
-			{
-				if(ennemis == null)
-				{
-					MusicManager.playLoop(map.getMusic());
-				}
-			}
 		}
 		
 		//DIALOGUE_____________________________________________________________________
@@ -219,14 +208,26 @@ public class Exploration extends Top
 		}
 		
 		Application.application().getGame().getParty().getMap().updateAnimatedTiles(delta);
-		
+
+
 		in.clearKeyPressedRecord();
+
 	}
 
 	@Override
 	public int getID()
 	{		
 		return Config.EXPLORATION;
+	}
+	
+	@Override
+	public void enter(GameContainer container, StateBasedGame sbg) throws SlickException{
+		
+		if(!Application.application().getGame().getParty().getMap().equals(currentMapMusic)){
+			MusicManager.playLoop(Application.application().getGame().getParty().getMap().getMusic());
+			currentMapMusic = Application.application().getGame().getParty().getMap().getId();
+		}
+		
 	}
 	
 	//#endregion
