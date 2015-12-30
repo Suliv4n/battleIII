@@ -33,6 +33,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 
+import bag.IItems;
 import characters.EnnemisParty;
 import characters.Party;
 import audio.MusicManager;
@@ -265,6 +266,10 @@ public class Game extends StateBasedGame{
 	{
 		TextInput.init(icon, message, defaut, out, operations, parameters);
 		Application.application().getGame().enterState(Config.SAISIE);
+	}
+
+	public void setResultBattle(int po, int exp, ArrayList<IItems> items) {
+		combatResult.init(po, exp, items);
 	}
 
 

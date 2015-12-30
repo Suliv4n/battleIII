@@ -1,6 +1,5 @@
 package game;
 
-import game.launcher.Launcher;
 import game.system.application.Application;
 
 import java.util.ArrayList;
@@ -22,20 +21,23 @@ import audio.MusicManager;
 public class CombatResult extends BasicGameState
 {
 	
-	private static int po;
-	private static int exp;
-	private static ArrayList<IItems> drops;
+	private int po;
+	private int exp;
+	private ArrayList<IItems> drops;
 	
 
-	public static void init(int po, int exp, ArrayList<IItems> drops)
+	public void init(int po, int exp, ArrayList<IItems> drops)
 	{
-		CombatResult.po = po;
-		CombatResult.exp = exp;
-		CombatResult.drops = drops;
+		if(drops == null){
+			drops = new ArrayList<IItems>();
+		}
+		this.po = po;
+		this.exp = exp;
+		this.drops = drops;
 	}
 	
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
+	public void init(GameContainer conatiner, StateBasedGame game)
 			throws SlickException 
 	{
 		

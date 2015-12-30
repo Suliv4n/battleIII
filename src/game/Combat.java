@@ -309,7 +309,7 @@ public class Combat extends BasicGameState
 				if(container.getInput().isKeyPressed(Input.KEY_RETURN))
 				{
 					container.getInput().clearKeyPressedRecord();
-					CombatResult.init( cumulPO , cumulXP, drops);
+					//CombatResult.init( cumulPO , cumulXP, drops);
 					game.enterState(Config.COMBATRESULT);
 				}
 			}

@@ -33,6 +33,10 @@ import ui.listRenderer.ElementRenderer;
 
 public class BattleWithATB extends Top
 {
+	
+	private static final int QUIT_WIN = 1;
+	private static final int QUIT_LOSE = 2;
+	private static final int CONTINUE = 3;
 
 	private Image background;
 	private EnnemisParty ennemis;
@@ -263,7 +267,6 @@ public class BattleWithATB extends Top
 					//typeSelectTargets = -1;
 					//showSkills = false;
 					
-					onActionFinished();
 				}
 			}
 			pauseAllATB();
@@ -279,6 +282,17 @@ public class BattleWithATB extends Top
 			}
 		}
 
+		switch (check()) {
+		case QUIT_WIN:
+			Application.application().getGame().setResultBattle(100,100,null);
+			game.enterState(Config.COMBATRESULT);
+			break;
+		case QUIT_LOSE:
+			game.enterState(Config.GAME_OVER);
+			break;
+		default:
+			break;
+		}
 		
 		super.update(container, game, delta);
 	}
@@ -479,7 +493,6 @@ public class BattleWithATB extends Top
 	public EnnemisParty getEnnemis() {
 		return ennemis;
 	}
-
 	
 	
 	public void pauseAllATB(){
@@ -493,9 +506,33 @@ public class BattleWithATB extends Top
 			i.getActiveTimeBattleManager().resume();
 		}
 	}
-
-	private void onActionFinished(){
+	
+	protected int check(){
+		boolean win = true;
+		for(Ennemy e : ennemis.getEnnemis().values()){
+			if(e.isAlive()){
+				win = false;
+				break;
+			}
+		}
 		
+		if(win){
+			return QUIT_WIN;
+		}
+		
+		boolean lose = true;
+		for(Character c : Application.application().getGame().getParty()){
+			if(c.isAlive()){
+				lose = false;
+				break;
+			}
+		}
+		
+		if(lose){
+			return QUIT_LOSE;
+		}
+		
+		return CONTINUE;
 	}
 	
 }
