@@ -1,5 +1,7 @@
 package game;
 
+import game.settings.Settings;
+import game.system.Configurations;
 import game.system.application.Application;
 
 import java.util.ArrayList;
@@ -12,6 +14,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import ui.BarUI;
+import ui.GUIList;
+import ui.Panel;
+import ui.TypeBarre;
 import characters.Character;
 import characters.Party;
 import bag.IItems;
@@ -24,6 +30,9 @@ public class CombatResult extends BasicGameState
 	private int po;
 	private int exp;
 	private ArrayList<IItems> drops;
+	
+	private Panel mainPanel;
+	private GUIList<Character> characters;
 	
 
 	public void init(int po, int exp, ArrayList<IItems> drops)
@@ -38,16 +47,25 @@ public class CombatResult extends BasicGameState
 	
 	@Override
 	public void init(GameContainer conatiner, StateBasedGame game)
-			throws SlickException 
+			throws SlickException
 	{
+		mainPanel = Panel.createFullScreen(2, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR);
+		characters = new GUIList<Character>(3, null, null, false);
 		
+		characters.setRenderCursor(false);
+		characters.setElementRenderer((int x , int y,  Object object, int i) -> {
+			Character character = (Character) object;
+			BarUI experienceBar = new BarUI(Configurations.EXPERIENCE_BAR_COLOR , Color.black, 200, 10, character.getExperience(), character.experienceRequiredForNextLevel(), TypeBarre.LEFT_TO_RIGHT, true, Settings.BORDER_COLOR);
+			
+			experienceBar.render(Application.application().getGraphics(), x, y);
+		});
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame sbg, Graphics g)
 			throws SlickException 
 	{
-		dessinerCadrePrincipal(g);
+		mainPanel.render(0, 0);
 		dessinerEquipe(g);
 	}
 
@@ -107,18 +125,6 @@ public class CombatResult extends BasicGameState
 
 		MusicManager.playLoop("victory");
 		
-	}
-	
-	private void dessinerCadrePrincipal(Graphics g) 
-	{
-		g.setColor(Config.couleur1);
-		g.fillRect(2, 2, 638, 478);
-		
-		g.setColor(Config.couleur2);
-		g.drawRect(0, 0, 639, 479);
-		g.drawRect(1, 1, 637, 477);
-		g.drawLine(0, 40, 640, 40);
-		g.drawLine(0, 41, 640, 41);
 	}
 	
 	private void dessinerEquipe(Graphics g) 

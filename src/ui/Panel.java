@@ -2,6 +2,7 @@ package ui;
 
 
 import game.launcher.Launcher;
+import game.system.Configurations;
 import game.system.application.Application;
 
 import org.newdawn.slick.Color;
@@ -62,6 +63,15 @@ public class Panel {
 		for(int i = 0; i<frame; i++){
 			g.drawRect(x+i, y+i, width-i*2-1, height-i*2-1);
 		}
+	}
+
+	
+	//Creer un Panel plein écran
+	public static Panel createFullScreen(int frame, Color color, Color colorFrame) {
+		
+		Panel panel = new Panel(Configurations.SCREEN_WIDTH, Configurations.SCREEN_HEIGHT,frame,  color, colorFrame);
+		
+		return panel;
 	}
 	
 	

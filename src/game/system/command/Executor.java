@@ -4,10 +4,11 @@ import game.system.application.Application;
 import game.system.command.rule.ParameterRule;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class Executor {
 	private ArrayList<ParameterRule> parameterRules;
-	private Handler script; 
+	private Consumer<Command>  script; 
 	private Command command;
 	private ArrayList<Integer> allowedStates;
 	
@@ -16,7 +17,7 @@ public class Executor {
 		allowedStates = new ArrayList<Integer>();
 	}
 	
-	public void setScript(Handler script)
+	public void setScript(Consumer<Command> script)
 	{
 		this.script = script;
 	}
@@ -44,7 +45,7 @@ public class Executor {
 	public void execute(Command command) throws CommandParseException{
 		this.command = command;
 		check();
-		script.go(command);
+		script.accept(command);
 	}
 	
 	public Command getCommand(){

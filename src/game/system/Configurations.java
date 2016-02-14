@@ -80,4 +80,6 @@ public class Configurations {
 	 */
 	public static final Color DAMAGE_LABEL_COLOR = new Color(150,50,0);
 	public static final Color HEAL_LABEL_COLOR = new Color(50,150,0);
+
+	public static final Color EXPERIENCE_BAR_COLOR = new Color(0,150,200);
 }

@@ -3,7 +3,6 @@ package game.system.command.commands.multiplayer;
 import game.system.application.Application;
 import game.system.command.Command;
 import game.system.command.Executor;
-import game.system.command.Handler;
 import game.system.command.rule.ParameterRule;
 
 import org.newdawn.slick.SlickException;
@@ -32,9 +31,8 @@ public class AddPlayerCommand extends Executor{
 		
 		
 		
-		setScript(new Handler() {
-			@Override
-			public void go(Command command) {
+		setScript(command -> {
+
 				String key = command.getParameter(0);
 				String map = command.getParameter(1);
 				int x = command.getIntegerParameter(2);
@@ -78,7 +76,6 @@ public class AddPlayerCommand extends Executor{
 					e.printStackTrace();
 				}
 				
-			}
 		});
 	}	
 }

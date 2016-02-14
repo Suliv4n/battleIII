@@ -11,7 +11,6 @@ import game.system.ConsoleLine;
 import game.system.application.Application;
 import game.system.command.Command;
 import game.system.command.Executor;
-import game.system.command.Handler;
 import game.system.command.rule.ParameterRule;
 
 public class BattleCommand extends Executor{
@@ -22,9 +21,7 @@ public class BattleCommand extends Executor{
 		addParameterRule(new ParameterRule("id",ParameterRule.STRING, null ,true));
 		addAllowedState(Config.EXPLORATION);
 		
-		setScript(new Handler() {
-			@Override
-			public void go(Command command) {
+		setScript( command -> {
 				String id = command.getParameter(0);
 				try {
 					EnnemisParty ennemis = DataManager.loadEnnemisParty(id);
@@ -38,7 +35,6 @@ public class BattleCommand extends Executor{
 				} catch (SlickException e) {
 					Application.application().console().print(new ConsoleLine(e.getMessage(), Console.ERROR_COLOR_LINE));
 				}
-			}
 		});
 	}	
 }
