@@ -33,7 +33,7 @@ public class AnimationFactory
 	 * 
 	 * @param id
 	 * 		L'id de l'animation à retourner.
-	 * @return
+	 * @returnk
 	 * 		L'animation correspondant à l'id.
 	 */
 	public static BattleAnimation createAnimation(IBattle caster, ArrayList<IBattle> targets)

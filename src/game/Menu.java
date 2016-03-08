@@ -73,21 +73,21 @@ public class Menu extends Top
 		{
 		case(0):
 			game.getContainer().getInput().clearKeyPressedRecord();
-			game.enterState(Config.EXPLORATION);
+			game.enterState(StatesId.EXPLORATION);
 			break;
 		case(1):
 			game.getContainer().getInput().clearKeyPressedRecord();
-			game.enterState(Config.GESTIONNAIRE_EQUIPE);
+			game.enterState(StatesId.GESTIONNAIRE_EQUIPE);
 			
 			break;
 		case(2):
 			game.getContainer().getInput().clearKeyPressedRecord();
-			game.enterState(Config.CONFIGURATION);
+			game.enterState(StatesId.CONFIGURATION);
 			
 			break;
 		case(3):
 			game.getContainer().getInput().clearKeyPressedRecord();
-			game.enterState(Config.SAC);
+			game.enterState(StatesId.SAC);
 			
 			break;
 		case(4):
@@ -104,7 +104,7 @@ public class Menu extends Top
 	@Override
 	public int getID() 
 	{		
-		return Config.MENU;
+		return StatesId.MENU;
 	}
 
 	//#endregion
@@ -115,6 +115,6 @@ public class Menu extends Top
 	
 	@Override
 	public void onStart(){
-		game.enterState(Config.EXPLORATION);
+		game.enterState(StatesId.EXPLORATION);
 	}
 }

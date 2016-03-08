@@ -1,7 +1,5 @@
 package game;
 
-import java.util.ArrayList;
-
 import game.settings.Settings;
 import game.system.Configurations;
 import game.system.KeyboardControlsConfigurations;
@@ -41,7 +39,7 @@ public abstract class Top  extends BasicGameState
 		if(logger){
 			Application.application().logger().render();
 		}
-		if(showHitboxes && Application.application().getGame().getCurrentStateID() == Config.EXPLORATION){
+		if(showHitboxes && Application.application().getGame().getCurrentStateID() == StatesId.EXPLORATION){
 			Application.application().getGame().getParty().getMap().drawHitbox(new Color(200,0,0,0.5f));
 			Application.application().getGame().getParty().drawHitbox(new Color(0,200,100,0.5f));
 		}
@@ -167,11 +165,17 @@ public abstract class Top  extends BasicGameState
 	
 	public final void controllerButtonPressed(int controller, int button){
 
-		if(button == ControllerInput.START){
+		switch(button){
+		case(ControllerInput.START):
 			onStart();
-		}
-		else if(button == ControllerInput.VALIDATE){
+			break;
+		case(ControllerInput.VALIDATE):
 			onValidate();
+			break;
+		}
+		
+		if(Configurations.DEBUG){
+			System.out.println(button);
 		}
 	}
 	

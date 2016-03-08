@@ -5,10 +5,12 @@
 package characters;
 
 import game.Combat;
-import game.Config;
+import game.StatesId;
 import game.battle.IBattle;
 import game.battle.actions.Action;
 import game.battle.atb.ActiveTimeBattleManager;
+import game.settings.Settings;
+import game.system.Configurations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -456,11 +458,11 @@ public abstract class Character extends IBattle
 	 */
 	public void renderCharacterPanel(Graphics g, int x, int y, boolean selectionne) 
 	{
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.drawRect(x, y, 256, 160);
 		g.drawRect(x+1, y+1, 254,158);
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BORDER_COLOR);
 		g.fillRect(x+2, y+2, 253, 157);
 		
 		Animation perso = getAnimation(Party.SOUTH);
@@ -479,7 +481,7 @@ public abstract class Character extends IBattle
 		g.drawString("PV", x+73, y+46);
 		g.drawString(healthPoints+"/"+getMaximumHealthPoints(),x+100,y+60);
 
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(x+95, y+50, 150, 10);
 		g.drawRect(x+95, y+90, 150, 10);
 		
@@ -498,7 +500,7 @@ public abstract class Character extends IBattle
 		//XP
 		g.drawString("EXP", x+5, y+120);
 		g.drawString("EXP : "+experience+"/"+experienceRequiredForNextLevel(), x+5, y+140);
-		new BarUI(Config.couleurXP, Color.black, 210, 4, experience, experienceRequiredForNextLevel(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2).render(g, x+35, y+127);
+		new BarUI(Configurations.EXPERIENCE_BAR_COLOR, Color.black, 210, 4, experience, experienceRequiredForNextLevel(), TypeBarre.LEFT_TO_RIGHT, true, Settings.BORDER_COLOR).render(g, x+35, y+127);
 
 		
 
@@ -513,11 +515,11 @@ public abstract class Character extends IBattle
 	 */
 	public void drawStatistiques(Graphics g)
 	{
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(256, 0, 383, 160);
 		g.drawRect(257, 1, 382, 159);
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(258, 2, 381, 158);
 		
 		g.setColor(new Color(255,255,255));
@@ -543,11 +545,11 @@ public abstract class Character extends IBattle
 	 */
 	public void drawStuff(Graphics g)
 	{
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(256, 160, 383, 200);
 		g.drawRect(257, 161, 382, 199);
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(258, 162, 381, 198);
 		
 		g.setColor(new Color(255,255,255));

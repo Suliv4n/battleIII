@@ -123,7 +123,7 @@ public class TitleScreen extends Top{
 
 	@Override
 	public int getID() {
-		return Config.TITLE_SCREEN;
+		return StatesId.TITLE_SCREEN;
 	}
 	
 	
@@ -153,7 +153,7 @@ public class TitleScreen extends Top{
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}
-				game.enterState(Config.EXPLORATION);
+				game.enterState(StatesId.EXPLORATION);
 			}
 		}
 	}

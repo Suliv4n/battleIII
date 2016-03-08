@@ -1,12 +1,11 @@
 package game;
 
-import game.system.application.Application;
-
 import org.newdawn.slick.Input;
 
 public class ControllerInput {
 	public static final int START = 8;
-	public static final int VALIDATE = 2;
+	public static final int VALIDATE = 1;
+	public static final int BACK = 2;
 	
 	private static boolean buttonDown = false;
 	private static boolean buttonUp = false;

@@ -4,7 +4,7 @@ import org.newdawn.slick.SlickException;
 
 import characters.EnnemisParty;
 import data.DataManager;
-import game.Config;
+import game.StatesId;
 import game.system.Configurations;
 import game.system.Console;
 import game.system.ConsoleLine;
@@ -19,7 +19,7 @@ public class BattleCommand extends Executor{
 		super();
 		
 		addParameterRule(new ParameterRule("id",ParameterRule.STRING, null ,true));
-		addAllowedState(Config.EXPLORATION);
+		addAllowedState(StatesId.EXPLORATION);
 		
 		setScript( command -> {
 				String id = command.getParameter(0);

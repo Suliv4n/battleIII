@@ -11,4 +11,6 @@ public class Settings {
 	public static Color BORDER_COLOR = Configurations.DEFAULT_BORDER_COLOR;
 	
 	public static boolean MULTIPLAYER = false;
+	public static float MUSIC_VOLUME = 0;
+	public static float SOUND_VOLUME = 0;
 }

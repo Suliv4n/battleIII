@@ -3,8 +3,9 @@ package game.input;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import game.Config;
+import game.StatesId;
 import game.launcher.Launcher;
+import game.settings.Settings;
 import game.system.application.Application;
 
 import org.newdawn.slick.Color;
@@ -142,10 +143,10 @@ public class TextInput extends BasicGameState
 	{
 		if(input.size()>0)
 		{
-			g.setColor(Config.couleur1);
+			g.setColor(Settings.BACKGROUND_COLOR);
 			g.fillRect(0, 0, 640,480);
 			
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawRect(0, 0, 639,479);
 			g.drawRect(1, 1, 637,477);
 			
@@ -172,7 +173,7 @@ public class TextInput extends BasicGameState
 				}
 			}
 			
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawLine(0, 399, 640, 399);
 			g.drawLine(0, 400, 640, 400);
 			
@@ -197,7 +198,7 @@ public class TextInput extends BasicGameState
 		}
 		else
 		{
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawRect(10 + cursorX*30, 160+cursorY*30,20,20);
 		}
 	}
@@ -311,7 +312,7 @@ public class TextInput extends BasicGameState
 	@Override
 	public int getID() 
 	{
-		return Config.SAISIE;
+		return StatesId.SAISIE;
 	}
 	/**
 	 * Retourne le texte saisi

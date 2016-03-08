@@ -108,7 +108,7 @@ public class CombatResult extends BasicGameState
 			}
 			else
 			{	
-				sbg.enterState(Config.EXPLORATION);
+				sbg.enterState(StatesId.EXPLORATION);
 			}
 		}
 		
@@ -117,7 +117,7 @@ public class CombatResult extends BasicGameState
 	@Override
 	public int getID()
 	{
-		return Config.COMBATRESULT;
+		return StatesId.COMBATRESULT;
 	}
 	
 	@Override
@@ -134,11 +134,11 @@ public class CombatResult extends BasicGameState
 		for(int i=0;i<equipe.numberOfCharacters();i++)
 		{
 			//dessiner barre xp :
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawRect(70,70+delta*i,200,20);
 			g.setColor(Color.black);
 			g.fillRect(71, 71+delta*i, 199, 19);
-			g.setColor(Config.couleurXP);
+			g.setColor(Configurations.EXPERIENCE_BAR_COLOR);
 			g.fillRect(71, 71+delta*i, (float) (equipe.get(i).getExperience()/(double) (equipe.get(i).experienceRequiredForNextLevel())*199) , 19);
 			
 			g.drawImage(equipe.get(i).getAnimation(Party.SOUTH).getImage(2), 10, 60+i*delta);

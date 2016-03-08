@@ -1,5 +1,6 @@
 package game;
 
+import game.settings.Settings;
 import game.system.application.Application;
 
 import java.util.ArrayList;
@@ -191,7 +192,7 @@ public class InterfaceSac extends Top
 				gererChoixCategorie(container.getInput());
 				if(container.getInput().isKeyPressed(Input.KEY_ESCAPE))
 				{
-					game.enterState(Config.MENU);
+					game.enterState(StatesId.MENU);
 				}
 				container.getInput().clearKeyPressedRecord();
 			}
@@ -297,7 +298,7 @@ public class InterfaceSac extends Top
 	@Override
 	public int getID() 
 	{
-		return Config.SAC;
+		return StatesId.SAC;
 	}
 
 	//#endregion
@@ -310,10 +311,10 @@ public class InterfaceSac extends Top
 	 */
 	private void dessinerInterface(Graphics g)
 	{
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(2, 2, 638, 478);
 		
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(0, 0, 639, 479);
 		g.drawRect(1, 1, 637, 477);
 		g.drawLine(0, 40, 640, 40);
@@ -341,7 +342,7 @@ public class InterfaceSac extends Top
 		
 		
 		//effet onglet (cache)
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(2 + curseurCategorie * 160, 80, 158, 2);
 	}
 	
@@ -396,7 +397,7 @@ public class InterfaceSac extends Top
 	
 		//affichage de la boite de comptage :
 		{
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawRect(280, 415, 80, 25);
 			g.drawRect(279, 414, 82, 27);
 			

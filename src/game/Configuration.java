@@ -1,6 +1,7 @@
 package game;
 
 import game.launcher.Launcher;
+import game.settings.Settings;
 import game.system.application.Application;
 
 import org.newdawn.slick.Color;
@@ -47,13 +48,13 @@ public class Configuration extends BasicGameState
 	{
 
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(2, 2, 638, 478);
 		
 		g.setColor(Color.white);
 		g.drawString("CONFIGURATIONS", 250, 15);
 		
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(0, 0, 639, 479);
 		g.drawRect(1, 1, 637, 477);
 		g.drawLine(0, 40, 640, 40);
@@ -61,7 +62,7 @@ public class Configuration extends BasicGameState
 		
 		//Interface couleur 1:
 		g.drawRect(15,70,610,100);
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(20, 60, 175, 20);
 		g.setColor(Color.white);
 		g.drawString("Couleur principale",25,60);
@@ -77,14 +78,14 @@ public class Configuration extends BasicGameState
 		g.drawLine(120, 111, 376, 111);
 		g.drawLine(120, 131, 376, 131);
 		g.setColor(Color.white);
-		g.drawString(String.valueOf(Config.couleur1.getRed()), 390, 80);
-		g.drawString(String.valueOf(Config.couleur1.getGreen()), 390, 100);
-		g.drawString(String.valueOf(Config.couleur1.getBlue()), 390, 120);
+		g.drawString(String.valueOf(Settings.BACKGROUND_COLOR.getRed()), 390, 80);
+		g.drawString(String.valueOf(Settings.BACKGROUND_COLOR.getGreen()), 390, 100);
+		g.drawString(String.valueOf(Settings.BACKGROUND_COLOR.getBlue()), 390, 120);
 		
 		//Interface couleur 2:
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(15,190,610,100);
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(20, 180, 130, 20);
 		g.setColor(Color.white);
 		g.drawString("Couleur cadre",25,180);
@@ -100,9 +101,9 @@ public class Configuration extends BasicGameState
 		g.drawLine(120, 231, 376, 231);
 		g.drawLine(120, 251, 376, 251);
 		g.setColor(Color.white);
-		g.drawString(String.valueOf(Config.couleur2.getRed()), 390, 200);
-		g.drawString(String.valueOf(Config.couleur2.getGreen()), 390, 220);
-		g.drawString(String.valueOf(Config.couleur2.getBlue()), 390, 240);
+		g.drawString(String.valueOf(Settings.BORDER_COLOR.getRed()), 390, 200);
+		g.drawString(String.valueOf(Settings.BORDER_COLOR.getGreen()), 390, 220);
+		g.drawString(String.valueOf(Settings.BORDER_COLOR.getBlue()), 390, 240);
 		
 
 
@@ -127,8 +128,8 @@ public class Configuration extends BasicGameState
 		g.drawLine(240, 350, 340, 350);
 		
 		g.setColor(Color.white);
-		g.drawString(String.valueOf(Config.son),350,340);
-		g.drawString(String.valueOf(Config.musique),350,320);
+		g.drawString(String.valueOf(Settings.SOUND_VOLUME),350,340);
+		g.drawString(String.valueOf(Settings.MUSIC_VOLUME),350,320);
 		
 		afficherCurseursCouleurs(g);
 		afficherCurseursVolumes(g);
@@ -147,7 +148,7 @@ public class Configuration extends BasicGameState
 		if(in.isKeyPressed(Input.KEY_ESCAPE))
 		{
 			in.clearKeyPressedRecord();
-			game.enterState(Config.MENU);
+			game.enterState(StatesId.MENU);
 		}
 		
 		if(in.isKeyDown(Input.KEY_LEFT))
@@ -157,29 +158,29 @@ public class Configuration extends BasicGameState
 			switch(curseur)
 			{
 			case(0):
-				Config.couleur1 = new Color(Math.max(Config.couleur1.getRed()-d,0),Config.couleur1.getGreen(),Config.couleur1.getBlue());
+				Settings.BACKGROUND_COLOR = new Color(Math.max(Settings.BACKGROUND_COLOR.getRed()-d,0),Settings.BACKGROUND_COLOR.getGreen(),Settings.BACKGROUND_COLOR.getBlue());
 				break;
 			case(1):
-				Config.couleur1 = new Color(Config.couleur1.getRed(),Math.max(Config.couleur1.getGreen()-d,0),Config.couleur1.getBlue());
+				Settings.BACKGROUND_COLOR = new Color(Settings.BACKGROUND_COLOR.getRed(),Math.max(Settings.BACKGROUND_COLOR.getGreen()-d,0),Settings.BACKGROUND_COLOR.getBlue());
 				break;
 			case(2):
-				Config.couleur1 = new Color(Config.couleur1.getRed(),Config.couleur1.getGreen(),Math.max(Config.couleur1.getBlue()-d,0));
+				Settings.BACKGROUND_COLOR = new Color(Settings.BACKGROUND_COLOR.getRed(),Settings.BACKGROUND_COLOR.getGreen(),Math.max(Settings.BACKGROUND_COLOR.getBlue()-d,0));
 				break;
 			case(4):
-				Config.couleur2 = new Color(Math.max(Config.couleur2.getRed()-d,0),Config.couleur2.getGreen(),Config.couleur2.getBlue());
+				Settings.BORDER_COLOR = new Color(Math.max(Settings.BORDER_COLOR.getRed()-d,0),Settings.BORDER_COLOR.getGreen(),Settings.BORDER_COLOR.getBlue());
 				break;
 			case(5):
-				Config.couleur2 = new Color(Config.couleur2.getRed(),Math.max(Config.couleur2.getGreen()-d,0),Config.couleur2.getBlue());
+				Settings.BORDER_COLOR = new Color(Settings.BORDER_COLOR.getRed(),Math.max(Settings.BORDER_COLOR.getGreen()-d,0),Settings.BORDER_COLOR.getBlue());
 				break;
 			case(6):
-				Config.couleur2 = new Color(Config.couleur2.getRed(),Config.couleur2.getGreen(),Math.max(Config.couleur2.getBlue()-d,0));
+				Settings.BORDER_COLOR = new Color(Settings.BORDER_COLOR.getRed(),Settings.BORDER_COLOR.getGreen(),Math.max(Settings.BORDER_COLOR.getBlue()-d,0));
 				break;
 			case(9):
-				Config.musique = Math.max(Config.musique-1, 0);
+				Settings.MUSIC_VOLUME = Math.max(Settings.MUSIC_VOLUME-1, 0);
 				MusicManager.setVolume();
 				break;
 			case(10):
-				Config.son = Math.max(Config.son-1, 0);
+				Settings.SOUND_VOLUME = Math.max(Settings.SOUND_VOLUME-1, 0);
 				break;
 
 			}
@@ -192,29 +193,29 @@ public class Configuration extends BasicGameState
 			switch(curseur)
 			{
 			case(0):
-				Config.couleur1 = new Color(Math.min(Config.couleur1.getRed()+d,255),Config.couleur1.getGreen(),Config.couleur1.getBlue());
+				Settings.BACKGROUND_COLOR = new Color(Math.min(Settings.BACKGROUND_COLOR.getRed()+d,255),Settings.BACKGROUND_COLOR.getGreen(),Settings.BACKGROUND_COLOR.getBlue());
 				break;
 			case(1):
-				Config.couleur1 = new Color(Config.couleur1.getRed(),Math.min(Config.couleur1.getGreen()+d,255),Config.couleur1.getBlue());
+				Settings.BACKGROUND_COLOR = new Color(Settings.BACKGROUND_COLOR.getRed(),Math.min(Settings.BACKGROUND_COLOR.getGreen()+d,255),Settings.BACKGROUND_COLOR.getBlue());
 				break;
 			case(2):
-				Config.couleur1 = new Color(Config.couleur1.getRed(),Config.couleur1.getGreen(),Math.min(Config.couleur1.getBlue()+d,255));
+				Settings.BACKGROUND_COLOR = new Color(Settings.BACKGROUND_COLOR.getRed(),Settings.BACKGROUND_COLOR.getGreen(),Math.min(Settings.BACKGROUND_COLOR.getBlue()+d,255));
 				break;
 			case(4):
-				Config.couleur2 = new Color(Math.min(Config.couleur2.getRed()+d,255),Config.couleur2.getGreen(),Config.couleur2.getBlue());
+				Settings.BORDER_COLOR = new Color(Math.min(Settings.BORDER_COLOR.getRed()+d,255),Settings.BORDER_COLOR.getGreen(),Settings.BORDER_COLOR.getBlue());
 				break;
 			case(5):
-				Config.couleur2 = new Color(Config.couleur2.getRed(),Math.min(Config.couleur2.getGreen()+d,255),Config.couleur2.getBlue());
+				Settings.BORDER_COLOR = new Color(Settings.BORDER_COLOR.getRed(),Math.min(Settings.BORDER_COLOR.getGreen()+d,255),Settings.BORDER_COLOR.getBlue());
 				break;
 			case(6):
-				Config.couleur2 = new Color(Config.couleur2.getRed(),Config.couleur2.getGreen(),Math.min(Config.couleur2.getBlue()+d,255));
+				Settings.BORDER_COLOR = new Color(Settings.BORDER_COLOR.getRed(),Settings.BORDER_COLOR.getGreen(),Math.min(Settings.BORDER_COLOR.getBlue()+d,255));
 				break;
 			case(9):
-				Config.musique = Math.min(Config.musique+1, 100);
+				Settings.MUSIC_VOLUME = Math.min(Settings.MUSIC_VOLUME+1, 100);
 				MusicManager.setVolume();
 				break;
 			case(10):
-				Config.son = Math.min(Config.son+1, 100);
+				Settings.SOUND_VOLUME = Math.min(Settings.SOUND_VOLUME+1, 100);
 				break;
 			}
 		}
@@ -236,7 +237,7 @@ public class Configuration extends BasicGameState
 			else if(curseur == 11)
 			{
 				in.clearKeyPressedRecord();
-				game.enterState(Config.MENU);
+				game.enterState(StatesId.MENU);
 			}
 		}
 		
@@ -254,7 +255,7 @@ public class Configuration extends BasicGameState
 	@Override
 	public int getID() 
 	{
-		return Config.CONFIGURATION;
+		return StatesId.CONFIGURATION;
 	}
 	
 	//#endregion
@@ -266,14 +267,14 @@ public class Configuration extends BasicGameState
 		g.setColor(new Color(200,200,200));
 		
 		//Couleur 1:
-		g.drawLine(120+Config.couleur1.getRed(), 89, 120+Config.couleur1.getRed(), 92);
-		g.drawLine(120+Config.couleur1.getGreen(), 109, 120+Config.couleur1.getGreen(), 112);
-		g.drawLine(120+Config.couleur1.getBlue(), 129, 120+Config.couleur1.getBlue(), 132);
+		g.drawLine(120+Settings.BACKGROUND_COLOR.getRed(), 89, 120+Settings.BACKGROUND_COLOR.getRed(), 92);
+		g.drawLine(120+Settings.BACKGROUND_COLOR.getGreen(), 109, 120+Settings.BACKGROUND_COLOR.getGreen(), 112);
+		g.drawLine(120+Settings.BACKGROUND_COLOR.getBlue(), 129, 120+Settings.BACKGROUND_COLOR.getBlue(), 132);
 		
 		//Couleur 2:
-		g.drawLine(120+Config.couleur2.getRed(), 209, 120+Config.couleur2.getRed(), 212);
-		g.drawLine(120+Config.couleur2.getGreen(), 229, 120+Config.couleur2.getGreen(), 232);
-		g.drawLine(120+Config.couleur2.getBlue(), 249, 120+Config.couleur2.getBlue(), 252);
+		g.drawLine(120+Settings.BORDER_COLOR.getRed(), 209, 120+Settings.BORDER_COLOR.getRed(), 212);
+		g.drawLine(120+Settings.BORDER_COLOR.getGreen(), 229, 120+Settings.BORDER_COLOR.getGreen(), 232);
+		g.drawLine(120+Settings.BORDER_COLOR.getBlue(), 249, 120+Settings.BORDER_COLOR.getBlue(), 252);
 	}
 
 	
@@ -282,11 +283,11 @@ public class Configuration extends BasicGameState
 		g.setColor(new Color(200,200,200));
 		
 		//Musique
-		g.drawLine(240+Config.musique,329,240+Config.musique,331);
+		g.drawLine(240+Settings.MUSIC_VOLUME,329,240+Settings.MUSIC_VOLUME,331);
 
 		
 		//Son
-		g.drawLine(240+Config.son,349,240+Config.son,351);
+		g.drawLine(240+Settings.SOUND_VOLUME,349,240+Settings.SOUND_VOLUME,351);
 
 		
 	}
@@ -316,10 +317,10 @@ public class Configuration extends BasicGameState
 		switch(numCouleur)
 		{
 		case(1):
-			Config.couleur1 = new Color(150,20,0);
+			Settings.BACKGROUND_COLOR = new Color(150,20,0);
 			break;
 		case(2):
-			Config.couleur2 = new Color(200,150,0);
+			Settings.BORDER_COLOR = new Color(200,150,0);
 			break;		
 		}		
 	}

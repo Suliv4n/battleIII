@@ -3,7 +3,8 @@ package audio;
 
 import java.util.HashMap;
 
-import game.Config;
+import game.StatesId;
+import game.settings.Settings;
 
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
@@ -105,7 +106,7 @@ public class MusicManager
 	 */
 	public static void setVolume()
 	{
-		currentMusic.setVolume(Config.musique/100f);
+		currentMusic.setVolume(Settings.MUSIC_VOLUME/100f);
 	}
 	
 	/**

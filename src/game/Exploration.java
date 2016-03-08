@@ -149,7 +149,7 @@ public class Exploration extends Top
 				Gate portail = Application.application().getGame().getParty().getMap().getGate((int) ((Application.application().getGame().getParty().getAbsoluteX())/32), (int) ((Application.application().getGame().getParty().getAbsoluteY()+16)/32));
 				if(portail != null)
 				{
-					Application.application().getGame().getParty().setMap(DataManager.loadMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Config.LONGUEUR/2), ((int) - portail.getYT()*32 - 16 + Config.LARGEUR/2), true));
+					Application.application().getGame().getParty().setMap(DataManager.loadMap(portail.getTarget(), (int) (- portail.getXT()*32 - 16 + Configurations.SCREEN_WIDTH/2), ((int) - portail.getYT()*32 - 16 + Configurations.SCREEN_HEIGHT/2), true));
 					Application.application().getGame().getParty().setValAbsoluteX(portail.getXT() * 32 +16);
 					Application.application().getGame().getParty().setValAbsoluteY(portail.getYT() * 32 +16);
 					
@@ -217,7 +217,7 @@ public class Exploration extends Top
 	@Override
 	public int getID()
 	{		
-		return Config.EXPLORATION;
+		return StatesId.EXPLORATION;
 	}
 	
 	@Override
@@ -512,7 +512,7 @@ public class Exploration extends Top
 	@Override
 	public void onStart(){
 		if(dialogue == null){
-			game.enterState(Config.MENU);
+			game.enterState(StatesId.MENU);
 		}
 	}
 

@@ -3,7 +3,7 @@ package game.system.application;
 import game.BattleWithATB;
 import game.Combat;
 import game.CombatResult;
-import game.Config;
+import game.StatesId;
 import game.Configuration;
 import game.Exploration;
 import game.GameOver;
@@ -175,7 +175,7 @@ public class Game extends StateBasedGame{
 		battleWithATB.launch(ennemis);
 		MusicManager.stop();
 		MusicManager.playLoop(ennemis.getMusic());
-		Application.application().getGame().enterState(Config.BATTLE_ATB);
+		Application.application().getGame().enterState(StatesId.BATTLE_ATB);
 	}
 	
 	public void exitBattle(){
@@ -266,7 +266,7 @@ public class Game extends StateBasedGame{
 	public void input(Image icon,String message, String defaut, int out, InputAction operations, HashMap<String, Object> parameters)
 	{
 		TextInput.init(icon, message, defaut, out, operations, parameters);
-		Application.application().getGame().enterState(Config.SAISIE);
+		Application.application().getGame().enterState(StatesId.SAISIE);
 	}
 
 	public void setResultBattle(int po, int exp, ArrayList<IItems> items) {

@@ -2,7 +2,6 @@ package game.system.application;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -283,6 +282,14 @@ public class Application{
 	
 	public void debug(String message){
 		logger().print(new ConsoleLine("[" + new SimpleDateFormat("yyyy MMM dd HH:mm:ss").format(new Date()) +  "]" + "[debug]" + message, new Color(0,200,30)));
+	}
+	
+	public void warning(String message){
+		logger().print(new ConsoleLine("[" + new SimpleDateFormat("yyyy MMM dd HH:mm:ss").format(new Date()) +  "]" + "[warning]" + message, new Color(100,100,30)));
+	}
+	
+	public void error(String message){
+		logger().print(new ConsoleLine("[" + new SimpleDateFormat("yyyy MMM dd HH:mm:ss").format(new Date()) +  "]" + "[error]" + message, new Color(200,0,30)));
 	}
 	
 }

@@ -2,6 +2,7 @@ package game;
 
 
 import game.battle.IBattle;
+import game.settings.Settings;
 import game.system.application.Application;
 
 import java.awt.Point;
@@ -300,7 +301,7 @@ public class Combat extends BasicGameState
 				if(container.getInput().isKeyPressed(Input.KEY_RETURN))
 				{
 					container.getInput().clearKeyPressedRecord();
-					game.enterState(Config.GAME_OVER);
+					game.enterState(StatesId.GAME_OVER);
 				}
 			}
 			else if(issueDuCombat == 2)
@@ -310,7 +311,7 @@ public class Combat extends BasicGameState
 				{
 					container.getInput().clearKeyPressedRecord();
 					//CombatResult.init( cumulPO , cumulXP, drops);
-					game.enterState(Config.COMBATRESULT);
+					game.enterState(StatesId.COMBATRESULT);
 				}
 			}
 		}
@@ -325,7 +326,7 @@ public class Combat extends BasicGameState
 	@Override
 	public int getID() 
 	{
-		return Config.COMBAT;
+		return StatesId.COMBAT;
 	}
 	
 	//#endregion
@@ -450,17 +451,17 @@ public class Combat extends BasicGameState
 	//-----------------------------------------------------------------------
 	private void barreHaut(Graphics g)
 	{
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(0, 0, 640, 100);		
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(0,0,640,99);
 		g.drawRect(1,1,638,97);
 	}
 	private void barreBas(Graphics g)
 	{
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(0, 380, 640, 100);
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(0,380,640,99);
 		g.drawRect(1,381,638,97);
 	}
@@ -567,7 +568,7 @@ public class Combat extends BasicGameState
 			
 			
 			//pv
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawRect(99, 389+i*30, 150, 10);
 			
 			
@@ -580,7 +581,7 @@ public class Combat extends BasicGameState
 			g.drawString((int)equipe.get(i).getHealtPoints()+"/"+equipe.get(i).getMaximumHealthPoints(),250,385+i*30);
 			
 			//Energie
-			g.setColor(Config.couleur2);
+			g.setColor(Settings.BORDER_COLOR);
 			g.drawRect(369, 389+i*30, 150, 10);
 			
 			
@@ -593,7 +594,7 @@ public class Combat extends BasicGameState
 			g.drawString((int)equipe.get(i).getEnergy()+"/"+equipe.get(i).getMaximumEnergy(),520,385+i*30);
 		}
 		
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		if(curseur >= 6)
 		{
 			g.drawRect(5, 385+(curseur-6)*30, 630, 20);
@@ -639,7 +640,7 @@ public class Combat extends BasicGameState
 				g.drawString("Déf mag : " + ennemi.getMagicDefense(), 320, 42);
 				g.drawString("Soin : " + ennemi.getAgility(), 320, 62);
 
-				g.setColor(Config.couleur2);
+				g.setColor(Settings.BORDER_COLOR);
 				g.drawRect(320, 3, 100, 15);
 				g.setColor(Color.black);
 				g.fillRect(321, 4, 99, 14);
@@ -745,11 +746,11 @@ public class Combat extends BasicGameState
 	private void dessinerTableauSkills(Graphics g)
 	{
 		//cadre :
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(8, 108, 353, 103);
 		g.drawRect(9, 109, 351, 101);		
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(10, 110, 350, 100);
 		
 		
@@ -791,9 +792,9 @@ public class Combat extends BasicGameState
 	
 	public void afficherTexte(Graphics g, String texte)
 	{
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(0, 120, 640, 25);
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawLine(0, 120, 640, 120);
 		g.drawLine(0, 145, 640, 145);
 		

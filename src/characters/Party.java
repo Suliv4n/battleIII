@@ -1,7 +1,7 @@
 package characters;
 
 
-import game.Config;
+import game.StatesId;
 import game.battle.IBattle;
 import game.system.Configurations;
 import game.system.application.Application;

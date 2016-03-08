@@ -1,6 +1,7 @@
 package data;
 
-import game.Config;
+import game.StatesId;
+import game.system.Configurations;
 import game.system.application.Application;
 
 import org.newdawn.slick.SlickException;
@@ -155,7 +156,7 @@ public class Save
 		int y = e.getIntAttribute("y");
 		int direction = e.getIntAttribute("direction");
 		String idMap = e.getAttribute("map");
-		Map map = DataManager.loadMap(idMap, (int) (- x + Config.LONGUEUR/2), ((int) - y + Config.LARGEUR/2), true);
+		Map map = DataManager.loadMap(idMap, (int) (- x + Configurations.SCREEN_WIDTH/2), ((int) - y + Configurations.SCREEN_HEIGHT/2), true);
 		
 		party.setValAbsoluteX(x);
 		party.setValAbsoluteY(y);
@@ -213,7 +214,7 @@ public class Save
 		int y = e.getIntAttribute("y");
 		int direction = e.getIntAttribute("direction");
 		String idMap = e.getAttribute("map");
-		Map map = DataManager.loadMap(idMap, (int) (- x + Config.LONGUEUR/2), ((int) - y + Config.LARGEUR/2), false);
+		Map map = DataManager.loadMap(idMap, (int) (- x + Configurations.SCREEN_WIDTH/2), ((int) - y + Configurations.SCREEN_HEIGHT/2), false);
 		
 		party.setValAbsoluteX(x);
 		party.setValAbsoluteY(y);

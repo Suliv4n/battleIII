@@ -34,7 +34,7 @@ public class GameOver extends BasicGameState
 	@Override
 	public int getID() 
 	{
-		return Config.GAME_OVER;
+		return StatesId.GAME_OVER;
 	}
 	//#endregion
 }

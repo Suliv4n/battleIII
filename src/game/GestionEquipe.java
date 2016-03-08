@@ -1,6 +1,7 @@
 package game;
 
 
+import game.settings.Settings;
 import game.system.application.Application;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class GestionEquipe extends BasicGameState
 		};
 		
 		for(Character p : Application.application().getGame().getParty()){
-			GUIList<Skill> liste = new GUIList<>(20, Config.couleur1, Config.couleur2, true);
+			GUIList<Skill> liste = new GUIList<>(20, Settings.BACKGROUND_COLOR, Settings.BORDER_COLOR, true);
 			liste.setWidth(204);
 			liste.setHeight(440);
 			liste.setAutomaticWidth(false);
@@ -139,7 +140,7 @@ public class GestionEquipe extends BasicGameState
 			if (in.isKeyPressed(Input.KEY_ESCAPE))
 			{
 				in.clearKeyPressedRecord();
-				game.enterState(Config.MENU);
+				game.enterState(StatesId.MENU);
 			}
 			
 			if(in.isKeyPressed(Input.KEY_RETURN))
@@ -244,7 +245,7 @@ public class GestionEquipe extends BasicGameState
 	@Override
 	public int getID() 
 	{
-		return Config.GESTIONNAIRE_EQUIPE;
+		return StatesId.GESTIONNAIRE_EQUIPE;
 	}
 	
 	private void afficherCurseur(Graphics g)
@@ -282,10 +283,10 @@ public class GestionEquipe extends BasicGameState
 	
 	private void genererMenu(Graphics g) 
 	{
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(257, 361, 382, 118);
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(258, 362, 381, 117);
 		
 		
@@ -304,10 +305,10 @@ public class GestionEquipe extends BasicGameState
 		g.drawString("COMPETENCES", 250, 15);
 		*/
 		
-		g.setColor(Config.couleur1);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(2, 2, 638, 478);
 		
-		g.setColor(Config.couleur2);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(0, 0, 639, 479);
 		g.drawRect(1, 1, 637, 477);
 		g.drawLine(0, 40, 640, 40);

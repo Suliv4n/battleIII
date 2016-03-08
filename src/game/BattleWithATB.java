@@ -77,9 +77,9 @@ public class BattleWithATB extends Top
 			public void render(int x, int y, Object element, int index) {
 				Character p = (Character) element;
 				Graphics g = Application.application().getGraphics();
-				BarUI hpBar = new BarUI(Configurations.HEALTH_BAR_COLOR, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				BarUI energyBar = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
-				BarUI atb = new BarUI(p.getActiveTimeBattleManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getActiveTimeBattleManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Config.couleur2);
+				BarUI hpBar = new BarUI(Configurations.HEALTH_BAR_COLOR, Color.black, 150, 5, p.getHealtPoints(), p.getMaximumHealthPoints(), TypeBarre.LEFT_TO_RIGHT, true, Settings.BORDER_COLOR);
+				BarUI energyBar = new BarUI(p.energyColor(), Color.black, 150, 5, p.getEnergy(), p.getMaximumEnergy(), TypeBarre.LEFT_TO_RIGHT, true, Settings.BORDER_COLOR);
+				BarUI atb = new BarUI(p.getActiveTimeBattleManager().getCurrent() == 100 ? Color.yellow : Color.cyan, Color.black, 50, 5, p.getActiveTimeBattleManager().getCurrent() ,100, TypeBarre.LEFT_TO_RIGHT, true, Settings.BORDER_COLOR);
 				hpBar.render(g, x, y+13);
 				energyBar.render(g, x+170, y+13);
 				atb.render(g,x+500,y+3);
@@ -285,10 +285,10 @@ public class BattleWithATB extends Top
 		switch (check()) {
 		case QUIT_WIN:
 			Application.application().getGame().setResultBattle(100,100,null);
-			game.enterState(Config.COMBATRESULT);
+			game.enterState(StatesId.COMBATRESULT);
 			break;
 		case QUIT_LOSE:
-			game.enterState(Config.GAME_OVER);
+			game.enterState(StatesId.GAME_OVER);
 			break;
 		default:
 			break;
@@ -301,7 +301,7 @@ public class BattleWithATB extends Top
 	@Override
 	public int getID() 
 	{
-		return Config.BATTLE_ATB;
+		return StatesId.BATTLE_ATB;
 	}
 	
 	@Override
