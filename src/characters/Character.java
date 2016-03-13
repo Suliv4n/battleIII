@@ -458,11 +458,11 @@ public abstract class Character extends IBattle
 	 */
 	public void renderCharacterPanel(Graphics g, int x, int y, boolean selectionne) 
 	{
-		g.setColor(Settings.BACKGROUND_COLOR);
+		g.setColor(Settings.BORDER_COLOR);
 		g.drawRect(x, y, 256, 160);
 		g.drawRect(x+1, y+1, 254,158);
 		
-		g.setColor(Settings.BORDER_COLOR);
+		g.setColor(Settings.BACKGROUND_COLOR);
 		g.fillRect(x+2, y+2, 253, 157);
 		
 		Animation perso = getAnimation(Party.SOUTH);

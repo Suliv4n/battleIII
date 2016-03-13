@@ -172,6 +172,9 @@ public abstract class Top  extends BasicGameState
 		case(ControllerInput.VALIDATE):
 			onValidate();
 			break;
+		case(ControllerInput.BACK):
+			onBack();
+			break;
 		}
 		
 		if(Configurations.DEBUG){
