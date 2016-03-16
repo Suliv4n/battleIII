@@ -177,9 +177,9 @@ public abstract class Top  extends BasicGameState
 			break;
 		}
 		
-		if(Configurations.DEBUG){
+		/*if(Configurations.DEBUG){
 			System.out.println(button);
-		}
+		}*/
 	}
 	
 	

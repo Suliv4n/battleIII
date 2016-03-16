@@ -13,6 +13,7 @@ import game.Menu;
 import game.TitleScreen;
 import game.input.InputAction;
 import game.input.TextInput;
+import game.scene.Scene;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -27,7 +28,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
@@ -271,6 +271,12 @@ public class Game extends StateBasedGame{
 
 	public void setResultBattle(int po, int exp, ArrayList<IItems> items) {
 		combatResult.init(po, exp, items);
+	}
+	
+	public void launchScene(Scene scene, int exiteStateId){
+		addState(scene);
+		scene.setExitStateId(exiteStateId);
+		Application.application().getGame().enterState(scene.getID());
 	}
 
 

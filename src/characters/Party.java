@@ -1,9 +1,9 @@
 package characters;
 
 
-import game.StatesId;
 import game.battle.IBattle;
 import game.system.Configurations;
+import game.system.GameStep;
 import game.system.application.Application;
 
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import map.Map;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import util.Random;
@@ -52,6 +51,8 @@ public class Party implements Iterable<Character>
 	private double absoluteY;
 	
 	private Map map;
+	
+	private GameStep gameSteps;
 	//___________
 
 	//liste des id des ennemis analysés
@@ -94,6 +95,7 @@ public class Party implements Iterable<Character>
 		
 		sac = new Bag();
 		
+		gameSteps = new GameStep();
 		
 		//Correcteur de coordonnées relatives initiales
 		/*
@@ -813,5 +815,9 @@ public class Party implements Iterable<Character>
 	
 	public void drawHitbox(Color color){
 		party[0].getSkin().drawHitbox(color);
+	}
+	
+	public GameStep getGameStep(){
+		return gameSteps;
 	}
 }

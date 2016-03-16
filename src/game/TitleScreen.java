@@ -1,6 +1,8 @@
 package game;
 
 
+import game.scene.Introduction;
+import game.system.GameStep;
 import game.system.application.Application;
 
 import java.io.FileNotFoundException;
@@ -13,6 +15,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.xml.SlickXMLException;
+
+
 
 
 
@@ -153,7 +157,12 @@ public class TitleScreen extends Top{
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}
-				game.enterState(StatesId.EXPLORATION);
+				if(!Application.application().getGame().getParty().getGameStep().has(GameStep.SEE_INTRO)){
+					Application.application().getGame().launchScene(new Introduction(), StatesId.EXPLORATION);
+				}
+				else{
+					game.enterState(StatesId.EXPLORATION);
+				}
 			}
 		}
 	}
