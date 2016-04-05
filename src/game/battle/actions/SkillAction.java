@@ -76,11 +76,12 @@ public class SkillAction extends Action{
 					power *= Random.rand(Ratio.PHYSIC_RANDOM_MIN, Ratio.PHYSIC_RANDOM_MAX);
 					power = Math.max(1, power);
 					type = EffectType.PHYSIC_DAMAGE;
-					break;	
+					break;
 			}
 			
 			Effect e = new Effect(target, type);
 			e.setValue((int)(Math.floor(power)));
+
 			super.effects.add(e);
 		}
 	}

@@ -3,12 +3,14 @@ package game.battle.actions;
 import game.battle.IBattle;
 import game.battle.effect.Effect;
 import game.battle.effect.EffectType;
+import game.system.Ratio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.SlickException;
 
+import util.Random;
 import animation.AnimationFactory;
 import animation.BattleAnimation;
 import animation.action.NormalAttackAnimation;
@@ -49,9 +51,21 @@ public class AttackAction extends Action{
 
 	@Override
 	public void calculateEffects() {
-		Effect e = new Effect(targets.get(0), EffectType.PHYSIC_DAMAGE);
-		e.setValue(50);
-		super.effects.add(e);
+		
+		for(IBattle target : targets){
+			Effect e = new Effect(target, EffectType.PHYSIC_DAMAGE);
+			
+			int power = Ratio.ATTACK_ACTION_BASE;
+			power *= Ratio.PHYSIC_SKILL_POWER_RATIO;
+			power += Ratio.PHYSIC_SKILL_POWER_RATIO * caster.getPhysicAttack();
+			power -= Ratio.PHYSIC_DEFENSE * target.getPhysicDefense(); 
+			power *= Random.rand(Ratio.PHYSIC_RANDOM_MIN, Ratio.PHYSIC_RANDOM_MAX);
+			power = Math.max(1, power);
+			
+			e.setValue(power);
+			
+			super.effects.add(e);
+		}
 	}
 
 }

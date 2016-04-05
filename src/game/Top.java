@@ -112,7 +112,7 @@ public abstract class Top  extends BasicGameState
 			onLeft();
 			directionKeyPressedOrDown = true;
 		}
-		if(in.isKeyPressed(KeyboardControlsConfigurations.RIGHT_KEY) || ControllerInput.isControllerDownPressed(0, in)){
+		if(in.isKeyPressed(KeyboardControlsConfigurations.RIGHT_KEY) || ControllerInput.isControllerRightPressed(0, in)){
 			onRight();
 			directionKeyPressedOrDown = true;
 		}

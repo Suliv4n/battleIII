@@ -396,7 +396,7 @@ public class BattleWithATB extends Top
 	public void onRight(){
 		if(typeSelectTargets == Skill.ENNEMY){
 			int cursor = ennemis.indexOf((Ennemy) cursorsTargets.get(0));
-			
+			System.out.println(cursor);
 			if(cursor % 2 == 0 && ennemis.isValidTarget(cursor + 1)){
 				cursorsTargets.set(0, ennemis.getEnnemis().get(cursor + 1));
 			}

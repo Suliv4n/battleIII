@@ -14,4 +14,6 @@ public class Ratio {
 	public static final double PHYSIC_RANDOM_MAX = 1;
 	public static final double PHYSIC_DEFENSE = 0.4;
 	
+	public static final int ATTACK_ACTION_BASE = 10;
+	
 }

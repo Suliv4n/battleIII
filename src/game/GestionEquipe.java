@@ -32,7 +32,7 @@ import util.Format;
  * @author Darklev
  *
  */
-public class GestionEquipe extends BasicGameState 
+public class GestionEquipe extends Top 
 {
 	
 	//#region ----------PROPRIETES------------

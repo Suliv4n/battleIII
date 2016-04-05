@@ -28,7 +28,7 @@ public class ConsoleRenderer{
 	public ConsoleRenderer(Color background, Color textColor ) {
 		this.background = background;
 		this.defaultTextColor = textColor;
-		textField = new TextField(Application.application().getContainer(), Application.application().getContainer().getDefaultFont(), 0, Configurations.SCREEN_WIDTH - 25, Configurations.SCREEN_HEIGHT, 20);
+		textField = new TextField(Application.application().getContainer(), Application.application().getContainer().getDefaultFont(), 0, Configurations.SCREEN_HEIGHT - 25, Configurations.SCREEN_HEIGHT, 20);
 		textField.setBackgroundColor(null);
 		textField.setBorderColor(null);
 	}
