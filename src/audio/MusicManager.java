@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import game.StatesId;
 import game.settings.Settings;
+import game.system.application.Application;
 
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
@@ -12,7 +13,7 @@ import org.newdawn.slick.SlickException;
 
 
 /**
- * Méthodes statiques permettant la gestion de la musique.
+ * Mï¿½thodes statiques permettant la gestion de la musique.
  * 
  * @author Darklev
  */
@@ -30,7 +31,7 @@ public class MusicManager
 	
 
 	/**
-	 * Dictionnaire des musiques chargées
+	 * Dictionnaire des musiques chargï¿½es
 	 */
 	private static HashMap<String, Music> musics;
 	
@@ -45,17 +46,16 @@ public class MusicManager
 	}
 	
 	/**
-	 * Joue en boucle la musique dont le nom est passé en paramètre.
-	 * S'il s'agit de la même musique que celle en cours, la nouvelle musique n'est pas chargée
+	 * Joue en boucle la musique dont le nom est passï¿½ en paramï¿½tre.
+	 * S'il s'agit de la mï¿½me musique que celle en cours, la nouvelle musique n'est pas chargï¿½e
 	 * et la musique en cours n'est donc pas interrompue.
 	 * 
 	 * @param musique
-	 * 		Nom de la musique à jouer.
+	 * 		Nom de la musique ï¿½ jouer.
 	 */
 	public static void playLoop(String musique)
 	{
-		System.out.println(musique);
-		if(musics.containsKey(musique))
+		if(musics.get(musique) != null)
 		{
 			currentMusic = musics.get(musique);
 			path = "resources/musiques/"+musique+".ogg";
@@ -67,20 +67,20 @@ public class MusicManager
 		}
 		else
 		{
-			musique = "resources/musiques/"+musique+".ogg";
-			if(!path.equals(musique))
-			{
-					try 
-					{
-						path = musique;
-						currentMusic = new Music(musique);
-					}
-					catch (SlickException e) 
-					{
-						e.printStackTrace();
-					}
+			try{
+				musique = "resources/musiques/"+musique+".ogg";
+				if(!path.equals(musique))
+				{
+					path = musique;
+					currentMusic = new Music(musique);
 					currentMusic.loop();
 					setVolume();
+				}
+				
+			}
+			catch (SlickException e) 
+			{
+				e.printStackTrace();
 			}
 		}
 	}
@@ -101,8 +101,8 @@ public class MusicManager
 	}
 	
 	/**
-	 * Met à jour le volume de la musique, en fonction du volume
-	 * paramétrée dans la Classe Jeu.Config.
+	 * Met ï¿½ jour le volume de la musique, en fonction du volume
+	 * paramï¿½trï¿½e dans la Classe Jeu.Config.
 	 */
 	public static void setVolume()
 	{
@@ -110,12 +110,17 @@ public class MusicManager
 	}
 	
 	/**
-	 * Charge une musique et la garde en mémoire dans le dictionnaire de musiques.
-	 * Permet de jouer une musique plus rapidement avec la méthode JouerEnBoucle().
+	 * Charge une musique et la garde en mï¿½moire dans le dictionnaire de musiques.
+	 * Permet de jouer une musique plus rapidement avec la mï¿½thode JouerEnBoucle().
 	 * @throws SlickException 
 	 */
 	public static void loadMusic(String musique) throws SlickException
 	{
+		try{
 		musics.put(musique, new Music("resources/musiques/"+musique+".ogg"));
+		}
+		catch(SlickException e){
+			Application.application().debug("Music not found = " + musique);
+		}
 	}
 }

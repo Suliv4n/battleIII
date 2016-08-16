@@ -18,11 +18,14 @@ public class SoundsManager
 	
 	public static void init() throws SlickException{
 		sounds = new HashMap<String, Sound>();
-		for(String name : new String[]{"select"})
-		sounds.put("select", new Sound(Configurations.SOUNDS_FOLDER+name+".ogg"));
+		for(String name : new String[]{}){
+			sounds.put("select", new Sound(Configurations.SOUNDS_FOLDER+name+".ogg"));
+		}
 	}
 	
 	public static void play(String id){
-		sounds.get(id).play();
+		if(sounds.get(id) != null){
+			sounds.get(id).play();
+		}
 	}
 }

@@ -29,15 +29,15 @@ public class Launcher
 
 	/*
 	 * To do list : 
-	 * TODO : supprimer fichier Config.java et mettre les données dans 
+	 * TODO : supprimer fichier Config.java et mettre les donnï¿½es dans 
 	 * Settings.java/Configurations.java les id des states dans un autre fichier. 
-	 * TODO : Graphics sur la mémoire pour le débuggage.
-	 * TODO : Classe Logger pour gérer les logs.
-	 * TODO : Hitbox pour les personnages et amélioration du systèmde collision
-	 * TODO : Mettre à jour toutes les states (extends Top)
-	 * TODO : Réfactoriser la classe DataManager.
-	 * TODO : Gestion des tiles animées de type REVERSE.
-	 * TODO : Sauvegardes des paramètrages.
+	 * TODO : Graphics sur la mï¿½moire pour le dï¿½buggage.
+	 * TODO : Classe Logger pour gï¿½rer les logs.
+	 * TODO : Hitbox pour les personnages et amï¿½lioration du systï¿½mde collision
+	 * TODO : Mettre ï¿½ jour toutes les states (extends Top)
+	 * TODO : Rï¿½factoriser la classe DataManager.
+	 * TODO : Gestion des tiles animï¿½es de type REVERSE.
+	 * TODO : Sauvegardes des paramï¿½trages.
 	 */
 	
 	public static void main(String[] args) {

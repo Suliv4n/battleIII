@@ -77,15 +77,15 @@ public class Application{
 	}
 	
 	private void init() throws SlickException{
-		MusicManager.loadMusic("victory");		
-		MusicManager.loadMusic("battle");
+		//MusicManager.loadMusic("victory");		
+		//MusicManager.loadMusic("battle");
 		
 		SoundsManager.init();
 	}
 	
 	/**
 	 * Retourne l'instance courante de l'application.
-	 * En crée une si elle n'existe pas.
+	 * En crï¿½e une si elle n'existe pas.
 	 * 
 	 * @return application courante.
 	 */
@@ -109,9 +109,9 @@ public class Application{
 	}
 	
 	/**
-	 * Teste si l'application est en plein écran.
+	 * Teste si l'application est en plein ï¿½cran.
 	 * 
-	 * @return vrai si l'application est en plein écran, sinon 
+	 * @return vrai si l'application est en plein ï¿½cran, sinon 
 	 * retourne faux.
 	 */
 	public boolean isFullScreen()
@@ -120,7 +120,7 @@ public class Application{
 	}
 
 	/**
-	 * Passe du mode plein écran au mode fenêtré en inversement.
+	 * Passe du mode plein ï¿½cran au mode fenï¿½trï¿½ en inversement.
 	 * 
 	 * @throws SlickException
 	 */
@@ -149,13 +149,13 @@ public class Application{
 	
 
 	/**
-	 * Charge un particle system avec l'emmiter et l'image passé en paramètre.
+	 * Charge un particle system avec l'emmiter et l'image passï¿½ en paramï¿½tre.
 	 * 
 	 * @param emmiter
 	 * 		Fichier emmiter sans l'extension xml (depuis le dossier particles).
 	 * @param image
 	 * 		Image depuis le dossier des images.
-	 * @return le particle system avec l'emmiter et l'image passé en paramètre.
+	 * @return le particle system avec l'emmiter et l'image passï¿½ en paramï¿½tre.
 	 */
 	public ParticleSystem loadParticleSystem(String emmiter, String image){
 		
@@ -177,15 +177,15 @@ public class Application{
 	}
 	
 	/**
-	 * Dessine la chaine de caractères passé en paramètre
-	 * avec la police par défaut de slick. 
+	 * Dessine la chaine de caractï¿½res passï¿½ en paramï¿½tre
+	 * avec la police par dï¿½faut de slick. 
 	 * 
 	 * @param string
-	 * 		Chaine de caractères à afficher.
+	 * 		Chaine de caractï¿½res ï¿½ afficher.
 	 * @param x
-	 * 		Abscisse où afficher la chaîne.
+	 * 		Abscisse oï¿½ afficher la chaï¿½ne.
 	 * @param y
-	 * 		Ordonnée où afficher la chaîne.
+	 * 		Ordonnï¿½e oï¿½ afficher la chaï¿½ne.
 	 */
 	public void drawStringWithoutGameFont(String string, int x, int y)
 	{
@@ -193,17 +193,17 @@ public class Application{
 	}
 	
 	/**
-	 * Dessine la chaine de caractères passé en paramètre
-	 * avec la police par défaut de slick. 
+	 * Dessine la chaine de caractï¿½res passï¿½ en paramï¿½tre
+	 * avec la police par dï¿½faut de slick. 
 	 * 
 	 * @param string
-	 * 		Chaine de caractères à afficher.
+	 * 		Chaine de caractï¿½res ï¿½ afficher.
 	 * @param x
-	 * 		Abscisse où afficher la chaîne.
+	 * 		Abscisse oï¿½ afficher la chaï¿½ne.
 	 * @param y
-	 * 		Ordonnée où afficher la chaîne.
+	 * 		Ordonnï¿½e oï¿½ afficher la chaï¿½ne.
 	 * @param color
-	 * 		Couleur à utiliser.
+	 * 		Couleur ï¿½ utiliser.
 	 */
 	public void drawStringWithoutGameFont(String string, int x, int y, Color color)
 	{
@@ -216,15 +216,15 @@ public class Application{
 	}
 	
 	/**
-	 * Dessine la chaine de caractères passé en paramètre
-	 * avec la police par défaut. 
+	 * Dessine la chaine de caractï¿½res passï¿½ en paramï¿½tre
+	 * avec la police par dï¿½faut. 
 	 * 
 	 * @param string
-	 * 		Chaine de caractères à afficher.
+	 * 		Chaine de caractï¿½res ï¿½ afficher.
 	 * @param x
-	 * 		Abscisse où afficher la chaîne.
+	 * 		Abscisse oï¿½ afficher la chaï¿½ne.
 	 * @param y
-	 * 		Ordonnée où afficher la chaîne.
+	 * 		Ordonnï¿½e oï¿½ afficher la chaï¿½ne.
 	 */
 	public void drawString(String string, int x, int y)
 	{
@@ -232,17 +232,17 @@ public class Application{
 	}
 	
 	/**
-	 * Dessine la chaine de caractères passé en paramètre. Avec la couleur
-	 * passé en paramère.
+	 * Dessine la chaine de caractï¿½res passï¿½ en paramï¿½tre. Avec la couleur
+	 * passï¿½ en paramï¿½re.
 	 * 
 	 * @param string
-	 * 		Chaine de caractères à afficher.
+	 * 		Chaine de caractï¿½res ï¿½ afficher.
 	 * @param x
-	 * 		Abscisse où afficher la chaîne.
+	 * 		Abscisse oï¿½ afficher la chaï¿½ne.
 	 * @param y
-	 * 		Ordonnée où afficher la chaîne.
+	 * 		Ordonnï¿½e oï¿½ afficher la chaï¿½ne.
 	 * @param color
-	 * 		Couleur à utiliser.
+	 * 		Couleur ï¿½ utiliser.
 	 */
 	public void drawString(String string, int x, int y, Color color)
 	{
